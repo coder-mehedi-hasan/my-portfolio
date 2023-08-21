@@ -6,7 +6,7 @@ const Header = () => {
         <div id='header' className='position-absolute w-100 py-1'>
             <div className='row justify-content-between' >
                 <div className="col-md-5">
-                    <p className='m-0 fw-medium fs-3 text-light text-center text-md-start'>mehedi <span className='fw-light'>hasan</span>.</p>
+                    <p className='m-0 fw-medium fs-3 text-light text-center text-md-start'>mehedi <span className='fw-light'>hasan</span><span className='color-me'>.</span></p>
                 </div>
                 <div className="col-md-5">
                     <p className='text-center text-lg-end m-0 py-1'>

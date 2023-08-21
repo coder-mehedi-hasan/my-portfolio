@@ -26,7 +26,7 @@ const Home = () => {
                                             }}
                                         />
                                     </p>
-                                    <p className='text-light my-md-5 p-0 fw-light text-center text-md-start text-justify '>
+                                    <p className='text-light my-md-5 p-0 fw-light text-center text-md-start text-justify'>
                                         I'm a Full Stack Web developer who is passionate about making error-free websites with 100% client satisfaction. I like to solve real-world problems. I am strategic, and goal-oriented, and always work with an end goal in mind.
                                     </p>
                                     <Link to="work" className='position-relative text-light roundtext'>
