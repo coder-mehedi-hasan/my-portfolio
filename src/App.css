@@ -32,7 +32,165 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
+
+/* navbar */
+#navbar {
+  position: fixed;
+  background-color: #4f4e4e47;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 50;
+}
+
+#navbar a {
+  color: #f5f5f5;
+  cursor: pointer;
+  font-size: 14px;
+  transition: .4s;
+}
+
+#navbar a:hover {
+  color: #ff4800;
+  transition: .4s;
+}
+
+#navbar li {
+  margin: 1rem 0;
+}
+
+#navbar ul li {
+  list-style: none;
+  position: relative;
+}
+
+/* for tooltip */
+.tootltip {
+  display: none;
+}
+
+#navbar ul li a:hover .tootltip {
+  display: inline;
+  font-size: 12px;
+  position: absolute;
+  right: 200%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: .4s;
+}
+
+#navbar .active {
+  color: #ff4800;
+  transition: .4s;
+}
+
+/* for responsive */
+@media screen and (max-width: 768px) {
+  #navbar {
+    right: 0;
+    top: 100%;
+    width: 100%;
+    position: fixed;
+    transform: translateY(-100%);
+    max-height: 40px;
+  }
+
+  #navbar ul {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  #navbar li {
+    margin: 0;
+  }
+
+  /* tooltip */
+  #navbar ul li a:hover .tootltip {
+    right: -5px;
+    top: -25px;
+    transform: translateY(0);
+  }
+}
+
+/* header */
+#header a {
+  cursor: pointer;
+  transition: .4s;
+  color: #f5f5f5;
+
+}
+
+#header a:hover {
+  color: #ff4800;
+}
+
+/* home page  */
+#home {
+  overflow: hidden;
+  background: linear-gradient(#11001f, #0f0b18);
+}
+
+
+#home .roundtext .arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f5f5f5;
+}
+
+#home .roundtext img {
+  animation: roundtextanim 5s infinite linear;
+  transition: 1s;
+  transform: scale(0.4);
+}
+#home .profile img {
+  transform: scale(1.2);
+  position: absolute;
+  bottom: 0;
+}
+
+
+@keyframes roundtextanim {
+  from {
+    transform: rotate(0deg)scale(0.8);
+  }
+  to {
+    transform: rotate(360deg)scale(0.8);
+  }
+}
+
+
+/* about  */
+#about{
+  background: linear-gradient(#0f0b18, #11001f);
+  position: relative;
+}
+/* services */
+#services{
+  background: linear-gradient(#0f0b18, #11001f);
+}
+
+/* work */
+#work{
+  background: linear-gradient(#0f0b18, #11001f);
+}
+/*testimonial */
+#testimonial{
+  background: linear-gradient(#0f0b18, #11001f);
+}
+/*contact */
+#contact{
+  background: linear-gradient(#0f0b18, #11001f);
+}
+
+
