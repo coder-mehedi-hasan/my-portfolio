@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
     return (
-        <div id='header' className='position-absolute w-100 py-1'>
+        <div id='header' className='position-absolute w-100 py-1'style={{zIndex:"99"}}>
             <div className='row justify-content-between' >
                 <div className="col-md-5">
                     <p className='m-0 fw-medium fs-3 text-light text-center text-md-start'>mehedi <span className='fw-light'>hasan</span><span className='color-me'>.</span></p>
