@@ -19,27 +19,27 @@ const About = () => {
                                     <div className="row mt-5">
                                         <div className="col">
                                             <div className='m-1 h-100' style={{ boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
-                                                <h3 className='fs-3 text-center m-0 color-me fw-bold'><CountUp start={0} end={8} />+</h3>
-                                                <p className='p-0 text-uppercase fw-semibold text-center'>years of experience</p>
+                                                <h3 className='fs-3 text-center m-0 color-me fw-bold'><CountUp start={0} end={2} />+</h3>
+                                                <p className='p-0 text-uppercase fw-semibold text-center' style={{color:"#f5f5f5"}}>years of experience</p>
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className='m-1 h-100' style={{ boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
                                                 <h3 className='fs-3 m-0 color-me fw-bold text-center'><CountUp start={0} end={99} />+</h3>
-                                                <p className='p-0 text-uppercase fw-semibold text-center'>finished Projects</p>
+                                                <p className='p-0 text-uppercase fw-semibold text-center' style={{color:"#f5f5f5"}}>finished Projects</p>
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className='m-1 h-100' style={{ boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
                                                 <h3 className='fs-3 m-0 color-me fw-bold text-center'><CountUp start={0} end={0} />+</h3>
-                                                <p className='p-0 text-uppercase fw-semibold text-center'>satisfied clients</p>
+                                                <p className='p-0 text-uppercase fw-semibold text-center' style={{color:"#f5f5f5"}}>satisfied clients</p>
                                             </div>
                                         </div>
 
                                         <div className="col">
                                             <div className='m-1 h-100' style={{ boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
                                                 <h3 className='fs-3 m-0 color-me fw-bold text-center'><CountUp start={0} end={1000} />+</h3>
-                                                <p className='p-0 text-uppercase fw-semibold text-center'>hours of works</p>
+                                                <p className='p-0 text-uppercase fw-semibold text-center' style={{color:"#f5f5f5"}}>hours of works</p>
                                             </div>
                                         </div>
                                     </div>

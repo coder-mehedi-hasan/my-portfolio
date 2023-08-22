@@ -1,6 +1,7 @@
-.color-me{
+.color-me {
   color: #ff4800;
 }
+
 .App {
   text-align: center;
 }
@@ -45,7 +46,7 @@
 /* navbar */
 #navbar {
   position: fixed;
-  background-color: rgb(0, 0, 0,0.4);
+  background-color: rgb(0, 0, 0, 0.4);
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
@@ -156,6 +157,7 @@
   transition: 1s;
   transform: scale(0.4);
 }
+
 #home .profile img {
   transform: scale(1.2);
   position: absolute;
@@ -167,6 +169,7 @@
   from {
     transform: rotate(0deg)scale(0.8);
   }
+
   to {
     transform: rotate(360deg)scale(0.8);
   }
@@ -174,19 +177,21 @@
 
 
 /* about  */
-#about{
+#about {
   background: linear-gradient(#0f0b18, #11001f);
   position: relative;
 }
 
-.about-info button{
+.about-info button {
   position: relative;
   transition: .4s;
 }
-.about-info button:hover{
+
+.about-info button:hover {
   color: #ff4800;
 }
-.about-info button::after{
+
+.about-info button::after {
   content: '';
   padding: 1px;
   transition: .4s;
@@ -196,36 +201,100 @@
   bottom: 0;
   left: 0;
 }
-.about-info .active{
+
+.about-info .active {
   color: #ff4800;
 }
-.about-info .active::after{
+
+.about-info .active::after {
   width: 100%;
   background-color: #ff4800;
 }
 
-#about .about-me .skill-content i{
-    margin: 0 5px;
+#about .about-me .skill-content i {
+  margin: 0 5px;
 }
-#about .about-me  i{
-    font-size: 20px;
+
+#about .about-me i {
+  font-size: 20px;
 }
 
 /* services */
-#services{
+#services {
   background: linear-gradient(#0f0b18, #11001f);
+  overflow: hidden;
 }
+
 /* work */
-#work{
+#work {
   background: linear-gradient(#0f0b18, #11001f);
+  overflow: hidden;
 }
+
+#work .work-overflow:hover .work-overflow-content {
+  opacity: 1 !important;
+}
+
+#work a {
+  cursor: pointer !important;
+}
+
+#work .swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#work .swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+}
+
+#work .swiper-slide img {
+  display: block;
+  width: 100%;
+}
+
 /*testimonial */
-#testimonial{
+#testimonial {
   background: linear-gradient(#0f0b18, #11001f);
+  overflow: hidden;
 }
+#testimonial .swiper-button-next{
+  color: #ff4800;
+}
+#testimonial .swiper-button-prev{
+  color: #ff4800;
+}
+
+
 /*contact */
-#contact{
+#contact {
+  background: linear-gradient(#0f0b18, #11001f);
+}
+/*allprojects */
+#allprojects {
   background: linear-gradient(#0f0b18, #11001f);
 }
 
 
+
+.swiper {
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  height: calc((100% - 30px) / 2) !important;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -8,6 +8,7 @@ import Work from './components/Work'
 import Testimonial from './components/Testimonial';
 import Services from './components/Services';
 import Error from './components/Error';
+import AllProjects from './components/AllProjects';
 
 function App() {
   const router = createBrowserRouter([
@@ -30,6 +31,10 @@ function App() {
         {
           path:"work",
           element:<Work />
+        },
+        {
+          path:"work/all/projects",
+          element:<AllProjects />
         },
         {
           path:"services",
