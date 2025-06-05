@@ -16,8 +16,7 @@ const projectItems: SectionItem[] = [
 export default function Home() {
   return (
     <div
-      className="relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg"
-      style={{ fontFamily: 'Inter, \"Noto Sans", sans-serif' }}
+      className="font-body relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg"
     >
       <div className="layout-container flex h-full grow flex-col">
         <div className="px-40 flex flex-1 justify-center py-5">

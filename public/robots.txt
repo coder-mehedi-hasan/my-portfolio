@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mehedi-info.vercel.app
+
+# Sitemaps
+Sitemap: https://mehedi-info.vercel.app/sitemap.xml

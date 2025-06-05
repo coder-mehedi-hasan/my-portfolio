@@ -1,4 +1,3 @@
-// src/app/layout.tsx
 import './globals.css';
 import { Inter, Noto_Sans } from 'next/font/google';
 
@@ -13,9 +12,34 @@ const noto = Noto_Sans({
 });
 
 export const metadata = {
-  title: 'Your Name | Portfolio',
+  title: 'Md Mehedi Hasan | Portfolio | coder-mehedi-hasan',
   description: 'Full-stack developer portfolio',
+  metadataBase: new URL('https://mehedi-info.vercel.app'),
+  openGraph: {
+    title: 'Md Mehedi Hasan | Portfolio',
+    description: 'Full-stack developer portfolio',
+    url: 'https://mehedi-info.vercel.app',
+    siteName: 'Mehedi Portfolio',
+    images: [
+      {
+        url: '/og-img.png',
+        width: 1200,
+        height: 630,
+        alt: 'Md Mehedi Hasan Portfolio',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Md Mehedi Hasan | Portfolio',
+    description: 'Full-stack developer portfolio',
+    images: ['/og-img.png'],
+    creator: '@yourTwitterHandle',
+  },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
