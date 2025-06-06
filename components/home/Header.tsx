@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const Header: React.FC = () => {
@@ -16,9 +17,11 @@ const Header: React.FC = () => {
             </div>
             <div className="flex flex-1 justify-end gap-8">
                 <nav className="flex items-center gap-9 text-sm font-medium text-[#0e141b]">
-                    <a href="#">About</a>
+                    <Link href="/about">About</Link>
+                    <Link href="/projects">Projects</Link>
+                    <Link href="/skills">Skills</Link>
+                    <Link href="/testimonials">Testimonials</Link>
                     <a href="#">Experience</a>
-                    <a href="#">Projects</a>
                     <a href="#">Contact</a>
                 </nav>
                 <button className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
