@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/home/Header';
 import Hero from '../components/home/Hero';
 import Section, { SectionItem } from '../components/home/Section';
+import Skills from '@/components/home/Skills';
 
 const experienceItems: SectionItem[] = [
   { title: 'Software Engineer', location: 'San Francisco, CA', date: 'Jun 2020 - Present' },
@@ -24,6 +25,7 @@ export default function Home() {
             <Hero />
             <Section title="Experience" items={experienceItems} id="experience" href="/experiences" btnText="View All Experiences" viewAllBtnPreview={false} />
             <Section title="Projects" items={projectItems} id={"projects"} href="/projects" btnText="View All Projects" viewAllBtnPreview={true} />
+            <Skills />
           </div>
         </div>
       </div>
