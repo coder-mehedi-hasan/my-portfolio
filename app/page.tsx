@@ -21,10 +21,9 @@ export default function Home() {
       <div className="layout-container flex h-full grow flex-col">
         <div className="px-40 flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-            <Header />
             <Hero />
-            <Section title="Experience" items={experienceItems} />
-            <Section title="Projects" items={projectItems} />
+            <Section title="Experience" items={experienceItems} id="experience" />
+            <Section title="Projects" items={projectItems} id={"projects"} />
             <div className="flex px-4 py-3 justify-end">
               <button className="flex h-12 min-w-[84px] items-center justify-center rounded-xl bg-[#e7edf3] px-5 text-base font-bold text-[#0e141b] tracking-[0.015em]">
                 <span className="truncate">View All Projects</span>

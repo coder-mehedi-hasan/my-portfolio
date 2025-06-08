@@ -1,3 +1,4 @@
+import Header from '@/components/home/Header';
 import './globals.css';
 import { Inter, Noto_Sans } from 'next/font/google';
 
@@ -44,7 +45,13 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${noto.variable}`}>
-      <body className="font-body">{children}</body>
+      <body>
+        <div className="sticky top-0 z-50 bg-white">
+          <Header />
+        </div>
+        {/* <Header></Header> */}
+        {children}
+      </body>
     </html>
   );
 }

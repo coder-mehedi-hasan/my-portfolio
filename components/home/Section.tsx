@@ -9,12 +9,13 @@ export type SectionItem = {
 interface SectionProps {
     title: string;
     items: SectionItem[];
+    id:string
 }
 
-const Section: React.FC<SectionProps> = ({ title, items }) => {
+const Section: React.FC<SectionProps> = ({ title, items,id }) => {
     return (
         <>
-            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5" id={id}>
                 {title}
             </h2>
             {items.map((item, index) => (
