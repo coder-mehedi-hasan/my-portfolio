@@ -7,7 +7,9 @@ const Hero: React.FC = () => {
                 className="flex min-h-[480px] flex-col gap-6 md:gap-8 md:rounded-xl items-start justify-end bg-cover bg-center bg-no-repeat px-4 pb-10 md:px-10"
                 style={{
                     backgroundImage:
-                        "linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://cdn.usegalileo.ai/sdxl10/5fbc8e03-bd63-4d84-b1a9-828c3a7f388f.png')",
+                        // "linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://cdn.usegalileo.ai/sdxl10/5fbc8e03-bd63-4d84-b1a9-828c3a7f388f.png')",
+                        "linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url('/me3.jpg')",
+                    
                 }}
             >
                 <div className="flex flex-col gap-2 text-left">

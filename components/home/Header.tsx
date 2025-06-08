@@ -13,7 +13,7 @@ const Header: React.FC = () => {
                         />
                     </svg>
                 </div>
-                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">Portfolio</h2>
+                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">Mehedi Hasan</h2>
             </div>
             <div className="flex flex-1 justify-end gap-8">
                 <nav className="flex items-center gap-9 text-sm font-medium text-[#0e141b]">
@@ -22,7 +22,7 @@ const Header: React.FC = () => {
                     <Link href="/skills">Skills</Link>
                     <Link href="/testimonials">Testimonials</Link>
                     <a href="#">Experience</a>
-                    <a href="#">Contact</a>
+                    <Link href="/contact">Contact</Link>
                 </nav>
                 <button className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
                     <span className="truncate">Resume</span>
