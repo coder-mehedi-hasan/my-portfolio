@@ -2,6 +2,7 @@ import Header from '@/components/home/Header';
 import './globals.css';
 import { Inter, Noto_Sans } from 'next/font/google';
 
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
