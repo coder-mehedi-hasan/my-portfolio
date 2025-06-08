@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 export type SectionItem = {
@@ -9,10 +10,13 @@ export type SectionItem = {
 interface SectionProps {
     title: string;
     items: SectionItem[];
-    id:string
+    id: string;
+    viewAllBtnPreview: boolean;
+    href: string;
+    btnText: string
 }
 
-const Section: React.FC<SectionProps> = ({ title, items,id }) => {
+const Section: React.FC<SectionProps> = ({ title, items, id, btnText, href, viewAllBtnPreview }) => {
     return (
         <>
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5" id={id}>
@@ -41,6 +45,14 @@ const Section: React.FC<SectionProps> = ({ title, items,id }) => {
                     </div>
                 </div>
             ))}
+            {
+                viewAllBtnPreview &&
+                <div className="flex px-4 justify-end">
+                    <Link href={href} className="flex h-12 min-w-[84px] items-center justify-center rounded-xl bg-[#e7edf3] px-5 text-base font-bold text-[#0e141b] tracking-[0.015em]">
+                        <span className="truncate">{btnText}</span>
+                    </Link>
+                </div>
+            }
         </>
     );
 };
