@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  USER
+  SUPERADMIN
+}
+
+model AdminUser {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  role     AdminRole @default(USER)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Skill {
+  id           Int     @id @default(autoincrement())
+  is_home_page Boolean @default(false)
+  title        String
+  sub_title    String?
+  description  String?
+  icon         String?
+  sort_index   Int?    @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("skills")
+}
+
+model Project {
+  id           Int       @id @default(autoincrement())
+  is_home_page Boolean   @default(false)
+  title        String
+  description  String?
+  icon         String?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  date         DateTime?
+  sort_index   Int?      @default(0)
+
+  @@map("projects")
+}
+
+model Experience {
+  id           Int       @id @default(autoincrement())
+  is_home_page Boolean   @default(false)
+  designation  String
+  company_name String
+  location     String
+  description  String?
+  icon         String?
+  start_date   DateTime?
+  end_date     DateTime?
+  sort_index   Int?      @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("experience")
+}
+
+model Testimonial {
+  id                  Int      @id @default(autoincrement())
+  author_name         String
+  author_designation  String
+  author_company_name String
+  author_image        String
+  feedback            String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model Blog {
+  id            Int       @id @default(autoincrement())
+  title         String
+  sub_title     String?
+  description   String?
+  feature_image String?
+  like_count    Int       @default(0)
+  deslike_count Int       @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Comment Comment[]
+
+  @@map("blogs")
+  @@index([created_at])
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  comment     String
+  author_name String
+  blog_id     Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  blog Blog @relation(fields: [blog_id], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String
+  value String
+
+  @@unique([key])
+}
+
+model Education {
+  id                Int       @id @default(autoincrement())
+  name              String
+  institute_name    String
+  start_date        DateTime?
+  end_date          DateTime?
+  institute_address String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("educations")
+}
+
+model Resume {
+  id        Int     @id @default(autoincrement())
+  url       String?
+  is_active Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("resumes")
+}
