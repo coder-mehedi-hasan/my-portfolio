@@ -50,7 +50,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="sticky top-0 z-50 bg-white">
           <Header />
         </div>
-        {/* <Header></Header> */}
         {children}
       </body>
     </html>

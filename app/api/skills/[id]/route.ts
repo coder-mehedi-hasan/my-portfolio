@@ -1,8 +1,6 @@
+import db from '@/utils/db';
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
-
-const prisma2 = new PrismaClient();
 
 const skillSchema2 = z.object({
     is_home_page: z.boolean().optional(),
@@ -22,7 +20,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         return NextResponse.json({ error: parse.error.errors }, { status: 400 });
     }
 
-    const updated = await prisma2.skill.update({ where: { id }, data: parse.data });
+    const updated = await db.skill.update(id, body);
     return NextResponse.json(updated);
 }
 
@@ -30,6 +28,6 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
     const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
-    await prisma2.skill.delete({ where: { id } });
+    await db.skill.delete(id);
     return new Response(null, { status: 204 });
 }

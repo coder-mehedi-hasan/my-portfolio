@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Modal from '@/components/Modal'; // adjust path if necessary
 
 type Skill = {
     id: number;
@@ -23,127 +24,212 @@ export default function AdminSkillsPage() {
     const [skills, setSkills] = useState<Skill[]>([]);
     const [form, setForm] = useState<Omit<Skill, 'id'>>(defaultForm);
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Load skills
+    const fetchSkills = async () => {
+        try {
+            const res = await fetch('/api/skills');
+            if (!res.ok) throw new Error('Failed to fetch');
+            const data = await res.json();
+            setSkills(data);
+        } catch (error: any) {
+            console.log(error.message || 'Unknown Error');
+        }
+    };
+
     useEffect(() => {
-        fetch('/api/skills')
-            .then(res => res.json())
-            .then(data => setSkills(data));
+        fetchSkills();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value, type, checked } = e.target;
-        setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+        setForm((prev) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
     };
 
     const handleSubmit = async () => {
         const method = editingId ? 'PUT' : 'POST';
         const url = editingId ? `/api/skills/${editingId}` : `/api/skills`;
 
-        const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
-        });
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            });
 
-        if (!res.ok) {
-            alert('Error saving skill');
-            return;
-        }
+            if (!res.ok) throw new Error('Failed to save skill');
 
-        setForm(defaultForm);
-        setEditingId(null);
-        const updated = await res.json();
+            alert(editingId ? 'Skill updated' : 'Skill created');
 
-        if (editingId) {
-            setSkills(prev =>
-                prev.map(skill => (skill.id === updated.id ? updated : skill))
-            );
-        } else {
-            setSkills(prev => [...prev, updated]);
+            setForm(defaultForm);
+            setEditingId(null);
+            setIsModalOpen(false);
+            fetchSkills();
+        } catch (error: any) {
+            alert(error.message || 'Save failed');
         }
     };
 
     const handleEdit = (skill: Skill) => {
-        setForm({ ...skill });
-        setEditingId(skill.id);
+        const { id, ...formFields } = skill;
+        setForm(formFields);
+        setEditingId(id);
+        setIsModalOpen(true);
     };
 
     const handleDelete = async (id: number) => {
-        const res = await fetch(`/api/skills/${id}`, { method: 'DELETE' });
-        if (res.ok) {
-            setSkills(prev => prev.filter(skill => skill.id !== id));
-        } else {
-            alert('Failed to delete skill');
+        try {
+            const res = await fetch(`/api/skills/${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Delete failed');
+
+            setSkills((prev) => prev.filter((skill) => skill.id !== id));
+            alert('Skill deleted successfully');
+        } catch (error: any) {
+            alert(error.message ?? 'Delete failed!');
         }
     };
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
-            <h1 className="text-2xl font-semibold mb-4">{editingId ? 'Edit Skill' : 'Add New Skill'}</h1>
-
-            <div className="space-y-4 mb-6">
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    value={form.title}
-                    onChange={handleChange}
-                    className="input input-bordered w-full"
-                />
-                <input
-                    type="text"
-                    name="sub_title"
-                    placeholder="Subtitle"
-                    value={form.sub_title}
-                    onChange={handleChange}
-                    className="input input-bordered w-full"
-                />
-                <textarea
-                    name="description"
-                    placeholder="Description"
-                    value={form.description}
-                    onChange={handleChange}
-                    className="textarea textarea-bordered w-full"
-                />
-                <input
-                    type="text"
-                    name="icon"
-                    placeholder="Icon"
-                    value={form.icon}
-                    onChange={handleChange}
-                    className="input input-bordered w-full"
-                />
-                <label className="flex items-center gap-2">
-                    <input
-                        type="checkbox"
-                        name="is_home_page"
-                        checked={form.is_home_page}
-                        onChange={handleChange}
-                    />
-                    Show on Home Page
-                </label>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">Skills Management</h1>
                 <button
-                    className="btn btn-primary"
-                    onClick={handleSubmit}
+                    onClick={() => {
+                        setForm(defaultForm);
+                        setEditingId(null);
+                        setIsModalOpen(true);
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
                 >
-                    {editingId ? 'Update Skill' : 'Create Skill'}
+                    Add New Skill
                 </button>
             </div>
 
-            <h2 className="text-xl font-semibold mb-2">Skill List</h2>
-            <div className="grid gap-3">
-                {skills.map(skill => (
-                    <div key={skill.id} className="border p-4 rounded shadow-sm">
-                        <div className="font-bold">{skill.title}</div>
-                        {skill.sub_title && <div className="text-sm text-gray-600">{skill.sub_title}</div>}
-                        <div className="text-sm">{skill.description}</div>
-                        <div className="flex gap-2 mt-2">
-                            <button onClick={() => handleEdit(skill)} className="btn btn-sm btn-warning">Edit</button>
-                            <button onClick={() => handleDelete(skill.id)} className="btn btn-sm btn-error">Delete</button>
+            {/* Modal for Form */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setForm(defaultForm);
+                    setEditingId(null);
+                }}
+                title={editingId ? 'Edit Skill' : 'Add New Skill'}
+            >
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Title *</label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={form.title}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="Enter skill title"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Subtitle</label>
+                        <input
+                            type="text"
+                            name="sub_title"
+                            value={form.sub_title}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Description</label>
+                        <textarea
+                            name="description"
+                            value={form.description}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="Description of the skill"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Icon</label>
+                        <input
+                            type="text"
+                            name="icon"
+                            value={form.icon}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="e.g. react-icon or class name"
+                        />
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            name="is_home_page"
+                            checked={form.is_home_page}
+                            onChange={handleChange}
+                            className="h-4 w-4"
+                        />
+                        <label className="text-sm">Show on Home Page</label>
+                    </div>
+
+                    <button
+                        onClick={handleSubmit}
+                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                    >
+                        {editingId ? 'Update Skill' : 'Create Skill'}
+                    </button>
+                </div>
+            </Modal>
+
+            {/* Skill List */}
+            <h2 className="text-2xl font-semibold mb-4">Skill List</h2>
+            <div className="space-y-4">
+                {skills.map((skill) => (
+                    <div
+                        key={skill.id}
+                        className="border border-gray-300 rounded-md p-4 shadow-sm hover:shadow transition"
+                    >
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h3 className="text-lg font-bold">{skill.title}</h3>
+                                {skill.sub_title && (
+                                    <p className="text-sm text-gray-500">{skill.sub_title}</p>
+                                )}
+                                {skill.description && (
+                                    <p className="text-sm mt-1 text-gray-600">{skill.description}</p>
+                                )}
+                                {skill.is_home_page && (
+                                    <span className="text-xs text-green-700 font-medium">
+                                        • Shown on homepage
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                                <button
+                                    onClick={() => handleEdit(skill)}
+                                    className="px-3 py-1 bg-yellow-400 text-white text-sm rounded hover:bg-yellow-500"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(skill.id)}
+                                    className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
+                {skills.length === 0 && (
+                    <p className="text-center text-gray-500 italic">No skills available.</p>
+                )}
             </div>
         </div>
     );

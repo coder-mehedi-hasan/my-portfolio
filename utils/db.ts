@@ -5,7 +5,7 @@ import { z } from 'zod';
 const prisma = new PrismaClient();
 
 // Validation Schemas
-const skillSchema = z.object({
+export const skillSchema = z.object({
     title: z.string(),
     sub_title: z.string().optional(),
     description: z.string().optional(),
@@ -13,12 +13,12 @@ const skillSchema = z.object({
     is_home_page: z.boolean().optional()
 });
 
-const adminUserSchema = z.object({
+export const adminUserSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6)
 });
 
-const projectSchema = z.object({
+export const projectSchema = z.object({
     title: z.string(),
     description: z.string().optional(),
     icon: z.string().optional(),
