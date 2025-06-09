@@ -9,7 +9,7 @@ type Project = {
   sub_title?: string;
   description?: string;
   icon?: string;
-  is_featured: boolean;
+  is_home_page: boolean;
 };
 
 const defaultForm: Omit<Project, 'id'> = {
@@ -17,7 +17,7 @@ const defaultForm: Omit<Project, 'id'> = {
   sub_title: '',
   description: '',
   icon: '',
-  is_featured: false,
+  is_home_page: false,
 };
 
 export default function AdminProjectsPage() {
@@ -170,12 +170,13 @@ export default function AdminProjectsPage() {
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
-              name="is_featured"
-              checked={form.is_featured}
+              name="is_home_page"
+              checked={form.is_home_page}
               onChange={handleChange}
               className="h-4 w-4"
+              id='is_home_page'
             />
-            <label className="text-sm">Feature on Home Page</label>
+            <label htmlFor='is_home_page' className="text-sm">Show on Home Page</label>
           </div>
 
           <button
@@ -203,9 +204,9 @@ export default function AdminProjectsPage() {
                 {project.description && (
                   <p className="text-sm mt-1 text-gray-600">{project.description}</p>
                 )}
-                {project.is_featured && (
+                {project.is_home_page && (
                   <span className="text-xs text-green-700 font-medium">
-                    • Featured on homepage
+                    • Show on homepage
                   </span>
                 )}
               </div>

@@ -2,7 +2,7 @@
 import { PrismaClient } from '../generated/prisma';
 import { z } from 'zod';
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 // Validation Schemas
 export const skillSchema = z.object({

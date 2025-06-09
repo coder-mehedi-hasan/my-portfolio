@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
                 style={{
                     backgroundImage:
                         // "linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://cdn.usegalileo.ai/sdxl10/5fbc8e03-bd63-4d84-b1a9-828c3a7f388f.png')",
-                        "linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url('/me3.jpg')",
+                        "linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url('/md-mehedi-hasan-portfolio.jpg')",
                     
                 }}
             >
