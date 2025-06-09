@@ -30,7 +30,7 @@ export default async function Home() {
               ...exp,
               title: exp?.designation,
               date: "Jun 2020 - Present",
-            }))} id="experience" href="/experiences" btnText="View All Experiences" viewAllBtnPreview={true} />
+            }))} id="experience" href="/experience" btnText="View All Experience" viewAllBtnPreview={true} />
             <Section title="Projects" items={data.projects.map((project: Project) => ({
               ...project,
               date: "Oct 2019"
