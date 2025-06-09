@@ -23,6 +23,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <aside className="w-64 bg-gray-800 text-white p-6 space-y-4">
                 <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
                 <nav className="space-y-2">
+                    <Link href="/" className="block hover:bg-gray-700 rounded px-3 py-2">
+                        Home
+                    </Link>
                     <Link href="/admin" className="block hover:bg-gray-700 rounded px-3 py-2">
                         Dashboard
                     </Link>
