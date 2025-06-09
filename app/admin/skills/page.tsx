@@ -1,7 +1,7 @@
 'use client';
 
+import Modal from '@/components/Modal';
 import React, { useEffect, useState } from 'react';
-import Modal from '@/components/Modal'; // adjust path if necessary
 
 type Skill = {
     id: number;
@@ -44,6 +44,7 @@ export default function AdminSkillsPage() {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
+        //@ts-ignore
         const { name, value, type, checked } = e.target;
         setForm((prev) => ({
             ...prev,

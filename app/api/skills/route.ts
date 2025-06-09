@@ -1,20 +1,9 @@
+import db, { skillSchema } from "@/utils/db";
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import db, { skillSchema } from "@/utils/db"
-
-
-// const skillSchema = z.object({
-//   is_home_page: z.boolean().optional(),
-//   title: z.string().min(1),
-//   sub_title: z.string().optional(),
-//   description: z.string().optional(),
-//   icon: z.string().optional(),
-// });
 
 export async function GET() {
 
   const skills = await db.skill.getAll();
-  // const skills = await prisma.skill.findMany();
   return NextResponse.json(skills);
 }
 
