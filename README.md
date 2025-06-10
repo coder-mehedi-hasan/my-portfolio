@@ -112,3 +112,139 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 2. Run prisma db pull to turn your database schema into a Prisma schema.
 3. Run prisma generate to generate the Prisma Client. You can then start querying your database.
 4. Tip: Explore how you can extend the ORM with scalable connection pooling, global caching, and real-time database events. Read: https://pris.ly/cli/beyond-orm      
+
+
+my-portfolio/
+├─ app/
+│  ├─ about/
+│  │  └─ page.tsx
+│  ├─ admin/
+│  │  ├─ education/
+│  │  │  └─ page.tsx
+│  │  ├─ experience/
+│  │  │  └─ page.tsx
+│  │  ├─ projects/
+│  │  │  └─ page.tsx
+│  │  ├─ resume/
+│  │  │  └─ page.tsx
+│  │  ├─ settings/
+│  │  │  └─ page.tsx
+│  │  ├─ skills/
+│  │  │  └─ page.tsx
+│  │  ├─ testimonials/
+│  │  │  └─ page.tsx
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ api/
+│  │  ├─ education/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ experience/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ projects/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ resume/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ settings/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ skills/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  ├─ testimonials/
+│  │  │  ├─ [id]/
+│  │  │  │  └─ route.ts
+│  │  │  └─ route.ts
+│  │  └─ route.ts
+│  ├─ blogs/
+│  │  └─ page.tsx
+│  ├─ contact/
+│  │  └─ page.tsx
+│  ├─ experience/
+│  │  └─ page.tsx
+│  ├─ login/
+│  │  └─ page.tsx
+│  ├─ projects/
+│  │  └─ page.tsx
+│  ├─ skills/
+│  │  └─ page.tsx
+│  ├─ testimonials/
+│  │  └─ page.tsx
+│  ├─ favicon.ico
+│  ├─ global.d.ts
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components/
+│  ├─ home/
+│  │  ├─ Header.tsx
+│  │  ├─ Hero.tsx
+│  │  ├─ Section.tsx
+│  │  └─ Skills.tsx
+│  └─ Modal.tsx
+├─ generated/
+│  └─ prisma/
+│     ├─ runtime/
+│     │  ├─ edge-esm.js
+│     │  ├─ edge.js
+│     │  ├─ index-browser.d.ts
+│     │  ├─ index-browser.js
+│     │  ├─ library.d.ts
+│     │  ├─ library.js
+│     │  ├─ react-native.js
+│     │  ├─ wasm-compiler-edge.js
+│     │  └─ wasm-engine-edge.js
+│     ├─ client.d.ts
+│     ├─ client.js
+│     ├─ default.d.ts
+│     ├─ default.js
+│     ├─ edge.d.ts
+│     ├─ edge.js
+│     ├─ index-browser.js
+│     ├─ index.d.ts
+│     ├─ index.js
+│     ├─ package.json
+│     ├─ query_engine-windows.dll.node
+│     ├─ schema.prisma
+│     ├─ wasm.d.ts
+│     └─ wasm.js
+├─ prisma/
+│  ├─ migrations/
+│  │  ├─ 20250608032612_add_skill_table_and_first_init/
+│  │  │  └─ migration.sql
+│  │  ├─ 20250608042433_added/
+│  │  │  └─ migration.sql
+│  │  └─ migration_lock.toml
+│  └─ schema.prisma
+├─ public/
+│  ├─ md-mehedi-hasan-portfolio.jpg
+│  ├─ me.jpg
+│  ├─ me.png
+│  ├─ me2.png
+│  ├─ me3-removebg-preview.png
+│  ├─ robots.txt
+│  ├─ sitemap.xml
+│  └─ testimonial-banner.png
+├─ utils/
+│  ├─ db.ts
+│  └─ helpers.ts
+├─ .env
+├─ .gitignore
+├─ eslint.config.mjs
+├─ next-env.d.ts
+├─ next-sitemap.config.js
+├─ next.config.ts
+├─ package.json
+├─ postcss.config.mjs
+├─ README.md
+├─ tailwind.config.ts
+└─ tsconfig.json

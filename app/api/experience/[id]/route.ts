@@ -1,5 +1,5 @@
 import db from '@/utils/db';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const experienceUpdateSchema = z.object({
@@ -13,7 +13,7 @@ const experienceUpdateSchema = z.object({
     end_date: z.string().optional(),
 });
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
@@ -25,7 +25,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     return NextResponse.json(updated);
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
