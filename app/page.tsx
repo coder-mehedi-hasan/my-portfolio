@@ -12,7 +12,7 @@ import Section, { SectionItem } from '../components/home/Section';
 //   { title: 'Pickle', date: 'Oct 2019' },
 // ];
 
-const baseUrl = "https://mehedi-info.vercel.app"
+const baseUrl = "http://localhost:3000"
 
 export default async function Home() {
   const res = await fetch(`${baseUrl}/api`);
