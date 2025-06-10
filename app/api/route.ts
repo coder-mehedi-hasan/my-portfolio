@@ -1,5 +1,5 @@
-import { Setting } from '@/generated/prisma';
-import db, { experienceSchema, prisma } from '@/utils/db';
+import db, { prisma } from '@/utils/db';
+import { Setting } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
