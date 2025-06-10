@@ -49,6 +49,7 @@ export default async function Home() {
                 ...exp,
                 title: exp?.designation,
                 date: "Jun 2020 - Present",
+                location: `${exp.company_name}, ${exp.location}`
               }))}
               id="experience"
               href="/experience"

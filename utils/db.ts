@@ -33,9 +33,10 @@ export const experienceSchema = z.object({
     location: z.string(),
     description: z.string().optional(),
     icon: z.string().optional(),
-    start_date: z.date().optional(),
-    end_date: z.date().optional(),
-    is_home_page: z.boolean().optional()
+    start_date: z.string().optional(),
+    end_date: z.string().optional(),
+    is_home_page: z.boolean().optional(),
+    sort_index: z.number().nullable().optional()
 });
 
 export const testimonialSchema = z.object({

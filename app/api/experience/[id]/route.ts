@@ -9,8 +9,9 @@ const experienceUpdateSchema = z.object({
     location: z.string().min(1).optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
-    start_date: z.string().optional(),
-    end_date: z.string().optional(),
+    start_date: z.string().nullable().optional(),
+    end_date: z.string().nullable().optional(),
+    sort_index: z.number().nullable().optional(),
 });
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {

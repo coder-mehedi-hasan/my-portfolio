@@ -10,6 +10,9 @@ type Experience = {
   description?: string;
   icon?: string;
   is_home_page: boolean;
+  end_date?: string | null;
+  start_date?: string | null;
+  sort_index: number;
 };
 
 const defaultForm: Omit<Experience, 'id'> = {
@@ -19,6 +22,9 @@ const defaultForm: Omit<Experience, 'id'> = {
   description: '',
   icon: '',
   is_home_page: false,
+  end_date: null,
+  start_date: null,
+  sort_index: 0,
 };
 
 export default function AdminExperiencePage() {
@@ -36,12 +42,18 @@ export default function AdminExperiencePage() {
   useEffect(() => { fetchAll(); }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //@ts-ignore
-    const { name, type, value, checked } = e.target;
-    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
+    const { name, type, value, checked } = e.target as HTMLInputElement;
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : type === 'number' ? parseInt(value) : value }));
   };
 
   const handleSubmit = async () => {
+    if (form.start_date) {
+      form.start_date = new Date(form.start_date).toISOString();
+    }
+    if (form.end_date) {
+      form.end_date = new Date(form.end_date).toISOString();
+    }
+
     const url = editingId ? `/api/experience/${editingId}` : '/api/experience';
     const res = await fetch(url, {
       method: editingId ? 'PUT' : 'POST',
@@ -58,6 +70,12 @@ export default function AdminExperiencePage() {
 
   const handleEdit = (item: Experience) => {
     const { id, ...rest } = item;
+    if (rest.start_date) {
+      rest.start_date = new Date(rest.start_date).toISOString().split('T')[0];
+    }
+    if (rest.end_date) {
+      rest.end_date = new Date(rest.end_date).toISOString().split('T')[0];
+    }
     setForm(rest);
     setEditingId(id);
     setModalOpen(true);
@@ -110,9 +128,24 @@ export default function AdminExperiencePage() {
             name="location"
             value={form.location}
             onChange={handleChange}
-            placeholder="Location"
+            placeholder="Company Location"
             className="w-full px-3 py-2 border rounded-md"
             required
+          />
+          <input
+            type="date"
+            name="start_date"
+            value={form.start_date ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
+            required
+          />
+          <input
+            type="date"
+            name="end_date"
+            value={form.end_date ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md"
           />
           <textarea
             name="description"
@@ -127,6 +160,14 @@ export default function AdminExperiencePage() {
             value={form.icon}
             onChange={handleChange}
             placeholder="Icon class (optional)"
+            className="w-full px-3 py-2 border rounded-md"
+          />
+          <input
+            type="number"
+            name="sort_index"
+            value={form.sort_index}
+            onChange={handleChange}
+            placeholder="Sort Index (e.g., 1, 2, 3...)"
             className="w-full px-3 py-2 border rounded-md"
           />
           <label className="flex items-center space-x-2">
@@ -159,6 +200,7 @@ export default function AdminExperiencePage() {
               <div>
                 <h3 className="text-lg font-bold">{item.designation} @ {item.company_name}</h3>
                 <p className="text-sm text-gray-500">{item.location}</p>
+                <p className="text-xs text-gray-400">Sort Index: {item.sort_index}</p>
                 {item.is_home_page && <span className="text-xs text-green-700">• Featured</span>}
               </div>
               <div className="flex gap-2">
