@@ -24,7 +24,8 @@ export const projectSchema = z.object({
     icon: z.string().optional(),
     is_home_page: z.boolean().optional(),
     created_at: z.date().optional(),
-    date: z.date().optional()
+    date: z.string().optional(),
+    sort_index: z.number().optional()
 });
 
 export const experienceSchema = z.object({
@@ -100,7 +101,7 @@ const db = {
     },
     project: {
         create: async (payload: any) => prisma.project.create({ data: projectSchema.parse(payload) }),
-        getAll: async () => prisma.project.findMany(),
+        getAll: async () => prisma.project.findMany({ orderBy: { sort_index: "asc" } }),
         getById: async (id: number) => prisma.project.findUnique({ where: { id } }),
         update: async (id: number, payload: any) => prisma.project.update({ where: { id }, data: payload }),
         delete: async (id: number) => prisma.project.delete({ where: { id } }),

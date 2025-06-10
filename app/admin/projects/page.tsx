@@ -10,6 +10,8 @@ type Project = {
   description?: string;
   icon?: string;
   is_home_page: boolean;
+  date?: string; // ISO format
+  sort_index?: number;
 };
 
 const defaultForm: Omit<Project, 'id'> = {
@@ -18,6 +20,8 @@ const defaultForm: Omit<Project, 'id'> = {
   description: '',
   icon: '',
   is_home_page: false,
+  date: new Date().toISOString(),
+  sort_index: 0,
 };
 
 export default function AdminProjectsPage() {
@@ -48,13 +52,21 @@ export default function AdminProjectsPage() {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]:
+        type === 'checkbox'
+          ? checked
+          : name === 'sort_index'
+            ? parseInt(value) || 0
+            : value,
     }));
   };
 
   const handleSubmit = async () => {
     const method = editingId ? 'PUT' : 'POST';
     const url = editingId ? `/api/projects/${editingId}` : '/api/projects';
+    if (form.date) {
+      form.date = new Date(form.date).toISOString();
+    }
 
     try {
       const res = await fetch(url, {
@@ -78,7 +90,14 @@ export default function AdminProjectsPage() {
 
   const handleEdit = (project: Project) => {
     const { id, ...formFields } = project;
-    setForm(formFields);
+    if (project.date) {
+      project.date = new Date(project.date).toISOString().split('T')[0];
+    }
+
+    setForm({
+      ...formFields,
+      sort_index: formFields.sort_index ?? 0,
+    });
     setEditingId(id);
     setIsModalOpen(true);
   };
@@ -133,7 +152,7 @@ export default function AdminProjectsPage() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium mb-1">Subtitle</label>
             <input
               type="text"
@@ -142,7 +161,7 @@ export default function AdminProjectsPage() {
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium mb-1">Description</label>
@@ -167,6 +186,33 @@ export default function AdminProjectsPage() {
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-medium mb-1">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={form.date}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  date: e.target.value,
+                }))
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Sort Index</label>
+            <input
+              type="number"
+              name="sort_index"
+              value={form.sort_index ?? 0}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -174,9 +220,11 @@ export default function AdminProjectsPage() {
               checked={form.is_home_page}
               onChange={handleChange}
               className="h-4 w-4"
-              id='is_home_page'
+              id="is_home_page"
             />
-            <label htmlFor='is_home_page' className="text-sm">Show on Home Page</label>
+            <label htmlFor="is_home_page" className="text-sm">
+              Show on Home Page
+            </label>
           </div>
 
           <button
@@ -205,9 +253,17 @@ export default function AdminProjectsPage() {
                   <p className="text-sm mt-1 text-gray-600">{project.description}</p>
                 )}
                 {project.is_home_page && (
-                  <span className="text-xs text-green-700 font-medium">
+                  <span className="text-xs text-green-700 font-medium block">
                     • Show on homepage
                   </span>
+                )}
+                {project.date && (
+                  <p className="text-xs text-gray-400">
+                    Date: {new Date(project.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </p>
+                )}
+                {project.sort_index !== undefined && (
+                  <p className="text-xs text-gray-400">Sort Index: {project.sort_index}</p>
                 )}
               </div>
               <div className="flex gap-2 mt-2">

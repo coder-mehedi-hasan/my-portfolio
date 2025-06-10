@@ -69,7 +69,7 @@ export default async function Home() {
               title="Projects"
               items={data?.projects.map((project: Project) => ({
                 ...project,
-                date: "Oct 2019",
+                date: formatDate(project?.date),
               }))}
               id={"projects"}
               href="/projects"
