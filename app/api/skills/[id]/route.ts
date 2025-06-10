@@ -8,6 +8,7 @@ const skillSchema2 = z.object({
     sub_title: z.string().optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
+    sort_index: z.number().optional(),
 });
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

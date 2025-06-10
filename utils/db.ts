@@ -9,7 +9,8 @@ export const skillSchema = z.object({
     sub_title: z.string().optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
-    is_home_page: z.boolean().optional()
+    is_home_page: z.boolean().optional(),
+    sort_index: z.number().optional(),
 });
 
 export const adminUserSchema = z.object({
@@ -87,7 +88,7 @@ export const resumeSchema = z.object({
 const db = {
     skill: {
         create: async (payload: any) => prisma.skill.create({ data: skillSchema.parse(payload) }),
-        getAll: async () => prisma.skill.findMany(),
+        getAll: async () => prisma.skill.findMany({ orderBy: { sort_index: "asc" } }),
         getById: async (id: number) => prisma.skill.findUnique({ where: { id } }),
         update: async (id: number, payload: any) => prisma.skill.update({ where: { id }, data: payload }),
         delete: async (id: number) => prisma.skill.delete({ where: { id } }),

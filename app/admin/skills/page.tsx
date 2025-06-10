@@ -10,6 +10,7 @@ type Skill = {
     description?: string;
     icon?: string;
     is_home_page: boolean;
+    sort_index: number;
 };
 
 const defaultForm: Omit<Skill, 'id'> = {
@@ -18,6 +19,7 @@ const defaultForm: Omit<Skill, 'id'> = {
     description: '',
     icon: '',
     is_home_page: false,
+    sort_index: 0,
 };
 
 export default function AdminSkillsPage() {
@@ -48,7 +50,7 @@ export default function AdminSkillsPage() {
         const { name, value, type, checked } = e.target;
         setForm((prev) => ({
             ...prev,
-            [name]: type === 'checkbox' ? checked : value,
+            [name]: type === 'checkbox' ? checked : (type === 'number' ? Number(value) : value),
         }));
     };
 
@@ -168,6 +170,18 @@ export default function AdminSkillsPage() {
                         />
                     </div>
 
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Sort Index</label>
+                        <input
+                            type="number"
+                            name="sort_index"
+                            value={form.sort_index}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="e.g. 1, 2, 3..."
+                        />
+                    </div>
+
                     <div className="flex items-center space-x-2">
                         <input
                             type="checkbox"
@@ -205,6 +219,7 @@ export default function AdminSkillsPage() {
                                 {skill.description && (
                                     <p className="text-sm mt-1 text-gray-600">{skill.description}</p>
                                 )}
+                                <p className="text-xs text-gray-400 mt-1">Sort Index: {skill.sort_index}</p>
                                 {skill.is_home_page && (
                                     <span className="text-xs text-green-700 font-medium">
                                         • Shown on homepage
