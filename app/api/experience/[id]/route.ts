@@ -1,6 +1,6 @@
+import db from '@/utils/db';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import db from '@/utils/db';
 
 const experienceUpdateSchema = z.object({
     is_home_page: z.boolean().optional(),
@@ -13,13 +13,8 @@ const experienceUpdateSchema = z.object({
     end_date: z.string().optional(),
 });
 
-type RouteContext = {
-    params: { id: string };
-};
-
-
-export async function PUT(req: NextRequest, context: RouteContext) {
-    const id = parseInt(context.params.id);
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
     const body = await req.json();
@@ -30,8 +25,8 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     return NextResponse.json(updated);
 }
 
-export async function DELETE(req: NextRequest, context: RouteContext) {
-    const id = parseInt(context.params.id);
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+    const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
     await db.experience.delete(id);
