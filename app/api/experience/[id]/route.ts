@@ -13,7 +13,7 @@ const experienceUpdateSchema = z.object({
     end_date: z.string().optional(),
 });
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
     const id = parseInt(params.id);
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
