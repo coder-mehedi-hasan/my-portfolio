@@ -36,6 +36,7 @@ export default function AdminExperiencePage() {
   useEffect(() => { fetchAll(); }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //@ts-ignore
     const { name, type, value, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };

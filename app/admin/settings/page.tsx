@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
 
     useEffect(() => { fetchAll(); }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | any) => {
         const { name, value } = e.target;
         setForm(f => ({ ...f, [name]: value }));
     };
