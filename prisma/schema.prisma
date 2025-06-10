@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -42,8 +41,10 @@ model Project {
   id           Int       @id @default(autoincrement())
   is_home_page Boolean   @default(false)
   title        String
+  sub_title    String?
   description  String?
   icon         String?
+  tools        Json?     @default("[]")
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   date         DateTime?
@@ -58,6 +59,7 @@ model Experience {
   designation  String
   company_name String
   location     String
+  job_type     String?
   description  String?
   icon         String?
   start_date   DateTime?
@@ -84,25 +86,25 @@ model Testimonial {
 }
 
 model Blog {
-  id            Int       @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   title         String
   sub_title     String?
   description   String?
   feature_image String?
-  like_count    Int       @default(0)
-  deslike_count Int       @default(0)
+  like_count    Int     @default(0)
+  deslike_count Int     @default(0)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   Comment Comment[]
 
-  @@map("blogs")
   @@index([created_at])
+  @@map("blogs")
 }
 
 model Comment {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   comment     String
   author_name String
   blog_id     Int

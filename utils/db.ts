@@ -1,8 +1,7 @@
-// utils/db.ts
-import { PrismaClient } from '../generated/prisma';
-import { z } from 'zod';
+import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient();
+import { z } from 'zod';
 
 // Validation Schemas
 export const skillSchema = z.object({

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import DynamicFAIcon from '../DynamicFAIcon';
 
 // const skills = [
 //     { name: 'Node.js', tools: 'Express, NestJS', icon: '📦' },
@@ -25,7 +26,9 @@ const Skills: React.FC<{ skills?: Skill[] }> = ({ skills }) => {
                         className="border rounded-xl p-4 flex flex-col gap-2 shadow-sm"
                     >
                         <div className="flex items-center gap-2 text-[#0e141b]">
-                            <span className="text-xl">{"📦"}</span>
+                            <span className="text-xl">
+                                <DynamicFAIcon icon={`${skill?.icon ?? ""} fa-lg`} />
+                            </span>
                             <p className="text-base font-medium leading-normal">{skill?.title}</p>
                         </div>
                         {skill?.sub_title && (

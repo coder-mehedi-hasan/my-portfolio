@@ -24,8 +24,8 @@ const Header: React.FC = () => {
                     <Link href={path === "/" ? "#experience" : "/experience"}>Experience</Link>
                     <Link href={path === "/" ? "#projects" : "/projects"}>Projects</Link>
                     <Link href={path === "/" ? "#skills" : "/skills"}>Skills</Link>
-                    <Link href="/testimonials">Testimonials</Link>
-                    <Link href="/blogs">Blogs</Link>
+                    {/* <Link href="/testimonials">Testimonials</Link> */}
+                    {/* <Link href="/blogs">Blogs</Link> */}
                     <Link href="/contact">Contact</Link>
                 </nav>
                 <button className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
