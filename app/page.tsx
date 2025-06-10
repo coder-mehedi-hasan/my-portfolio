@@ -15,9 +15,12 @@ import Section, { SectionItem } from '../components/home/Section';
 const baseUrl = "http://localhost:3000"
 
 export default async function Home() {
-  const res = await fetch(`${baseUrl}/api`);
-  const data = await res.json() as PortfolioData;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/api`, {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+  });
 
+  const data = await res.json() as PortfolioData;
   return (
     <div
       className="font-body relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg"
