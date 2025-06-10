@@ -9,7 +9,7 @@ export type SectionItem = {
 
 interface SectionProps {
     title: string;
-    items: SectionItem[];
+    items?: SectionItem[];
     id: string;
     viewAllBtnPreview: boolean;
     href: string;
@@ -22,7 +22,7 @@ const Section: React.FC<SectionProps> = ({ title, items, id, btnText, href, view
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5" id={id}>
                 {title}
             </h2>
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
                 <div key={index} className="flex gap-4 bg-slate-50 px-4 py-3 justify-between">
                     <div className="flex items-start gap-4">
                         <div className="text-[#0e141b] flex items-center justify-center rounded-lg bg-[#e7edf3] shrink-0 size-12">

@@ -9,7 +9,7 @@ import React from 'react';
 //     { name: 'Java', tools: 'Spring', icon: '☕' }
 // ];
 
-const Skills: React.FC<{ skills: Skill[] }> = ({ skills }) => {
+const Skills: React.FC<{ skills?: Skill[] }> = ({ skills }) => {
     return (
         <section className="">
             <h2
@@ -19,7 +19,7 @@ const Skills: React.FC<{ skills: Skill[] }> = ({ skills }) => {
                 Technical Skills
             </h2>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 px-4 pb-10">
-                {skills.map((skill, idx) => (
+                {skills?.map((skill, idx) => (
                     <div
                         key={idx}
                         className="border rounded-xl p-4 flex flex-col gap-2 shadow-sm"
