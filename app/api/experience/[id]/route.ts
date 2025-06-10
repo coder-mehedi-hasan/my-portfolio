@@ -13,8 +13,9 @@ const experienceUpdateSchema = z.object({
     end_date: z.string().optional(),
 });
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    const id = parseInt(params.id);
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id: strId } = await params;
+    const id = Number(strId)
     if (isNaN(id)) return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
 
     const body = await req.json();
