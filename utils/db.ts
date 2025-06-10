@@ -107,7 +107,7 @@ const db = {
     },
     experience: {
         create: async (payload: any) => prisma.experience.create({ data: experienceSchema.parse(payload) }),
-        getAll: async () => prisma.experience.findMany(),
+        getAll: async () => prisma.experience.findMany({ orderBy: { sort_index: "asc" } }),
         getById: async (id: number) => prisma.experience.findUnique({ where: { id } }),
         update: async (id: number, payload: any) => prisma.experience.update({ where: { id }, data: payload }),
         delete: async (id: number) => prisma.experience.delete({ where: { id } }),

@@ -37,6 +37,13 @@ export default async function Home() {
     };
   }
 
+
+  const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return 'Present';
+    const date = new Date(dateStr);
+    return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+  };
+
   return (
     <div className="font-body relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg">
       <div className="layout-container flex h-full grow flex-col">
@@ -45,12 +52,14 @@ export default async function Home() {
             <Hero setting={data?.setting} />
             <Section
               title="Experience"
-              items={data?.experience?.map((exp: Experience) => ({
-                ...exp,
-                title: exp?.designation,
-                date: "Jun 2020 - Present",
-                location: `${exp.company_name}, ${exp.location}`
-              }))}
+              items={data?.experience?.map((exp: Experience) => {
+                return {
+                  ...exp,
+                  title: exp?.designation,
+                  date: `${formatDate(exp?.start_date)} - ${formatDate(exp?.end_date)}`,
+                  location: `${exp.company_name}, ${exp.location}`
+                }
+              })}
               id="experience"
               href="/experience"
               btnText="View All Experience"
