@@ -21,10 +21,10 @@ const Header: React.FC = () => {
             <div className="flex flex-1 justify-end gap-8">
                 <nav className="flex items-center gap-9 text-sm font-medium text-[#0e141b]">
                     <Link href="/about">About</Link>
-                    <Link href="#projects">Projects</Link>
-                    <Link href="#skills">Skills</Link>
+                    <Link href={path === "/" ? "#experience" : "/experience"}>Experience</Link>
+                    <Link href={path === "/" ? "#projects" : "/projects"}>Projects</Link>
+                    <Link href={path === "/" ? "#skills" : "/skills"}>Skills</Link>
                     <Link href="/testimonials">Testimonials</Link>
-                    <Link href="#experience">Experience</Link>
                     <Link href="/blogs">Blogs</Link>
                     <Link href="/contact">Contact</Link>
                 </nav>
