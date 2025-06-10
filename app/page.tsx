@@ -70,6 +70,7 @@ export default async function Home() {
               items={data?.projects.map((project: Project) => ({
                 ...project,
                 date: formatDate(project?.date),
+                location: project?.sub_title
               }))}
               id={"projects"}
               href="/projects"

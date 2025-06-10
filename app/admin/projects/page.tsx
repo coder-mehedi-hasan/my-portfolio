@@ -152,7 +152,7 @@ export default function AdminProjectsPage() {
             />
           </div>
 
-          {/* <div>
+          <div>
             <label className="block text-sm font-medium mb-1">Subtitle</label>
             <input
               type="text"
@@ -161,7 +161,7 @@ export default function AdminProjectsPage() {
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
-          </div> */}
+          </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Description</label>

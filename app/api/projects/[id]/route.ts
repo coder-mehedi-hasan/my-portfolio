@@ -5,7 +5,7 @@ import { z } from 'zod';
 const projectUpdateSchema = z.object({
     is_featured: z.boolean().optional(),
     title: z.string().min(1),
-    // sub_title: z.string().optional(),
+    sub_title: z.string().optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
     date: z.string().optional(),

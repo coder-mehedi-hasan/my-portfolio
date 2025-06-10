@@ -27,6 +27,7 @@ type Project = {
     id: number;
     is_home_page: boolean;
     title: string;
+    sub_title?: string;
     description: string;
     icon: string;
     date: string | null;

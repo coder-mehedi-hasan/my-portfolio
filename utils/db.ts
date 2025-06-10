@@ -19,6 +19,7 @@ export const adminUserSchema = z.object({
 
 export const projectSchema = z.object({
     title: z.string(),
+    sub_title: z.string().optional(),
     description: z.string().optional(),
     icon: z.string().optional(),
     is_home_page: z.boolean().optional(),
