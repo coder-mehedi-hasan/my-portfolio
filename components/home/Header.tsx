@@ -35,7 +35,7 @@ const Header: React.FC = () => {
                         if (!constant.baseUrl) return;
                         downloadResume(`${constant.baseUrl}/resume-mehedi.pdf`)
                     }}
-                    className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
+                    className="cursor-pointer flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
                     <span className="truncate">Resume</span>
                 </button>
             </div>
