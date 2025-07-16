@@ -1,4 +1,6 @@
 "use client";
+import constant from '@/utils/constant';
+import { downloadResume } from '@/utils/helpers';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -28,7 +30,12 @@ const Header: React.FC = () => {
                     {/* <Link href="/blogs">Blogs</Link> */}
                     <Link href="/contact">Contact</Link>
                 </nav>
-                <button className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
+                <button
+                    onClick={() => {
+                        if (!constant.baseUrl) return;
+                        downloadResume(`${constant.baseUrl}/resume-mehedi.pdf`)
+                    }}
+                    className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
                     <span className="truncate">Resume</span>
                 </button>
             </div>

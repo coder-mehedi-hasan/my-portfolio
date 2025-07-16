@@ -1,4 +1,5 @@
 "use client";
+import constant from '@/utils/constant';
 import { downloadResume } from '@/utils/helpers';
 import React from 'react';
 
@@ -23,7 +24,8 @@ const Hero: React.FC<{ setting: setting }> = ({ setting }) => {
                     </h2>
                 </div>
                 <button onClick={() => {
-                    downloadResume(setting?.resume_url)
+                    if (!constant.baseUrl) return;
+                    downloadResume(`${constant.baseUrl}/resume-mehedi.pdf`)
                 }} className="flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em] md:h-12 md:px-5 md:text-base cursor-pointer">
                     <span className="truncate">Download Resume</span>
                 </button>
