@@ -91,36 +91,38 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Blogs
+## Markdown Content
 
-Blog posts are stored as Markdown files in `content/blogs/` and rendered statically. No database or API is involved.
+All content — blogs, skills, projects, and experiences — is stored as Markdown files under `content/` and rendered statically. No database or API is involved.
 
-### How it works
-
-- Each post is a `.md` file with YAML frontmatter (metadata) followed by Markdown body content.
-- The listing page (`app/blogs/page.tsx`) reads every `.md` file and shows title, excerpt, author, date, and image.
-- The detail page (`app/blogs/[slug]/page.tsx`) renders the full Markdown body.
-- Files starting with `_` (e.g. `_template.md`) are ignored by the listing.
-
-### Accessing posts
-
-| URL                              | What you get                              |
-| -------------------------------- | ----------------------------------------- |
-| `/blogs/my-post`                 | Rendered HTML preview                     |
-| `/blogs/my-post.md`              | Raw Markdown file (`text/markdown`)       |
-| `/blogs/_template.md`            | Raw Markdown of the template              |
-| `/blogs/raw/my-post`             | Raw Markdown file (direct, no redirect)   |
+- Files starting with `_` (e.g. `_template.md`) are ignored by the readers and used only as templates.
+- Add a new file → rebuild → the page updates.
 
 ### File structure
 
 ```
-content/blogs/
-├─ _template.md                      # Copy this to create a new post
-├─ building-scalable-ecommerce-platforms.md
-└─ creating-elegant-websites-from-scratch.md
+content/
+├─ blogs/                            # Blog posts
+│  ├─ _template.md
+│  ├─ building-scalable-ecommerce-platforms.md
+│  └─ creating-elegant-websites-from-scratch.md
+├─ skills/                           # Technical skills
+│  ├─ _template.md
+│  ├─ backend-development.md
+│  └─ frontend-development.md
+├─ projects/                         # Projects
+│  ├─ _template.md
+│  ├─ mycare360.md
+│  └─ quantumleap-emr.md
+└─ experiences/                      # Work experience
+   ├─ _template.md
+   ├─ frontend-developer-kotha.md
+   └─ software-developer-bitpixel.md
 ```
 
-### Frontmatter format
+### Frontmatter formats
+
+**Blogs** (`content/blogs/*.md`)
 
 ```yaml
 ---
@@ -135,25 +137,83 @@ tags:
 ---
 ```
 
-### Rules
+**Skills** (`content/skills/*.md`)
 
-1. Save the file as `content/blogs/<kebab-case-slug>.md` (e.g. `content/blogs/understanding-react-server-components.md`).
-2. The slug (filename) must be kebab-case and unique.
-3. `date` must be a valid `YYYY-MM-DD` value.
-4. `author` (`Md Mehedi Hasan`) and `feature_image` (`/me.png`) are fixed — keep them as-is.
-5. Every post must include a `## Introduction` and a `## Conclusion` heading.
-6. Do NOT add a top-level `# ` title heading — the page renders the title from frontmatter.
-7. Only these Markdown features are styled: headings, paragraphs, bold/italic, lists, blockquotes, inline code, and fenced code blocks.
+```yaml
+---
+title: "Skill Name"
+sub_title: "Compact summary shown under the title"
+icon: "fa-solid fa-code"
+sort_index: 0
+---
 
-### Prompt to convert content into blog format
+Optional longer description written in Markdown.
+```
 
-Use the prompt below (or copy the template at `content/blogs/_template.md`) to convert any piece of writing into a portfolio blog post:
+**Projects** (`content/projects/*.md`)
 
-> You are helping me publish a blog post on my portfolio website. Convert the content I provide into a single Markdown file that follows this exact format.
+```yaml
+---
+title: "Project Name"
+sub_title: "One line about what it does"
+date: "YYYY-MM-DD"
+icon: "fa-solid fa-briefcase"
+image: "/path/to/thumbnail.png"     # optional
+live_url: "https://example.com"     # optional live site link
+sort_index: 0
+tools:
+  - Tool One
+  - Tool Two
+---
+
+Body rendered on /projects/<slug>. Suggested sections:
+## Project Scope, ## My Role, ## Learning Curve,
+## Challenges & Struggles, ## Key Takeaways
+```
+
+**Experiences** (`content/experiences/*.md`)
+
+```yaml
+---
+designation: "Job Title"
+company_name: "Company Name"
+location: "City or Country"
+job_type: "Full-time"
+icon: "fa-solid fa-briefcase"
+start_date: "YYYY-MM-DD"
+end_date: "YYYY-MM-DD"              # omit for a current role
+sort_index: 0
+---
+
+Body rendered on /experiences/<slug>. Suggested sections:
+## About the Company, ## What I Did, ## What I Learned, ## Why It Mattered
+```
+
+### Common rules
+
+1. Save each item as `content/<type>/<kebab-case-slug>.md` — the slug must be kebab-case and unique.
+2. `date`, `start_date`, `end_date` must be valid `YYYY-MM-DD` values.
+3. All skills, projects, and experiences appear on the homepage and on their listing page.
+4. Clicking a project or experience card opens its detail page (`/projects/<slug>` or `/experiences/<slug>`), which renders the markdown body.
+5. In blog posts, `author` (`Md Mehedi Hasan`) and `feature_image` (`/me.png`) are fixed — keep them as-is.
+6. Blog posts must include a `## Introduction` and `## Conclusion` heading and no top-level `# ` title heading.
+
+### Accessing blog posts
+
+| URL                              | What you get                              |
+| -------------------------------- | ----------------------------------------- |
+| `/blogs/my-post`                 | Rendered HTML preview                     |
+| `/blogs/my-post.md`              | Raw Markdown file (`text/markdown`)       |
+| `/blogs/_template.md`            | Raw Markdown of the template              |
+| `/blogs/raw/my-post`             | Raw Markdown file (direct, no redirect)   |
+
+### Prompt to convert content into portfolio Markdown
+
+Use the prompt below (or copy the matching `_template.md`) to convert any piece of writing or data into the site's content files:
+
+> Convert the content I provide into Markdown content files for my portfolio website. Detect whether it is a blog post, a skill, a project, or an experience, then follow the matching format below. Save each item as `content/<type>/<kebab-case-slug>.md`.
 >
-> **Output location:** save the result as `content/blogs/<kebab-case-slug>.md`.
->
-> **Frontmatter (YAML) — use the fields below:**
+> **Blog format:**
 > ```yaml
 > ---
 > title: "<concise, click-worthy title>"
@@ -163,20 +223,51 @@ Use the prompt below (or copy the template at `content/blogs/_template.md`) to c
 > feature_image: "/me.png"
 > tags:
 >   - <tag-one>
->   - <tag-two>
+> ---
+> ```
+> Body: start with `## Introduction`, organize into `##` / `###` sections, keep paragraphs short, use lists, blockquotes for takeaways, and fenced code blocks for code. End with `## Conclusion`. Do not add a top-level `# ` heading.
+>
+> **Skill format** (`content/skills/<slug>.md`):
+> ```yaml
+> ---
+> title: "<skill name>"
+> sub_title: "<related tools, comma separated>"
+> icon: "<fa-* icon class>"
+> sort_index: <number>
 > ---
 > ```
 >
-> **Body rules:**
-> 1. Start with a `## Introduction` section explaining what the post covers.
-> 2. Organize the rest into clear `##` / `###` sections.
-> 3. Keep paragraphs short (2-3 sentences). Use bullet lists for scannable points and numbered lists for steps.
-> 4. Use blockquotes (`>`) for key takeaways and inline or fenced code blocks for code examples.
-> 5. End with a `## Conclusion` summarizing the post.
-> 6. Do not add a top-level `# ` title heading.
-> 7. Only use the Markdown features listed: headings, paragraphs, bold/italic, lists, blockquotes, and code blocks.
-> 8. Slugify the filename from the title using kebab-case (lowercase, hyphens instead of spaces).
-> 9. `author` and `feature_image` are FIXED — always set them to `Md Mehedi Hasan` and `/me.png`. Never change them.
+> **Project format** (`content/projects/<slug>.md`):
+> ```yaml
+> ---
+> title: "<project name>"
+> sub_title: "<one line about it>"
+> date: "<YYYY-MM-DD>"
+> icon: "<fa-* icon class>"
+> image: "<optional thumbnail path>"
+> live_url: "<optional live site URL>"
+> sort_index: <number>
+> tools:
+>   - <tool>
+> ---
+> ```
+> Body: use these sections for the details page — `## Project Scope`, `## My Role`, `## Learning Curve`, `## Challenges & Struggles`, `## Key Takeaways`. Mention the scope, learnings, challenges, and struggles in detail; include the `live_url` if a live site exists.
+>
+> **Experience format** (`content/experiences/<slug>.md`):
+> ```yaml
+> ---
+> designation: "<job title>"
+> company_name: "<company>"
+> location: "<location>"
+> job_type: "<full-time|part-time|...>"
+> start_date: "<YYYY-MM-DD>"
+> end_date: "<YYYY-MM-DD or omit for current>"
+> sort_index: <number>
+> ---
+> ```
+> Body: use these sections for the details page — `## About the Company`, `## What I Did`, `## What I Learned`, `## Why It Mattered`. Describe the company and what you learned/experienced there in detail.
+>
+> Rules: slugify filenames with kebab-case; dates must be `YYYY-MM-DD`; never change `author` or `feature_image` in blog posts.
 
 
 ## Learn More

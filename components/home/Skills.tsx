@@ -2,8 +2,9 @@
 
 import React from 'react';
 import DynamicFAIcon from '../DynamicFAIcon';
+import { SkillItem } from '@/utils/content';
 
-const Skills: React.FC<{ skills?: Skill[] }> = ({ skills }) => {
+const Skills: React.FC<{ skills?: SkillItem[] }> = ({ skills }) => {
     return (
         <section>
             <h2

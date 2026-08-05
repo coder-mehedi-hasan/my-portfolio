@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://mehedi-info.vercel.app/about</loc><lastmod>2026-08-05T06:12:44.953Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/blogs</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/experience</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/contact</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/projects</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/skills</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/testimonials</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/blogs/building-scalable-ecommerce-platforms</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://mehedi-info.vercel.app/blogs/creating-elegant-websites-from-scratch</loc><lastmod>2026-08-05T06:12:44.954Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/about</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/blogs</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/contact</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/experience</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/skills</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/testimonials</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/experiences/frontend-developer-kotha</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/experiences/software-developer-bitpixel</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/projects/mycare360</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/projects/quantumleap-emr</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/blogs/building-scalable-ecommerce-platforms</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/blogs/creating-elegant-websites-from-scratch</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://mehedi-info.vercel.app/projects</loc><lastmod>2026-08-05T06:37:42.041Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

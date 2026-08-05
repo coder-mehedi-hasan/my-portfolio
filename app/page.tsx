@@ -1,7 +1,8 @@
 import Skills from '@/components/home/Skills';
 import Hero from '../components/home/Hero';
 import Section from '../components/home/Section';
-import { setting, homeSkills, homeProjects, homeExperience } from '@/utils/data';
+import { setting } from '@/utils/data';
+import { getAllSkills, getAllProjects, getAllExperiences } from '@/utils/content';
 
 export default function Home() {
   const formatDate = (dateStr?: string | null) => {
@@ -9,6 +10,10 @@ export default function Home() {
     const date = new Date(dateStr);
     return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
   };
+
+  const skills = getAllSkills();
+  const projects = getAllProjects();
+  const experiences = getAllExperiences();
 
   return (
     <div className="font-body relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg">
@@ -18,9 +23,8 @@ export default function Home() {
             <Hero setting={setting} />
             <Section
               title="Experience"
-              items={homeExperience.map((exp: Experience) => {
+              items={experiences.map((exp) => {
                 return {
-                  ...exp,
                   title: exp?.designation,
                   date: `${formatDate(exp?.start_date)} - ${formatDate(exp?.end_date)}`,
                   location: `${exp.company_name}, ${exp.location}`
@@ -33,8 +37,8 @@ export default function Home() {
             />
             <Section
               title="Projects"
-              items={homeProjects.map((project: Project) => ({
-                ...project,
+              items={projects.map((project) => ({
+                title: project.title,
                 date: formatDate(project?.date),
                 location: project?.sub_title
               }))}
@@ -43,7 +47,7 @@ export default function Home() {
               btnText="View All Projects"
               viewAllBtnPreview={true}
             />
-            <Skills skills={homeSkills} />
+            <Skills skills={skills} />
           </div>
         </div>
       </div>
