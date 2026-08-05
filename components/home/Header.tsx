@@ -27,7 +27,7 @@ const Header: React.FC = () => {
                     <Link href={path === "/" ? "#projects" : "/projects"}>Projects</Link>
                     <Link href={path === "/" ? "#skills" : "/skills"}>Skills</Link>
                     {/* <Link href="/testimonials">Testimonials</Link> */}
-                    {/* <Link href="/blogs">Blogs</Link> */}
+                    <Link href="/blogs">Blogs</Link>
                     <Link href="/contact">Contact</Link>
                 </nav>
                 <button
