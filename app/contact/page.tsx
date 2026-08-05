@@ -1,39 +1,21 @@
 'use client';
 
-import React, { FormEvent, useState, useTransition } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 const Contact: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
-    const [isPending, startTransition] = useTransition();
 
-    const handleSubmit = async (e: FormEvent) => {
+const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         const payload = { name, email, message }
         console.log(payload);
-        setStatus("error");
-        return;
-        startTransition(async () => {
-            try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-
-                if (!res.ok) throw new Error('Message failed');
-
-                setName('');
-                setEmail('');
-                setMessage('');
-                setStatus('success');
-            } catch (error) {
-                console.error(error);
-                setStatus('error');
-            }
-        });
+        setName('');
+        setEmail('');
+        setMessage('');
+        setStatus('success');
     };
 
     return (
@@ -72,10 +54,9 @@ const Contact: React.FC = () => {
 
                     <button
                         type="submit"
-                        disabled={isPending}
-                        className="w-full bg-black text-white font-semibold py-2 rounded-md hover:bg-white hover:text-black border border-black transition disabled:opacity-50"
+                        className="w-full bg-black text-white font-semibold py-2 rounded-md hover:bg-white hover:text-black border border-black transition"
                     >
-                        {isPending ? 'Sending...' : 'Submit'}
+                        Submit
                     </button>
 
                     {status === 'success' && (

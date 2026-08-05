@@ -8,7 +8,7 @@ import React from 'react';
 const Header: React.FC = () => {
     const path = usePathname();
     return (
-        <header className={`items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] px-10 py-3 ${path.startsWith("/admin") ? "hidden" : "flex"}`}>
+        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] px-10 py-3">
             <div className="flex items-center gap-4 text-[#0e141b]">
                 <div className="size-4">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
