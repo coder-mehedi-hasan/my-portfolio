@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import React from 'react';
 import { getAllBlogs, getBlogBySlug } from '@/utils/blogs';
 
@@ -7,10 +7,13 @@ export function generateStaticParams() {
     return getAllBlogs().map((blog) => ({ slug: blog.slug }));
 }
 
-export const dynamicParams = false;
-
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+    let { slug } = await params;
+
+    if (slug.endsWith('.md')) {
+        redirect(`/blogs/raw/${slug.slice(0, -3)}`);
+    }
+
     const blog = getBlogBySlug(slug);
 
     if (!blog) {

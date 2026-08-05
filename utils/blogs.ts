@@ -21,7 +21,7 @@ const BLOGS_DIR = path.join(process.cwd(), 'content', 'blogs');
 
 function readBlogFiles(): string[] {
     if (!fs.existsSync(BLOGS_DIR)) return [];
-    return fs.readdirSync(BLOGS_DIR).filter((file) => file.endsWith('.md'));
+    return fs.readdirSync(BLOGS_DIR).filter((file) => file.endsWith('.md') && !file.startsWith('_'));
 }
 
 function normalizeBlog(file: string): Blog {

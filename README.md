@@ -91,6 +91,94 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Blogs
+
+Blog posts are stored as Markdown files in `content/blogs/` and rendered statically. No database or API is involved.
+
+### How it works
+
+- Each post is a `.md` file with YAML frontmatter (metadata) followed by Markdown body content.
+- The listing page (`app/blogs/page.tsx`) reads every `.md` file and shows title, excerpt, author, date, and image.
+- The detail page (`app/blogs/[slug]/page.tsx`) renders the full Markdown body.
+- Files starting with `_` (e.g. `_template.md`) are ignored by the listing.
+
+### Accessing posts
+
+| URL                              | What you get                              |
+| -------------------------------- | ----------------------------------------- |
+| `/blogs/my-post`                 | Rendered HTML preview                     |
+| `/blogs/my-post.md`              | Raw Markdown file (`text/markdown`)       |
+| `/blogs/_template.md`            | Raw Markdown of the template              |
+| `/blogs/raw/my-post`             | Raw Markdown file (direct, no redirect)   |
+
+### File structure
+
+```
+content/blogs/
+├─ _template.md                      # Copy this to create a new post
+├─ building-scalable-ecommerce-platforms.md
+└─ creating-elegant-websites-from-scratch.md
+```
+
+### Frontmatter format
+
+```yaml
+---
+title: "Your Blog Title Here"
+excerpt: "One or two sentence summary shown on the /blogs listing page."
+author: "Md Mehedi Hasan"          # FIXED — do not change
+date: "YYYY-MM-DD"
+feature_image: "/me.png"            # FIXED — do not change
+tags:
+  - tag-one
+  - tag-two
+---
+```
+
+### Rules
+
+1. Save the file as `content/blogs/<kebab-case-slug>.md` (e.g. `content/blogs/understanding-react-server-components.md`).
+2. The slug (filename) must be kebab-case and unique.
+3. `date` must be a valid `YYYY-MM-DD` value.
+4. `author` (`Md Mehedi Hasan`) and `feature_image` (`/me.png`) are fixed — keep them as-is.
+5. Every post must include a `## Introduction` and a `## Conclusion` heading.
+6. Do NOT add a top-level `# ` title heading — the page renders the title from frontmatter.
+7. Only these Markdown features are styled: headings, paragraphs, bold/italic, lists, blockquotes, inline code, and fenced code blocks.
+
+### Prompt to convert content into blog format
+
+Use the prompt below (or copy the template at `content/blogs/_template.md`) to convert any piece of writing into a portfolio blog post:
+
+> You are helping me publish a blog post on my portfolio website. Convert the content I provide into a single Markdown file that follows this exact format.
+>
+> **Output location:** save the result as `content/blogs/<kebab-case-slug>.md`.
+>
+> **Frontmatter (YAML) — use the fields below:**
+> ```yaml
+> ---
+> title: "<concise, click-worthy title>"
+> excerpt: "<1-2 sentence summary for the listing page>"
+> author: "Md Mehedi Hasan"
+> date: "<YYYY-MM-DD>"
+> feature_image: "/me.png"
+> tags:
+>   - <tag-one>
+>   - <tag-two>
+> ---
+> ```
+>
+> **Body rules:**
+> 1. Start with a `## Introduction` section explaining what the post covers.
+> 2. Organize the rest into clear `##` / `###` sections.
+> 3. Keep paragraphs short (2-3 sentences). Use bullet lists for scannable points and numbered lists for steps.
+> 4. Use blockquotes (`>`) for key takeaways and inline or fenced code blocks for code examples.
+> 5. End with a `## Conclusion` summarizing the post.
+> 6. Do not add a top-level `# ` title heading.
+> 7. Only use the Markdown features listed: headings, paragraphs, bold/italic, lists, blockquotes, and code blocks.
+> 8. Slugify the filename from the title using kebab-case (lowercase, hyphens instead of spaces).
+> 9. `author` and `feature_image` are FIXED — always set them to `Md Mehedi Hasan` and `/me.png`. Never change them.
+
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
