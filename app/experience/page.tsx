@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import React from 'react';
+import type { Metadata } from 'next';
 import DynamicFAIcon from '@/components/DynamicFAIcon';
 import { getAllExperiences } from '@/utils/content';
+
+export const metadata: Metadata = {
+    title: 'Experience',
+    description:
+        'Professional work experience of Md Mehedi Hasan, a full-stack developer specializing in front-end and back-end development.',
+    alternates: {
+        canonical: '/experience',
+    },
+};
 
 const formatDate = (dateStr?: string) => {
     if (!dateStr) return 'Present';

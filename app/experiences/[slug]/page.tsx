@@ -1,10 +1,28 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import React from 'react';
 import { getAllExperiences, getExperienceBySlug } from '@/utils/content';
 
 export function generateStaticParams() {
     return getAllExperiences().map((exp) => ({ slug: exp.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const experience = getExperienceBySlug(slug);
+
+    if (!experience) {
+        return {};
+    }
+
+    return {
+        title: `${experience.designation} at ${experience.company_name}`,
+        description: experience.description,
+        alternates: {
+            canonical: `/experiences/${experience.slug}`,
+        },
+    };
 }
 
 const formatDate = (dateStr?: string) => {

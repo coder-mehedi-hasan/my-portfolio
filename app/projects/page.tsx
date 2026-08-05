@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import React from 'react';
+import type { Metadata } from 'next';
 import { getAllProjects } from '@/utils/content';
+
+export const metadata: Metadata = {
+    title: 'Projects',
+    description:
+        'Explore the projects built by Md Mehedi Hasan, a full-stack developer. From e-commerce platforms to healthcare systems and elegant websites.',
+    alternates: {
+        canonical: '/projects',
+    },
+};
 
 const Project: React.FC = () => {
     const projects = getAllProjects();

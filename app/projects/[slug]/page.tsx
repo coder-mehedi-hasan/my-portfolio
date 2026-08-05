@@ -1,10 +1,42 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import React from 'react';
 import { getAllProjects, getProjectBySlug } from '@/utils/content';
 
 export function generateStaticParams() {
     return getAllProjects().map((project) => ({ slug: project.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const project = getProjectBySlug(slug);
+
+    if (!project) {
+        return {};
+    }
+
+    return {
+        title: project.title,
+        description: project.description ?? project.sub_title,
+        alternates: {
+            canonical: `/projects/${project.slug}`,
+        },
+        openGraph: {
+            title: project.title,
+            description: project.description ?? project.sub_title,
+            type: 'article',
+            publishedTime: project.date,
+            tags: project.tools,
+            images: project.image ? [{ url: project.image, alt: project.title }] : undefined,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: project.title,
+            description: project.description ?? project.sub_title,
+            images: project.image ? [project.image] : undefined,
+        },
+    };
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -55,7 +87,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
                 {project.image && (
                     <div className="w-full rounded-xl overflow-hidden mb-8">
-                        <img src={project.image} alt={project.title} className="w-full object-cover" />
+                        <img src={project.image} alt={project.title} loading="lazy" className="w-full object-cover" />
                     </div>
                 )}
 

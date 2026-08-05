@@ -1,4 +1,14 @@
+import type { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+    title: 'About',
+    description:
+        'Learn more about Md Mehedi Hasan, a full-stack developer with 10 years of experience in JavaScript, Python, React, Node.js, Express and MongoDB.',
+    alternates: {
+        canonical: '/about',
+    },
+};
 
 const About: React.FC = () => {
     return (

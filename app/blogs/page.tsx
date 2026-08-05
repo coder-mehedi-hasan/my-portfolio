@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import React from 'react';
+import type { Metadata } from 'next';
 import { getAllBlogs } from '@/utils/blogs';
+
+export const metadata: Metadata = {
+    title: 'Blogs',
+    description:
+        'Articles and tutorials written by Md Mehedi Hasan covering web development, e-commerce platforms, deployment and more.',
+    alternates: {
+        canonical: '/blogs',
+    },
+};
 
 export default function BlogsPage() {
     const blogs = getAllBlogs();
@@ -40,6 +50,9 @@ export default function BlogsPage() {
                                     <img
                                         src={blog.feature_image}
                                         alt={blog.title}
+                                        loading="lazy"
+                                        width={160}
+                                        height={160}
                                         className="object-cover w-full h-full rounded-lg"
                                     />
                                 </div>

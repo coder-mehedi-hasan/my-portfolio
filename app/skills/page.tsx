@@ -1,6 +1,16 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import DynamicFAIcon from '@/components/DynamicFAIcon';
 import { getAllSkills } from '@/utils/content';
+
+export const metadata: Metadata = {
+    title: 'Skills',
+    description:
+        'Technical skills of Md Mehedi Hasan including frontend development, backend development, databases, devops infrastructure and more.',
+    alternates: {
+        canonical: '/skills',
+    },
+};
 
 const SkillsPage: React.FC = () => {
     const skills = getAllSkills();

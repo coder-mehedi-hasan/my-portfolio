@@ -1,10 +1,42 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import type { Metadata } from 'next';
 import React from 'react';
 import { getAllBlogs, getBlogBySlug } from '@/utils/blogs';
 
 export function generateStaticParams() {
     return getAllBlogs().map((blog) => ({ slug: blog.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const blog = getBlogBySlug(slug);
+
+    if (!blog) {
+        return {};
+    }
+
+    return {
+        title: blog.title,
+        description: blog.excerpt,
+        alternates: {
+            canonical: `/blogs/${blog.slug}`,
+        },
+        openGraph: {
+            title: blog.title,
+            description: blog.excerpt,
+            type: 'article',
+            publishedTime: blog.date,
+            tags: blog.tags,
+            images: blog.feature_image ? [{ url: blog.feature_image }] : undefined,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: blog.title,
+            description: blog.excerpt,
+            images: blog.feature_image ? [blog.feature_image] : undefined,
+        },
+    };
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -48,7 +80,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
                 {blog.feature_image && (
                     <div className="w-full rounded-xl overflow-hidden mb-8">
-                        <img src={blog.feature_image} alt={blog.title} className="w-full object-cover" />
+                        <img src={blog.feature_image} alt={blog.title} loading="lazy" className="w-full object-cover" />
                     </div>
                 )}
 

@@ -1,4 +1,14 @@
 import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Testimonials',
+    description:
+        'Client testimonials and reviews about the work of Md Mehedi Hasan, a full-stack developer.',
+    alternates: {
+        canonical: '/testimonials',
+    },
+};
 
 const TestimonialsPage: React.FC = () => {
     return (
@@ -20,7 +30,10 @@ const TestimonialsPage: React.FC = () => {
                             <div className="flex items-center gap-3 mb-3">
                                 <img
                                     src={t.avatar}
-                                    alt={t.name}
+                                    alt={`${t.name} avatar`}
+                                    loading="lazy"
+                                    width={32}
+                                    height={32}
                                     className="w-8 h-8 rounded-full object-cover"
                                 />
                                 <div className="text-sm">
