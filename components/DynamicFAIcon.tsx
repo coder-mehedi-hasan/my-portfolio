@@ -1,45 +1,29 @@
-//@ts-nocheck
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-
-// Import all icons
-import * as solidIcons from '@fortawesome/free-solid-svg-icons';
-import * as brandIcons from '@fortawesome/free-brands-svg-icons';
-import * as regularIcons from '@fortawesome/free-regular-svg-icons';
-
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faBriefcase, faCode, faDatabase, faGear, faHeartPulse, faLayerGroup, faServer, faStethoscope, faToolbox, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { faReact } from '@fortawesome/free-brands-svg-icons';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import React from 'react';
 
-const iconSets: Record<string, Record<string, IconDefinition>> = {
-    'fa-solid': solidIcons as Record<string, IconDefinition>,
-    'fa-brands': brandIcons as Record<string, IconDefinition>,
-    'fa-regular': regularIcons as Record<string, IconDefinition>,
+const icons: Record<string, IconDefinition> = {
+    'fa-solid fa-briefcase': faBriefcase,
+    'fa-solid fa-code': faCode,
+    'fa-solid fa-database': faDatabase,
+    'fa-solid fa-gear': faGear,
+    'fa-solid fa-heart-pulse': faHeartPulse,
+    'fa-solid fa-layer-group': faLayerGroup,
+    'fa-solid fa-server': faServer,
+    'fa-solid fa-stethoscope': faStethoscope,
+    'fa-solid fa-toolbox': faToolbox,
+    'fa-solid fa-window-restore': faWindowRestore,
+    'fa-brands fa-react': faReact,
 };
 
-function formatIconKey(raw: string): string {
-    return 'fa' + raw
-        .replace('fa-', '')
-        .replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase());
+interface DynamicFAIconProps extends Omit<React.ComponentProps<typeof FontAwesomeIcon>, 'icon'> {
+    icon: string;
 }
 
-function getIconFromString(iconString: string): IconDefinition | null {
-    const [prefix, iconName] = iconString.split(' ');
-    const iconPack = iconSets[prefix];
-    if (!iconPack || !iconName) return null;
-
-    const key = formatIconKey(iconName);
-    return iconPack[key] || null;
+export default function DynamicFAIcon({ icon, ...props }: DynamicFAIconProps) {
+    const iconKey = icon.split(' ').slice(0, 2).join(' ');
+    return <FontAwesomeIcon icon={icons[iconKey] ?? faCircle} {...props} />;
 }
-
-//@ts-ignore
-interface DynamicFAIconProps extends React.ComponentProps<typeof FontAwesomeIcon> {
-    icon: string; // e.g., "fa-brands fa-react"
-}
-
-const DynamicFAIcon: React.FC<DynamicFAIconProps> = ({ icon, ...props }) => {
-    let faIcon = getIconFromString(icon);
-    if (!faIcon) faIcon = getIconFromString("fa-regular fa-circle fa-lg");
-    //@ts-ignore
-    return <FontAwesomeIcon icon={faIcon} {...props} />;
-};
-
-export default DynamicFAIcon;

@@ -16,7 +16,7 @@ const SkillsPage: React.FC = () => {
     const skills = getAllSkills();
 
     return (
-        <div className="min-h-screen bg-slate-50 font-body">
+        <div className="min-h-screen bg-[#fafaf9] font-body">
             <div className="max-w-5xl mx-auto px-4 py-10">
                 <SectionTitle title="Technical Skills" />
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 mt-6">

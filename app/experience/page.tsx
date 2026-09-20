@@ -23,7 +23,7 @@ const ExperiencePage: React.FC = () => {
     const experiences = getAllExperiences();
 
     return (
-        <div className="min-h-screen bg-slate-50 text-[#0e141b] font-body">
+        <div className="min-h-screen bg-[#fafaf9] text-[#111211] font-body">
             <div className="max-w-5xl mx-auto px-4 py-10">
                 <SectionTitle title="Experience" description="A selection of roles I've worked in." />
 

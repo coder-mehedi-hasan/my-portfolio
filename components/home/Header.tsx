@@ -1,14 +1,15 @@
 "use client";
-import constant from '@/utils/constant';
 import { downloadResume } from '@/utils/helpers';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 
 const Header: React.FC = () => {
     const path = usePathname();
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
-        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] px-10 py-3">
+        <header className="border-b border-solid border-b-[#e7e8e5] bg-white/95 px-4 py-4 backdrop-blur md:px-8">
+          <div className="mx-auto flex max-w-[1120px] items-center justify-between whitespace-nowrap">
             <div className="flex items-center gap-4 text-[#0e141b]">
                 <div className="size-4">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,9 +21,9 @@ const Header: React.FC = () => {
                 </div>
                 <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]"><Link href={"/"}>Mehedi Hasan</Link></h2>
             </div>
-            <div className="flex flex-1 justify-end gap-8">
-                <nav className="flex items-center gap-9 text-sm font-medium text-[#0e141b]">
-                    {/* <Link href="/about">About</Link> */}
+            <div className="hidden flex-1 justify-end gap-8 md:flex">
+                <nav className="flex items-center gap-8 text-sm font-medium text-[#4f5753] [&_a]:transition-colors [&_a:hover]:text-black">
+                    <Link href="/about">About</Link>
                     <Link href={path === "/" ? "#experience" : "/experience"}>Experience</Link>
                     <Link href={path === "/" ? "#projects" : "/projects"}>Projects</Link>
                     <Link href={path === "/" ? "#skills" : "/skills"}>Skills</Link>
@@ -31,14 +32,26 @@ const Header: React.FC = () => {
                     <Link href="/contact">Contact</Link>
                 </nav>
                 <button
-                    onClick={() => {
-                        if (!constant.baseUrl) return;
-                        downloadResume(`${constant.baseUrl}/resume-mehedi.pdf`)
-                    }}
-                    className="cursor-pointer flex h-10 min-w-[84px] items-center justify-center rounded-xl bg-[#1980e6] px-4 text-sm font-bold text-slate-50 tracking-[0.015em]">
+                    onClick={() => downloadResume('/resume-mehedi.pdf')}
+                    className="flex h-10 min-w-[88px] cursor-pointer items-center justify-center rounded-full bg-[#111211] px-5 text-sm font-bold tracking-[0.015em] text-white transition hover:bg-[#303330]">
                     <span className="truncate">Resume</span>
                 </button>
             </div>
+            <button type="button" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)} className="flex size-10 items-center justify-center rounded-xl border border-[#e7edf3] text-xl md:hidden">
+              {menuOpen ? '×' : '☰'}
+            </button>
+          </div>
+          {menuOpen && (
+            <nav className="mt-3 flex flex-col gap-1 border-t border-[#e7edf3] pt-3 text-sm font-medium md:hidden">
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/about">About</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/experience">Experience</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/projects">Projects</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/skills">Skills</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/blogs">Blogs</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-50" href="/contact">Contact</Link>
+              <a href="/resume-mehedi.pdf" target="_blank" rel="noreferrer" className="mt-2 rounded-xl bg-[#111211] px-4 py-3 text-center font-bold text-white">Resume</a>
+            </nav>
+          )}
         </header>
     );
 };

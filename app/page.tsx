@@ -16,10 +16,10 @@ export default function Home() {
   const experiences = getAllExperiences();
 
   return (
-    <div className="font-body relative flex size-full min-h-screen flex-col bg-slate-50 overflow-x-hidden bg">
+    <div className="font-body relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#fafaf9]">
       <div className="layout-container flex h-full grow flex-col">
-        <div className="px-40 flex flex-1 justify-center py-5">
-          <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div className="flex flex-1 justify-center px-4 pb-10 sm:px-8">
+          <div className="layout-content-container flex max-w-[1040px] flex-1 flex-col">
             <Hero setting={setting} />
             <Section
               title="Experience"
@@ -27,7 +27,8 @@ export default function Home() {
                 return {
                   title: exp?.designation,
                   date: `${formatDate(exp?.start_date)} - ${formatDate(exp?.end_date)}`,
-                  location: `${exp.company_name}, ${exp.location}`
+                  location: `${exp.company_name}, ${exp.location}`,
+                  href: `/experiences/${exp.slug}`
                 }
               })}
               id="experience"
@@ -40,7 +41,8 @@ export default function Home() {
               items={projects.map((project) => ({
                 title: project.title,
                 date: formatDate(project?.date),
-                location: project?.sub_title
+                location: project?.sub_title,
+                href: `/projects/${project.slug}`
               }))}
               id={"projects"}
               href="/projects"

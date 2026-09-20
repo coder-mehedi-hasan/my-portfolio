@@ -3,7 +3,7 @@ title: "QuantumLeap EMR"
 sub_title: "Electronic Medical Record Software"
 date: "2024-10-01"
 icon: "fa-solid fa-stethoscope"
-live_url: "https://example.com/quantumleap"
+description: "A web-based electronic medical record system for clinical workflows, patient charts, and reporting."
 sort_index: 2
 tools:
   - React.js

@@ -50,7 +50,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     return (
         <div className="min-h-screen bg-white text-[#0e141b] font-body">
             <div className="max-w-3xl mx-auto px-4 py-10">
-                <Link href="/projects" className="text-sm text-[#1980e6] hover:underline">
+                <Link href="/projects" className="text-sm font-semibold text-[#111211] hover:underline">
                     ← Back to Projects
                 </Link>
 
@@ -73,7 +73,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             href={project.live_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-lg bg-[#1980e6] px-3 py-1 text-xs font-bold text-white hover:opacity-80"
+                            className="rounded-full bg-[#111211] px-4 py-1.5 text-xs font-bold text-white hover:opacity-80"
                         >
                             Live Site
                         </a>

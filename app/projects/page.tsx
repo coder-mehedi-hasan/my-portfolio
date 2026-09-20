@@ -16,7 +16,7 @@ const Project: React.FC = () => {
     const projects = getAllProjects();
 
     return (
-        <div className="min-h-screen bg-slate-50 text-[#0e141b] font-body">
+        <div className="min-h-screen bg-[#fafaf9] text-[#111211] font-body">
             <div className="max-w-5xl mx-auto px-4 py-10">
                 <SectionTitle title="Projects" description="A selection of projects I've worked on." />
 

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --no-lint",
+    "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

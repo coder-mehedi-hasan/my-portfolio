@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafaf9;
+  --foreground: #111211;
+  --muted: #66706b;
+  --line: #e3e5e2;
 }
 
 @theme inline {
@@ -23,7 +25,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), var(--font-noto-sans), sans-serif;
+  text-rendering: optimizeLegibility;
 }
+
+html { scroll-behavior: smooth; }
+
+::selection { background: #d9ddd8; color: #111211; }
+
+:focus-visible { outline: 2px solid #111211; outline-offset: 3px; }
 
 .blog-content {
   color: #0e141b;
@@ -44,7 +53,7 @@ body {
 .blog-content h2 { font-size: 1.5rem; }
 .blog-content h3 { font-size: 1.25rem; }
 .blog-content p { margin: 0.75em 0; }
-.blog-content a { color: #1980e6; text-decoration: underline; }
+.blog-content a { color: #111211; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .blog-content ul,
 .blog-content ol { margin: 0.75em 0; padding-left: 1.5rem; }
 .blog-content ul { list-style: disc; }

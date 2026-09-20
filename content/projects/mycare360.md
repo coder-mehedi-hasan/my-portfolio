@@ -3,7 +3,7 @@ title: "MyCare360"
 sub_title: "Mobile Based Patient App for EMR"
 date: "2025-01-01"
 icon: "fa-solid fa-heart-pulse"
-live_url: "https://example.com/mycare360"
+description: "A mobile-first patient experience for appointments, medical records, and communication with care providers."
 sort_index: 1
 tools:
   - React Native

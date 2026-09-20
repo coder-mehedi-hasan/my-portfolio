@@ -10,16 +10,14 @@ const Contact: React.FC = () => {
 
 const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        const payload = { name, email, message }
-        console.log(payload);
-        setName('');
-        setEmail('');
-        setMessage('');
+        const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+        window.location.href = `mailto:contact@mehedih.com?subject=${subject}&body=${body}`;
         setStatus('success');
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 text-[#0e141b] font-body">
+        <div className="min-h-screen bg-[#fafaf9] text-[#111211] font-body">
             <div className="max-w-5xl mx-auto px-4 py-10">
                 <SectionTitle
                     title="Get in touch"
@@ -60,7 +58,7 @@ const handleSubmit = (e: FormEvent) => {
                     </button>
 
                     {status === 'success' && (
-                        <p className="text-green-600 text-center">Message sent successfully!</p>
+                        <p className="text-green-600 text-center">Your email draft is ready to review and send.</p>
                     )}
                     {status === 'error' && (
                         <p className="text-red-600 text-center">Something went wrong. Please try again.</p>
@@ -72,11 +70,6 @@ const handleSubmit = (e: FormEvent) => {
                     <p>
                         <a href="mailto:contact@mehedih.com" className="text-blue-600 hover:underline">
                             email me directly at contact@mehedih.com
-                        </a>
-                    </p>
-                    <p>
-                        <a href="#" className="text-blue-600 hover:underline">
-                            join my newsletter for updates on my work
                         </a>
                     </p>
                 </div>

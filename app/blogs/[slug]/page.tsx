@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    let { slug } = await params;
+    const { slug } = await params;
 
     if (slug.endsWith('.md')) {
         redirect(`/blogs/raw/${slug.slice(0, -3)}`);
@@ -55,7 +55,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     return (
         <div className="min-h-screen bg-white text-[#0e141b] font-body">
             <div className="max-w-3xl mx-auto px-4 py-10">
-                <Link href="/blogs" className="text-sm text-[#1980e6] hover:underline">
+                <Link href="/blogs" className="text-sm font-semibold text-[#111211] hover:underline">
                     ← Back to Blogs
                 </Link>
 

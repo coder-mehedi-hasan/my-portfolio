@@ -41,7 +41,7 @@ export default async function ExperienceDetailPage({ params }: { params: Promise
     return (
         <div className="min-h-screen bg-white text-[#0e141b] font-body">
             <div className="max-w-3xl mx-auto px-4 py-10">
-                <Link href="/experience" className="text-sm text-[#1980e6] hover:underline">
+                <Link href="/experience" className="text-sm font-semibold text-[#111211] hover:underline">
                     ← Back to Experience
                 </Link>
 
