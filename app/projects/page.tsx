@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import type { Metadata } from 'next';
 import { getAllProjects } from '@/utils/content';
+import DynamicFAIcon from '@/components/DynamicFAIcon';
 
 export const metadata: Metadata = {
     title: 'Projects',
@@ -28,13 +29,15 @@ const Project: React.FC = () => {
                             className="flex flex-col gap-3 pb-3 hover:opacity-80 transition"
                         >
                             <div
-                                className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                                className="flex w-full items-center justify-center bg-center bg-no-repeat aspect-video bg-cover rounded-xl text-4xl text-[#45515c]"
                                 style={{
                                     backgroundImage: project.image
                                         ? `url('${project.image}')`
                                         : `linear-gradient(135deg, #e7edf3 0%, #c3d2e0 100%)`,
                                 }}
-                            ></div>
+                            >
+                                {!project.image && <DynamicFAIcon icon={project.icon ?? 'fa-solid fa-briefcase'} />}
+                            </div>
                             <div>
                                 <p className="text-base font-medium leading-normal">{project.title}</p>
                                 {project.sub_title && (

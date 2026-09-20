@@ -28,6 +28,7 @@ export default function Home() {
                   title: exp?.designation,
                   date: `${formatDate(exp?.start_date)} - ${formatDate(exp?.end_date)}`,
                   location: `${exp.company_name}, ${exp.location}`,
+                  icon: exp.icon,
                   href: `/experiences/${exp.slug}`
                 }
               })}
@@ -42,6 +43,8 @@ export default function Home() {
                 title: project.title,
                 date: formatDate(project?.date),
                 location: project?.sub_title,
+                icon: project.icon,
+                image: project.image,
                 href: `/projects/${project.slug}`
               }))}
               id={"projects"}

@@ -4,6 +4,7 @@ sub_title: "Mobile Based Patient App for EMR"
 date: "2025-01-01"
 icon: "fa-solid fa-heart-pulse"
 description: "A mobile-first patient experience for appointments, medical records, and communication with care providers."
+live_url: "https://quantumleapcorp.com/#mycare360"
 sort_index: 1
 tools:
   - React Native

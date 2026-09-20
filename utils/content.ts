@@ -60,6 +60,7 @@ export type ProjectItem = {
     date?: string;
     image?: string;
     live_url?: string;
+    url?: string;
     sort_index?: number;
 };
 

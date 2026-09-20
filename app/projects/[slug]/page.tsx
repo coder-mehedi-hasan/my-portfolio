@@ -68,9 +68,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             })}
                         </span>
                     )}
-                    {project.live_url && (
+                    {(project.live_url ?? project.url) && (
                         <a
-                            href={project.live_url}
+                            href={project.live_url ?? project.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="rounded-full bg-[#111211] px-4 py-1.5 text-xs font-bold text-white hover:opacity-80"
