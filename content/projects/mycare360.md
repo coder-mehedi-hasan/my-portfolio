@@ -1,4 +1,6 @@
 ---
+featured: true
+featured_order: 0
 title: "MyCare360"
 sub_title: "Mobile Based Patient App for EMR"
 date: "2025-01-01"

@@ -2,20 +2,16 @@ import Link from 'next/link';
 import ProjectCards from '@/components/site/ProjectCards';
 import Hero from '@/components/home/Hero';
 import { setting } from '@/utils/data';
-import { getAllProjects, getAllExperiences } from '@/utils/content';
+import { getFeaturedProjects, getFeaturedSkillGroups, getAllExperiences } from '@/utils/content';
 
 function formatDate(value?: string | null) {
   return value ? new Date(value).toLocaleString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Present';
 }
 
 export default function Home() {
-  const projects = getAllProjects().slice(0, 2);
+  const projects = getFeaturedProjects(2);
   const experiences = getAllExperiences();
-  const skillHighlights = [
-    { title: 'Frontend & mobile', tools: 'React, Next.js, React Native' },
-    { title: 'Backend & data', tools: 'Node.js, NestJS, PostgreSQL' },
-    { title: 'Infrastructure', tools: 'Docker, Nginx, CI/CD' },
-  ];
+  const skillHighlights = getFeaturedSkillGroups();
 
   return (
     <main className="mx-auto max-w-[1080px] px-6 sm:px-10">
@@ -41,10 +37,15 @@ export default function Home() {
           </Link>
         </div>
         <dl>
-          {skillHighlights.map(({ title, tools }) => (
-            <div key={title} className="grid gap-2 border-b border-[#e5e6df] py-5 first:pt-0 last:border-0 last:pb-0 lg:grid-cols-[160px_1fr] lg:gap-6">
-              <dt className="text-sm font-medium leading-7">{title}</dt>
-              <dd className="text-sm leading-7 text-[#626660]">{tools}</dd>
+          {skillHighlights.map(({ category, skills }) => (
+            <div key={category} className="grid gap-2 border-b border-[#e5e6df] py-5 first:pt-0 last:border-0 last:pb-0 lg:grid-cols-[160px_1fr] lg:gap-6">
+              <dt className="text-sm font-medium leading-7">{category}</dt>
+              <dd className="text-sm leading-7 text-[#626660]">{skills.map((skill, index) => (
+                <span key={skill.slug}>
+                  {index > 0 && ', '}
+                  <Link href={`/skills/${skill.slug}`} className="underline-offset-4 hover:underline">{skill.title}</Link>
+                </span>
+              ))}</dd>
             </div>
           ))}
         </dl>

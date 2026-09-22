@@ -42,3 +42,6 @@ next-env.d.ts
 
 /generated/prisma
 node_modules
+
+# Isolated production output
+/.next-production/

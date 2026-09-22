@@ -1,34 +1,30 @@
 ---
-# Project frontmatter. save as content/projects/<kebab-case-slug>.md
-# The body below is rendered on /projects/<slug> as the details page.
-title: "Project Name"
-sub_title: "One line about what it does"
-date: "YYYY-MM-DD"
-icon: "fa-solid fa-briefcase"
-image: "/path/to/thumbnail.png"
-live_url: "https://example.com"
+title: "Project name"
+sub_title: "A short description of the product"
+description: "Who it helps and what it does."
+date: "2026-01-01"
+status: draft
+featured: false
+featured_order: 0
 sort_index: 0
 tools:
-  - Tool One
-  - Tool Two
+  - TypeScript
+# Optional: image: "/projects/my-project.png"
+# Optional: live_url: "https://example.com"
 ---
 
 ## Project Scope
 
-What was this project, who was it for, and what did it cover?
+Describe the product, its users, and the problem it solves.
 
 ## My Role
 
-What did you work on specifically?
+Describe your contribution.
 
-## Learning Curve
+## Challenges & Decisions
 
-What was hard to learn and how did you grow?
+Explain the important tradeoffs and how you approached them.
 
-## Challenges & Struggles
+## Results & Takeaways
 
-Describe blockers, hard decisions, and how you solved them.
-
-## Key Takeaways
-
-Summarize what you took away from the project.
+Describe the outcome and what you learned. Include metrics only when verified.

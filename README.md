@@ -1,429 +1,153 @@
-# Getting Started with Create React App
+# Mehedi Hasan — Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Next.js portfolio with Markdown-managed projects, experience, skills, and writing. Content is validated with Zod and rendered through shared readers. No database or admin service is needed.
 
-## Available Scripts
+## Development
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [localhost:3000](http://localhost:3000), or the port printed by Next.js.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Markdown Content
-
-All content — blogs, skills, projects, and experiences — is stored as Markdown files under `content/` and rendered statically. No database or API is involved.
-
-- Files starting with `_` (e.g. `_template.md`) are ignored by the readers and used only as templates.
-- Add a new file → rebuild → the page updates.
-
-### File structure
-
+```sh
+npm run content:validate
+npm run content:test
+npm run lint
+npm run build
 ```
+
+`npm run build` validates all content before building. Invalid content stops the build with the filename and field to fix. Google Fonts require network access during a fresh build. Development uses `.next/`; production builds use `.next-production/` so a running dev server cannot overwrite production artifacts.
+
+## Add content
+
+Use one command for all four collections:
+
+```sh
+npm run content -- new projects my-new-project --data '{"title":"My new project","sub_title":"A useful product"}'
+npm run content -- new experiences my-new-role --data '{"designation":"Software Engineer","company_name":"Company","location":"Dhaka"}'
+npm run content -- new skills playwright --data '{"title":"Playwright","category":"Testing & API tools","sub_title":"Browser automation and end-to-end testing."}'
+npm run content -- new blogs lessons-learned --data '{"title":"Lessons learned","excerpt":"Notes from building a product."}'
+```
+
+The command copies the matching `_template.md`, fills today's date (or start date), and creates a **draft**. Open the generated Markdown file, replace the starter text, and review every field. Pass an explicit date in `--data` for historical work. Existing files are never overwritten by `new`.
+
+You can also copy a template manually. Use a unique kebab-case filename such as `my-new-project.md`. The filename determines the URL; there is no `slug` frontmatter field. Files beginning with `_` are excluded from listings and validation.
+
+## Update content
+
+Edit the Markdown file directly, or use the same update command for any collection:
+
+```sh
+npm run content -- update projects my-new-project --data '{"title":"Updated title","tools":["Next.js","PostgreSQL"]}'
+npm run content -- update experiences my-new-role --unset end_date
+npm run content -- update blogs lessons-learned --body-file /path/to/article-body.md
+npm run content -- update projects my-new-project --data-file /path/to/metadata.json
+```
+
+`--data` and `--data-file` merge frontmatter fields. Array fields replace the previous array. The Markdown body is preserved unless `--body-file` supplies a replacement; this file should contain only the body, without frontmatter. `--unset` removes optional fields (comma-separated). CLI updates reformat frontmatter and remove its comments. Validation happens before saving; failed updates leave the original file unchanged.
+
+## Publish and feature content
+
+```sh
+npm run content -- update projects my-new-project --data '{"status":"published","featured":true,"featured_order":0}'
+npm run content -- update blogs lessons-learned --data '{"status":"published"}'
+npm run content:validate
+```
+
+Review the result locally, then commit your content and deploy through your normal workflow. The commands do not commit, push, or deploy. The production site uses build-time content, so additions and updates need a new build/deployment.
+
+- `status: draft` hides an entry from public lists, detail routes, and raw Markdown routes. CLI `list` includes drafts. There is no public draft preview.
+- `status: published` makes an entry eligible for the next build. A future date does **not** schedule publication.
+- Existing entries without `status` remain published for compatibility. New entries default to draft.
+- `sort_index` controls listing order for projects, experience, and skills; lower numbers come first. Ties use the slug.
+- Blogs are ordered by date, newest first, then slug.
+- `featured: true` selects homepage content: up to **two projects** and **three skill categories with three featured skills each**. Lower `featured_order` appears first. Only published featured entries qualify; unfeatured entries remain on their full listing page.
+- Each skill is a separate file with a required `category`. The Skills page groups entries by that field. Category names are free-form; reuse the exact same spelling to group skills together.
+- The homepage groups featured skills by category, using `featured_order` to order skills and the first appearance of each category. It shows at most three groups and three skills per group, with links to the individual pages. Full listings use `sort_index`.
+- `featured` and `featured_order` are available on every collection for consistency; only projects and skills currently use them on the homepage.
+
+```sh
+npm run content -- list projects
+npm run content -- list experiences
+npm run content -- list skills
+npm run content -- list blogs
+npm run content -- --help
+```
+
+## Content structure and fields
+
+```text
 content/
-├─ blogs/                            # Blog posts
-│  ├─ _template.md
-│  ├─ building-scalable-ecommerce-platforms.md
-│  └─ creating-elegant-websites-from-scratch.md
-├─ skills/                           # Technical skills
-│  ├─ _template.md
-│  ├─ backend-development.md
-│  └─ frontend-development.md
-├─ projects/                         # Projects
-│  ├─ _template.md
-│  ├─ mycare360.md
-│  └─ quantumleap-emr.md
-└─ experiences/                      # Work experience
-   ├─ _template.md
-   ├─ frontend-developer-kotha.md
-   └─ software-developer-bitpixel.md
+  projects/       # /projects and /projects/<slug>
+  experiences/    # /experience and /experiences/<slug>
+  skills/         # /skills, /skills/<slug>, and homepage highlights
+  blogs/          # /blogs and /blogs/<slug>
 ```
 
-### Frontmatter formats
+Each folder includes a ready-to-copy `_template.md`.
 
-**Blogs** (`content/blogs/*.md`)
+All collections support `status`, `sort_index`, `featured`, and `featured_order`. Order fields must be non-negative integers. Unknown frontmatter fields are rejected to catch typos.
 
-```yaml
+| Collection | Required fields | Optional fields |
+| --- | --- | --- |
+| Projects | `title`, `sub_title`, `date` | `description`, `tools`, `image`, `live_url`, `icon`, legacy `url` |
+| Experiences | `designation`, `company_name`, `location`, `start_date` | `end_date`, `job_type`, `description`, `icon` |
+| Skills | `title`, `category`, `sub_title` | `description`, `icon` |
+| Blogs | `title`, `excerpt`, `date` | `author`, `feature_image`, `tags` |
+
+Use quoted `YYYY-MM-DD` dates. Experience end dates cannot precede start dates; omit `end_date` for current roles. Website URLs must start with `http://` or `https://`. Images accept a public path such as `/projects/example.png` or an HTTP(S) URL. Lists such as `tools` and `tags` must contain nonempty strings.
+
+Blogs default to author `Md Mehedi Hasan` and image `/me.png` when omitted. Existing explicit image values are preserved. Images for projects are optional. Put local image assets under `public/` and reference them without the `public` prefix.
+
+Published projects, experiences, and blogs require a nonempty Markdown body. Use `##` and `###` headings: the page already supplies the main title. Templates offer a suggested structure, not mandatory heading names. Each skill’s Markdown body is rendered on its own `/skills/<slug>` page. An empty body is allowed and shows a short “notes will be added” message. Adding notes later requires editing only that skill’s file.
+
+Markdown is trusted repository content. Only accept edits from trusted contributors; HTML in Markdown is rendered as authored.
+
+## Raw blog Markdown
+
+- `/blogs/<slug>` — rendered article
+- `/blogs/<slug>.md` — redirects to the raw Markdown route
+- `/blogs/raw/<slug>` — raw Markdown for a published article
+- `/blogs/_template.md` — the public starter template
+
+Drafts are excluded from raw article routes as well as rendered pages.
+
+## Extending the system
+
+- `lib/content/schema.mjs` defines the collection registry and field validation. TypeScript content types are inferred from these schemas.
+- `lib/content/store.mjs` handles reads, sorting, draft visibility, featured selection, creation, and updates.
+- `scripts/content.mjs` exposes the generic CLI.
+- `utils/content.ts` and `utils/blogs.ts` provide typed readers and Markdown rendering for the pages.
+- `tests/content.test.mjs` checks draft visibility, validation, ordering, overwrite prevention, update preservation, and CLI behavior in temporary directories.
+
+To add a collection, register its schema, add `content/<collection>/_template.md`, and create the public page(s) that use it. The CLI and validator discover registered collections automatically. Profile text, navigation, and site-wide settings remain in the application code; these four collections are managed through Markdown.
+
+## Write about an individual skill
+
+For example, `content/skills/react.md` owns the React summary, category, homepage visibility, and long-form notes:
+
+```markdown
 ---
-title: "Your Blog Title Here"
-excerpt: "One or two sentence summary shown on the /blogs listing page."
-author: "Md Mehedi Hasan"          # FIXED — do not change
-date: "YYYY-MM-DD"
-feature_image: "/me.png"            # FIXED — do not change
-tags:
-  - tag-one
-  - tag-two
----
-```
-
-**Skills** (`content/skills/*.md`)
-
-```yaml
----
-title: "Skill Name"
-sub_title: "Compact summary shown under the title"
-icon: "fa-solid fa-code"
+title: "React"
+category: "Frontend & mobile"
+sub_title: "Component-based web interfaces."
+status: published
+featured: true
+featured_order: 0
 sort_index: 0
 ---
 
-Optional longer description written in Markdown.
+## How I use React
+
+Write about your approach and link to relevant projects.
+
+## Lessons learned
+
+Add code examples, patterns, or notes as you learn.
 ```
 
-**Projects** (`content/projects/*.md`)
+Share the resulting `/skills/react` URL. The page has its own title, description, canonical URL, and social metadata. Other skills from the same category appear below the notes. Draft skills are excluded from listings, related links, homepage highlights, and detail pages.
 
-```yaml
----
-title: "Project Name"
-sub_title: "One line about what it does"
-date: "YYYY-MM-DD"
-icon: "fa-solid fa-briefcase"
-image: "/path/to/thumbnail.png"     # optional
-live_url: "https://example.com"     # optional live site link
-sort_index: 0
-tools:
-  - Tool One
-  - Tool Two
----
-
-Body rendered on /projects/<slug>. Suggested sections:
-## Project Scope, ## My Role, ## Learning Curve,
-## Challenges & Struggles, ## Key Takeaways
-```
-
-**Experiences** (`content/experiences/*.md`)
-
-```yaml
----
-designation: "Job Title"
-company_name: "Company Name"
-location: "City or Country"
-job_type: "Full-time"
-icon: "fa-solid fa-briefcase"
-start_date: "YYYY-MM-DD"
-end_date: "YYYY-MM-DD"              # omit for a current role
-sort_index: 0
----
-
-Body rendered on /experiences/<slug>. Suggested sections:
-## About the Company, ## What I Did, ## What I Learned, ## Why It Mattered
-```
-
-### Common rules
-
-1. Save each item as `content/<type>/<kebab-case-slug>.md` — the slug must be kebab-case and unique.
-2. `date`, `start_date`, `end_date` must be valid `YYYY-MM-DD` values.
-3. All skills, projects, and experiences appear on the homepage and on their listing page.
-4. Clicking a project or experience card opens its detail page (`/projects/<slug>` or `/experiences/<slug>`), which renders the markdown body.
-5. In blog posts, `author` (`Md Mehedi Hasan`) and `feature_image` (`/me.png`) are fixed — keep them as-is.
-6. Blog posts must include a `## Introduction` and `## Conclusion` heading and no top-level `# ` title heading.
-
-### Accessing blog posts
-
-| URL                              | What you get                              |
-| -------------------------------- | ----------------------------------------- |
-| `/blogs/my-post`                 | Rendered HTML preview                     |
-| `/blogs/my-post.md`              | Raw Markdown file (`text/markdown`)       |
-| `/blogs/_template.md`            | Raw Markdown of the template              |
-| `/blogs/raw/my-post`             | Raw Markdown file (direct, no redirect)   |
-
-### Prompt to convert content into portfolio Markdown
-
-Use the prompt below (or copy the matching `_template.md`) to convert any piece of writing or data into the site's content files:
-
-> Convert the content I provide into Markdown content files for my portfolio website. Detect whether it is a blog post, a skill, a project, or an experience, then follow the matching format below. Save each item as `content/<type>/<kebab-case-slug>.md`.
->
-> **Blog format:**
-> ```yaml
-> ---
-> title: "<concise, click-worthy title>"
-> excerpt: "<1-2 sentence summary for the listing page>"
-> author: "Md Mehedi Hasan"
-> date: "<YYYY-MM-DD>"
-> feature_image: "/me.png"
-> tags:
->   - <tag-one>
-> ---
-> ```
-> Body: start with `## Introduction`, organize into `##` / `###` sections, keep paragraphs short, use lists, blockquotes for takeaways, and fenced code blocks for code. End with `## Conclusion`. Do not add a top-level `# ` heading.
->
-> **Skill format** (`content/skills/<slug>.md`):
-> ```yaml
-> ---
-> title: "<skill name>"
-> sub_title: "<related tools, comma separated>"
-> icon: "<fa-* icon class>"
-> sort_index: <number>
-> ---
-> ```
->
-> **Project format** (`content/projects/<slug>.md`):
-> ```yaml
-> ---
-> title: "<project name>"
-> sub_title: "<one line about it>"
-> date: "<YYYY-MM-DD>"
-> icon: "<fa-* icon class>"
-> image: "<optional thumbnail path>"
-> live_url: "<optional live site URL>"
-> sort_index: <number>
-> tools:
->   - <tool>
-> ---
-> ```
-> Body: use these sections for the details page — `## Project Scope`, `## My Role`, `## Learning Curve`, `## Challenges & Struggles`, `## Key Takeaways`. Mention the scope, learnings, challenges, and struggles in detail; include the `live_url` if a live site exists.
->
-> **Experience format** (`content/experiences/<slug>.md`):
-> ```yaml
-> ---
-> designation: "<job title>"
-> company_name: "<company>"
-> location: "<location>"
-> job_type: "<full-time|part-time|...>"
-> start_date: "<YYYY-MM-DD>"
-> end_date: "<YYYY-MM-DD or omit for current>"
-> sort_index: <number>
-> ---
-> ```
-> Body: use these sections for the details page — `## About the Company`, `## What I Did`, `## What I Learned`, `## Why It Mattered`. Describe the company and what you learned/experienced there in detail.
->
-> Rules: slugify filenames with kebab-case; dates must be `YYYY-MM-DD`; never change `author` or `feature_image` in blog posts.
-
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Prisma
-
-1. Set the DATABASE_URL in the .env file to point to your existing database. If your database has no tables yet, read https://pris.ly/d/getting-started
-2. Run prisma db pull to turn your database schema into a Prisma schema.
-3. Run prisma generate to generate the Prisma Client. You can then start querying your database.
-4. Tip: Explore how you can extend the ORM with scalable connection pooling, global caching, and real-time database events. Read: https://pris.ly/cli/beyond-orm      
-
-
-my-portfolio/
-├─ app/
-│  ├─ about/
-│  │  └─ page.tsx
-│  ├─ admin/
-│  │  ├─ education/
-│  │  │  └─ page.tsx
-│  │  ├─ experience/
-│  │  │  └─ page.tsx
-│  │  ├─ projects/
-│  │  │  └─ page.tsx
-│  │  ├─ resume/
-│  │  │  └─ page.tsx
-│  │  ├─ settings/
-│  │  │  └─ page.tsx
-│  │  ├─ skills/
-│  │  │  └─ page.tsx
-│  │  ├─ testimonials/
-│  │  │  └─ page.tsx
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ api/
-│  │  ├─ education/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ experience/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ projects/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ resume/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ settings/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ skills/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  ├─ testimonials/
-│  │  │  ├─ [id]/
-│  │  │  │  └─ route.ts
-│  │  │  └─ route.ts
-│  │  └─ route.ts
-│  ├─ blogs/
-│  │  └─ page.tsx
-│  ├─ contact/
-│  │  └─ page.tsx
-│  ├─ experience/
-│  │  └─ page.tsx
-│  ├─ login/
-│  │  └─ page.tsx
-│  ├─ projects/
-│  │  └─ page.tsx
-│  ├─ skills/
-│  │  └─ page.tsx
-│  ├─ testimonials/
-│  │  └─ page.tsx
-│  ├─ favicon.ico
-│  ├─ global.d.ts
-│  ├─ globals.css
-│  ├─ layout.tsx
-│  └─ page.tsx
-├─ components/
-│  ├─ home/
-│  │  ├─ Header.tsx
-│  │  ├─ Hero.tsx
-│  │  ├─ Section.tsx
-│  │  └─ Skills.tsx
-│  └─ Modal.tsx
-├─ generated/
-│  └─ prisma/
-│     ├─ runtime/
-│     │  ├─ edge-esm.js
-│     │  ├─ edge.js
-│     │  ├─ index-browser.d.ts
-│     │  ├─ index-browser.js
-│     │  ├─ library.d.ts
-│     │  ├─ library.js
-│     │  ├─ react-native.js
-│     │  ├─ wasm-compiler-edge.js
-│     │  └─ wasm-engine-edge.js
-│     ├─ client.d.ts
-│     ├─ client.js
-│     ├─ default.d.ts
-│     ├─ default.js
-│     ├─ edge.d.ts
-│     ├─ edge.js
-│     ├─ index-browser.js
-│     ├─ index.d.ts
-│     ├─ index.js
-│     ├─ package.json
-│     ├─ query_engine-windows.dll.node
-│     ├─ schema.prisma
-│     ├─ wasm.d.ts
-│     └─ wasm.js
-├─ prisma/
-│  ├─ migrations/
-│  │  ├─ 20250608032612_add_skill_table_and_first_init/
-│  │  │  └─ migration.sql
-│  │  ├─ 20250608042433_added/
-│  │  │  └─ migration.sql
-│  │  └─ migration_lock.toml
-│  └─ schema.prisma
-├─ public/
-│  ├─ md-mehedi-hasan-portfolio.jpg
-│  ├─ me.jpg
-│  ├─ me.png
-│  ├─ me2.png
-│  ├─ me3-removebg-preview.png
-│  ├─ robots.txt
-│  ├─ sitemap.xml
-│  └─ testimonial-banner.png
-├─ utils/
-│  ├─ db.ts
-│  └─ helpers.ts
-├─ .env
-├─ .gitignore
-├─ eslint.config.mjs
-├─ next-env.d.ts
-├─ next-sitemap.config.js
-├─ next.config.ts
-├─ package.json
-├─ postcss.config.mjs
-├─ README.md
-├─ tailwind.config.ts
-└─ tsconfig.json
+To move a skill to another group, update its `category`; no page code changes are needed. The existing category files have been replaced by individual skill files, with repeated tools consolidated into a single entry.

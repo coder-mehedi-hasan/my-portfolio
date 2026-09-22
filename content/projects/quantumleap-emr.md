@@ -1,4 +1,6 @@
 ---
+featured: true
+featured_order: 1
 title: "QuantumLeap EMR"
 sub_title: "Electronic Medical Record Software"
 date: "2024-10-01"

@@ -195,3 +195,11 @@ html { scroll-behavior: smooth; }
  .site-footer nav { gap: 20px; }
  .reference-panel { padding: 28px; }
 }
+
+.skill-directory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+.skill-link { display: flex; align-items: start; justify-content: space-between; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.skill-link h3 { font-size: 15px; font-weight: 500; }
+.skill-link p { margin-top: 8px; font-size: 13px; line-height: 1.8; color: var(--muted); }
+.skill-link > span { color: var(--muted); }
+.skill-link:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 767px) { .skill-directory { grid-template-columns: 1fr; } }
