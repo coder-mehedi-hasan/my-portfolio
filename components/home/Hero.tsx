@@ -16,12 +16,12 @@ const Hero: React.FC<{ setting: setting }> = ({ setting }) => {
             >
                 <div className="flex max-w-[680px] flex-col gap-3 text-left">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/75">Full-stack developer</p>
-                    <h1 className="text-4xl font-black leading-[1.02] tracking-[-0.045em] text-white md:text-6xl">
+                    <h1 className="text-4xl font-bold leading-[1.08] tracking-[-0.035em] text-white md:text-6xl">
                         {setting?.hero_title}
                     </h1>
-                    <h2 className="max-w-[620px] text-sm font-normal leading-6 text-white/85 md:text-base">
+                    <p className="max-w-[58ch] text-base font-normal leading-7 text-white/95 md:text-lg">
                         {setting?.hero_desc}
-                    </h2>
+                    </p>
                 </div>
                 <button onClick={() => {
                     downloadResume('/resume-mehedi.pdf')

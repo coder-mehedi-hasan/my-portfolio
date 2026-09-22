@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import React from 'react';
+import Link from 'next/link';
+import DynamicFAIcon from '@/components/DynamicFAIcon';
 import { getAllExperiences, getAllSkills } from '@/utils/content';
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ const About: React.FC = () => {
 
                 <h1 className="text-4xl font-bold text-center pt-6 pb-3">Mehedi Hasan</h1>
                 <p className="text-[#4e7397] text-sm text-center pb-3">Full-stack Developer</p>
-                <p className="text-base text-center pb-3">
+                <p className="mx-auto max-w-[65ch] pb-6 text-base leading-7 text-[#4f5753] sm:text-lg sm:leading-8">
                     I am a full-stack developer working across frontend experiences, backend services, databases, and delivery infrastructure. I enjoy turning complex workflows into clear,
                     maintainable products and taking ownership from requirements through production.
                 </p>
@@ -36,6 +38,7 @@ const About: React.FC = () => {
                 {experiences.map((experience) => (
                     <ExperienceItem
                         key={experience.slug}
+                        href={`/experiences/${experience.slug}`}
                         role={`${experience.designation}, ${experience.company_name}`}
                         duration={`${new Date(experience.start_date ?? '').getFullYear()} - ${experience.end_date ? new Date(experience.end_date).getFullYear() : 'Present'}`}
                     />
@@ -61,26 +64,18 @@ const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
     <h2 className="text-[22px] font-bold tracking-tight pt-5 pb-3 px-4">{title}</h2>
 );
 
-const ExperienceItem: React.FC<{ role: string; duration: string }> = ({ role, duration }) => (
+const ExperienceItem: React.FC<{ role: string; duration: string; href: string }> = ({ role, duration, href }) => (
     <div className="flex items-center justify-between bg-slate-50 px-4 py-2 min-h-[72px]">
         <div className="flex items-center gap-4">
             <div className="size-12 bg-[#e7edf3] flex items-center justify-center rounded-lg">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                >
-                    <path d="M216,56H176V48a24..." />
-                </svg>
+                <DynamicFAIcon icon="fa-solid fa-briefcase" />
             </div>
             <div>
-                <p className="text-base font-medium leading-normal line-clamp-1">{role}</p>
+                <p className="text-base font-semibold leading-6">{role}</p>
                 <p className="text-[#4e7397] text-sm leading-normal line-clamp-2">{duration}</p>
             </div>
         </div>
-        <button className="text-base font-medium">Details</button>
+        <Link href={href} className="ml-3 shrink-0 text-sm font-semibold hover:underline" aria-label={`Details for ${role}`}>Details →</Link>
     </div>
 );
 
