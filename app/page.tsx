@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ProjectCards from '@/components/site/ProjectCards';
 import Hero from '@/components/home/Hero';
 import { setting } from '@/utils/data';
-import { getAllSkills, getAllProjects, getAllExperiences } from '@/utils/content';
+import { getAllProjects, getAllExperiences } from '@/utils/content';
 
 function formatDate(value?: string | null) {
   return value ? new Date(value).toLocaleString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Present';
@@ -11,7 +11,11 @@ function formatDate(value?: string | null) {
 export default function Home() {
   const projects = getAllProjects().slice(0, 2);
   const experiences = getAllExperiences();
-  const skills = getAllSkills();
+  const skillHighlights = [
+    { title: 'Frontend & mobile', tools: 'React, Next.js, React Native' },
+    { title: 'Backend & data', tools: 'Node.js, NestJS, PostgreSQL' },
+    { title: 'Infrastructure', tools: 'Docker, Nginx, CI/CD' },
+  ];
 
   return (
     <main className="mx-auto max-w-[1080px] px-6 sm:px-10">
@@ -30,8 +34,20 @@ export default function Home() {
       </section>
 
       <section id="skills" className="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">
-        <div><h2 className="text-lg font-medium tracking-tight">Tools of the trade</h2><p className="mt-3 max-w-[190px] text-sm leading-6 text-[#70746f]">The technologies I work with.</p></div>
-        <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">{skills.map((skill) => <div key={skill.slug}><h3 className="text-sm font-medium">{skill.title}</h3><p className="mt-2 text-sm leading-7 text-[#70746f]">{skill.sub_title}</p></div>)}</div>
+        <div>
+          <h2 className="text-lg font-medium tracking-tight">Tools of the trade</h2>
+          <Link href="/skills" className="mt-3 inline-block text-sm text-[#626660] underline-offset-4 hover:underline">
+            All skills <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+        <dl>
+          {skillHighlights.map(({ title, tools }) => (
+            <div key={title} className="grid gap-2 border-b border-[#e5e6df] py-5 first:pt-0 last:border-0 last:pb-0 lg:grid-cols-[160px_1fr] lg:gap-6">
+              <dt className="text-sm font-medium leading-7">{title}</dt>
+              <dd className="text-sm leading-7 text-[#626660]">{tools}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <section className="mt-8 border-t border-[#dedfd9] py-14 sm:py-20">
