@@ -1,3 +1,4 @@
+import Footer from '@/components/site/Footer';
 import Header from '@/components/home/Header';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
@@ -119,7 +120,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="sticky top-0 z-50 bg-white">
           <Header />
         </div>
-        {children}
+        <a href="#page-content" className="skip-link">Skip to content</a>
+        <div id="page-content">{children}</div>
+        <Footer />
       </body>
     </html>
   );

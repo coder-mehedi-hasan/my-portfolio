@@ -48,18 +48,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     }
 
     return (
-        <div className="min-h-screen bg-white text-[#0e141b] font-body">
-            <div className="max-w-3xl mx-auto px-4 py-10">
-                <Link href="/projects" className="text-sm font-semibold text-[#111211] hover:underline">
-                    ← Back to Projects
+        <main className="detail-page">
+            <div className="detail-shell">
+                <Link href="/projects" className="back-link">
+                    ← All projects
                 </Link>
 
-                <h1 className="text-3xl font-bold mt-4 mb-2">{project.title}</h1>
+                <h1 className="detail-title">{project.title}</h1>
                 {project.sub_title && (
-                    <p className="text-lg text-[#4e7397] mb-3">{project.sub_title}</p>
+                    <p className="detail-description">{project.sub_title}</p>
                 )}
 
-                <div className="flex flex-wrap items-center gap-3 text-sm text-[#7c7c7c] mb-8">
+                <div className="detail-meta">
                     {project.date && (
                         <span>
                             {new Date(project.date).toLocaleDateString('en-US', {
@@ -73,20 +73,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             href={project.live_url ?? project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-full bg-[#111211] px-4 py-1.5 text-xs font-bold text-white hover:opacity-80"
+                            className="button-primary"
                         >
                             Live Site
                         </a>
                     )}
                     {project.tools?.map((tool) => (
-                        <span key={tool} className="rounded-lg bg-[#e7edf3] px-2 py-1 text-xs font-medium">
+                        <span key={tool} className="tag">
                             {tool}
                         </span>
                     ))}
                 </div>
 
                 {project.image && (
-                    <div className="w-full rounded-xl overflow-hidden mb-8">
+                    <div className="detail-image">
                         <img src={project.image} alt={project.title} loading="lazy" className="w-full object-cover" />
                     </div>
                 )}
@@ -96,6 +96,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     dangerouslySetInnerHTML={{ __html: project.content }}
                 />
             </div>
-        </div>
+        </main>
     );
 }

@@ -1,9 +1,7 @@
-import Link from 'next/link';
-import React from 'react';
+import PageIntro from '@/components/site/PageIntro';
 import type { Metadata } from 'next';
-import DynamicFAIcon from '@/components/DynamicFAIcon';
+import Link from 'next/link';
 import { getAllExperiences } from '@/utils/content';
-
 export const metadata: Metadata = {
     title: 'Experience',
     description:
@@ -13,58 +11,7 @@ export const metadata: Metadata = {
     },
 };
 
-const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'Present';
-    const date = new Date(dateStr);
-    return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
-};
-
-const ExperiencePage: React.FC = () => {
-    const experiences = getAllExperiences();
-
-    return (
-        <div className="min-h-screen bg-[#fafaf9] text-[#111211] font-body">
-            <div className="max-w-5xl mx-auto px-4 py-10">
-                <SectionTitle title="Experience" description="A selection of roles I've worked in." />
-
-                <div className="flex flex-col gap-4 p-4">
-                    {experiences.map((exp) => (
-                        <Link
-                            key={exp.slug}
-                            href={`/experiences/${exp.slug}`}
-                            className="border rounded-xl bg-white p-4 flex items-start gap-4 hover:opacity-80 transition"
-                        >
-                            <div className="text-[#0e141b] flex items-center justify-center rounded-lg bg-[#e7edf3] shrink-0 size-12">
-                                <DynamicFAIcon icon={`${exp.icon ?? 'fa-solid fa-briefcase'} fa-lg`} />
-                            </div>
-                            <div className="flex flex-1 flex-col gap-1">
-                                <p className="text-base font-medium leading-normal">{exp.designation}</p>
-                                <p className="text-[#4e7397] text-sm font-normal leading-normal">
-                                    {exp.company_name}, {exp.location}
-                                    {exp.job_type ? ` · ${exp.job_type}` : ''}
-                                </p>
-                                <p className="text-[#4e7397] text-sm font-normal leading-normal">
-                                    {formatDate(exp.start_date)} - {formatDate(exp.end_date)}
-                                </p>
-                                {exp.description && (
-                                    <p className="text-sm text-[#0e141b] leading-normal mt-1">{exp.description}</p>
-                                )}
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const SectionTitle: React.FC<{ title: string; description?: string }> = ({ title, description }) => (
-    <div className="flex flex-wrap justify-between gap-3 p-4">
-        <div className="flex min-w-72 flex-col gap-3">
-            <p className="text-[32px] font-bold leading-tight">{title}</p>
-            {description && <p className="text-[#4e7397] text-sm font-normal leading-normal">{description}</p>}
-        </div>
-    </div>
-);
-
-export default ExperiencePage;
+const date = (value?: string) => value ? new Date(value).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Present';
+export default function ExperiencePage() {
+ return <main className="page-shell"><PageIntro eyebrow="The journey" title="Experience." description="The teams I’ve worked with and the products I’ve helped build, across frontend, backend, and mobile development." /><div className="editorial-list">{getAllExperiences().map(exp => <Link className="editorial-row" key={exp.slug} href={`/experiences/${exp.slug}`}><p className="row-meta">{date(exp.start_date)} — {date(exp.end_date)}</p><div><h2>{exp.company_name}</h2><p className="mt-2">{exp.designation}</p><p className="row-meta mt-2">{[exp.location, exp.job_type].filter(Boolean).join(' · ')}</p>{exp.description && <p className="mt-4">{exp.description}</p>}</div><span aria-hidden="true">↗</span></Link>)}</div></main>;
+}

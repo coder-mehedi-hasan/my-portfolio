@@ -39,24 +39,24 @@ export default async function ExperienceDetailPage({ params }: { params: Promise
     }
 
     return (
-        <div className="min-h-screen bg-white text-[#0e141b] font-body">
-            <div className="max-w-3xl mx-auto px-4 py-10">
-                <Link href="/experience" className="text-sm font-semibold text-[#111211] hover:underline">
-                    ← Back to Experience
+        <main className="detail-page">
+            <div className="detail-shell">
+                <Link href="/experience" className="back-link">
+                    ← All experience
                 </Link>
 
-                <h1 className="text-3xl font-bold mt-4 mb-2">{experience.designation}</h1>
-                <p className="text-lg text-[#4e7397] mb-3">
+                <h1 className="detail-title">{experience.designation}</h1>
+                <p className="detail-description">
                     {experience.company_name}
                     {experience.location ? `, ${experience.location}` : ''}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 text-sm text-[#7c7c7c] mb-8">
+                <div className="detail-meta">
                     <span>
                         {formatDate(experience.start_date)} - {formatDate(experience.end_date)}
                     </span>
                     {experience.job_type && (
-                        <span className="rounded-lg bg-[#e7edf3] px-2 py-1 text-xs font-medium">
+                        <span className="tag">
                             {experience.job_type}
                         </span>
                     )}
@@ -67,6 +67,6 @@ export default async function ExperienceDetailPage({ params }: { params: Promise
                     dangerouslySetInnerHTML={{ __html: experience.content }}
                 />
             </div>
-        </div>
+        </main>
     );
 }

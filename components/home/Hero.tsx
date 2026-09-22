@@ -1,36 +1,22 @@
-"use client";
-import { downloadResume } from '@/utils/helpers';
-import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const Hero: React.FC<{ setting: setting }> = ({ setting }) => {
-
-    return (
-        <div className="px-4 pb-10 pt-5 md:px-0 md:pb-14 md:pt-8">
-            <div
-                className="flex min-h-[500px] flex-col items-start justify-end gap-7 rounded-2xl bg-cover bg-center bg-no-repeat px-6 pb-9 shadow-[0_1px_0_rgba(0,0,0,.04)] md:min-h-[540px] md:px-12 md:pb-12"
-                style={{
-                    backgroundImage:
-                        // "linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://cdn.usegalileo.ai/sdxl10/5fbc8e03-bd63-4d84-b1a9-828c3a7f388f.png')",
-                        `linear-gradient(rgba(0, 0, 0, 0.08) 20%, rgba(0, 0, 0, 0.68) 100%), url(${setting.hero_img})`,
-                }}
-            >
-                <div className="flex max-w-[680px] flex-col gap-3 text-left">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/75">Full-stack developer</p>
-                    <h1 className="text-4xl font-bold leading-[1.08] tracking-[-0.035em] text-white md:text-6xl">
-                        {setting?.hero_title}
-                    </h1>
-                    <p className="max-w-[58ch] text-base font-normal leading-7 text-white/95 md:text-lg">
-                        {setting?.hero_desc}
-                    </p>
-                </div>
-                <button onClick={() => {
-                    downloadResume('/resume-mehedi.pdf')
-                }} className="flex h-11 min-w-[84px] cursor-pointer items-center justify-center rounded-full bg-white px-5 text-sm font-bold tracking-[0.015em] text-[#111211] transition hover:bg-[#ededeb] md:h-12 md:px-6">
-                    <span className="truncate">Download Resume</span>
-                </button>
-            </div>
+export default function Hero({ setting }: { setting: setting }) {
+  return (
+    <section className="pb-20 pt-14 sm:pb-24 sm:pt-20">
+      <div className="mb-8 flex items-center gap-4">
+        <Image src={setting.hero_img || "/md-mehedi-hasan-portfolio.jpg"} alt="Mehedi Hasan" width={64} height={64} priority className="size-16 rounded-full object-cover grayscale" />
+        <div className="text-sm leading-6">
+          <p className="font-medium text-[#202220]">Mehedi Hasan</p>
+          <p className="text-[#70746f]">Full-stack developer</p>
         </div>
-    );
-};
-
-export default Hero;
+      </div>
+      <h1 className="max-w-[760px] text-[40px] font-semibold leading-[1.12] tracking-[-0.045em] text-[#202220] sm:text-[64px]">Thoughtful software.<br />Built for everyday life.</h1>
+      <p className="mt-6 max-w-[570px] text-base leading-8 text-[#626660] sm:text-lg">{setting.hero_desc}</p>
+      <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 text-sm">
+        <Link href="/contact" className="inline-flex items-center gap-3 rounded-full bg-[#252724] px-5 py-3 font-medium text-white transition-colors hover:bg-[#444741]">Get in touch <span aria-hidden="true">↗</span></Link>
+        <a href="/resume-mehedi.pdf" target="_blank" rel="noreferrer" className="font-medium text-[#626660] underline-offset-4 hover:text-[#202220] hover:underline">View résumé <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  );
+}
