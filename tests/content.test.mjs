@@ -4,9 +4,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import matter from 'gray-matter';
 import { fileURLToPath } from 'node:url';
 import { contentTypes } from '../lib/content/schema.mjs';
-import { createEntry, updateEntry, getEntry, listEntries, featuredEntries, readPublishedMarkdown, validateContent, groupSkills } from '../lib/content/store.mjs';
+import { createEntry, updateEntry, getEntry, listEntries, featuredEntries, readPublishedMarkdown, validateContent, groupSkills, entryIssues, readTemplate, deleteEntry } from '../lib/content/store.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 function fixture(t) {
@@ -31,6 +32,34 @@ test('each template creates a valid draft; publishing exposes it', t => {
     assert.equal(getEntry(type, 'example', { root }).status, 'published');
     assert.ok(readPublishedMarkdown(type, 'example', root));
     assert.equal(listEntries(type, { root }).length, 1);
+  }
+});
+
+test('createEntry unset drops values inherited from the template', t => {
+  const root = fixture(t);
+  const template = readTemplate('projects', root);
+  const required = { title: 'Clean', sub_title: 'A subtitle', date: '2026-01-15' };
+  const optional = Object.keys(template.data).filter(key => !(key in required) && key !== 'status');
+  assert.ok(optional.includes('description') && optional.includes('tools'), 'the template should carry sample optionals');
+  const file = createEntry('projects', 'clean', required, 'Just this body.\n', root, { unset: optional });
+  const parsed = matter(fs.readFileSync(file, 'utf8'));
+  for (const key of optional) {
+    assert.equal(key in parsed.data, false, `${key} should not be inherited from the template`);
+  }
+  assert.equal(parsed.data.title, 'Clean');
+  assert.equal(parsed.content, 'Just this body.\n');
+});
+
+test('createEntry without unset still seeds the template', t => {
+  const root = fixture(t);
+  const file = createEntry('projects', 'seeded', { title: 'Seeded' }, undefined, root);
+  const { data } = matter(fs.readFileSync(file, 'utf8'));
+  assert.equal(data.title, 'Seeded');
+  assert.equal(data.status, 'draft', 'new entries always start as drafts');
+  assert.equal(data.date, new Date().toISOString().slice(0, 10), 'the template date is replaced by today');
+  for (const [key, value] of Object.entries(readTemplate('projects', root).data)) {
+    if (key === 'title' || key === 'status' || key === 'date') continue;
+    assert.deepEqual(data[key], value, `${key} should come from the template`);
   }
 });
 
@@ -106,6 +135,41 @@ test('CLI creates, updates, lists and validates files in a temporary workspace',
   assert.equal(run(['new', 'blogs', '../escape']).status, 1);
 });
 
+
+test('entryIssues reports every field at once and keys body problems under "body"', t => {
+  const root = fixture(t);
+  const template = readTemplate('projects', root);
+  const issues = entryIssues('projects', { ...template.data, date: '2026-02-30', live_url: 'javascript:alert(1)' }, '');
+  assert.match(issues.date, /date: Use a real calendar date/);
+  assert.match(issues.live_url, /live_url/);
+  assert.equal(issues.body, undefined, 'a draft needs no body');
+
+  const published = entryIssues('projects', { ...template.data, date: '2026-01-01', status: 'published' }, '   \n');
+  assert.match(published.body, /Published entries need a Markdown body/);
+
+  const ok = entryIssues('projects', { ...template.data, date: '2026-01-01', status: 'published' }, 'Body text.');
+  assert.deepEqual(ok, {});
+
+  const skill = entryIssues('skills', { ...readTemplate('skills', root).data, status: 'published' }, '');
+  assert.equal(skill.body, undefined, 'skills carry no body requirement');
+  assert.ok(Object.keys(entryIssues('experiences', { start_date: '' }, 'Body')).includes('start_date'));
+});
+
+test('readTemplate exposes seed frontmatter, and deleteEntry removes only the target', t => {
+  const root = fixture(t);
+  const template = readTemplate('blogs', root);
+  assert.ok(Object.keys(template.data).length, 'templates ship seed frontmatter');
+  assert.ok(template.content.trim(), 'templates ship a starter body');
+  assert.throws(() => readTemplate('__proto__', root), /Unknown content type/);
+
+  const keep = createEntry('blogs', 'keep', { title: 'Keep' }, 'Keep body\n', root);
+  const drop = createEntry('blogs', 'drop', { title: 'Drop' }, 'Drop body\n', root);
+  assert.equal(deleteEntry('blogs', 'drop', root), drop);
+  assert.equal(fs.existsSync(drop), false);
+  assert.equal(fs.readFileSync(keep, 'utf8').includes('Keep body'), true);
+  assert.throws(() => deleteEntry('blogs', 'drop', root), /No blogs entry named/);
+  assert.throws(() => deleteEntry('blogs', '../escape', root));
+});
 
 test('skills retain individual bodies and group by category without duplication', t => {
   const root = fixture(t);

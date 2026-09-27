@@ -14,11 +14,40 @@ Open [localhost:3000](http://localhost:3000), or the port printed by Next.js.
 ```sh
 npm run content:validate
 npm run content:test
+npm run generator
 npm run lint
 npm run build
 ```
 
 `npm run build` validates all content before building. Invalid content stops the build with the filename and field to fix. Google Fonts require network access during a fresh build. Development uses `.next/`; production builds use `.next-production/` so a running dev server cannot overwrite production artifacts.
+
+## Content generator
+
+`npm run generator` opens a terminal UI for the same four collections. It reads and writes the same Markdown files through the same validation as the CLI, so anything it produces passes `npm run content:validate`.
+
+```sh
+npm run generator
+```
+
+Browse screen: `n` creates, `p` publishes or moves an entry back to draft, `/` filters, `↑`/`↓` move, `tab` switches collection, `q` quits.
+
+Editor screen: `tab` and `shift+tab` move between fields, `ctrl+s` saves, `esc` cancels. Fields come from the Zod schema, so required fields and the slug are enforced before anything is written. The Markdown body is a full-height editor beside the frontmatter fields.
+
+The generator is deliberately create-and-publish only. Changing existing content is a deliberate act, so use `npm run content -- update` or edit the Markdown files directly. Removing an entry means deleting its file:
+
+```sh
+npm run content -- update projects my-new-project --data '{"description":"Rewritten."}'
+npm run content -- update projects my-new-project --unset image,live_url
+rm content/projects/my-new-project.md
+```
+
+The generator needs [Bun](https://bun.sh) 1.3 or newer because OpenTUI's native core does not support the Node version Next.js runs on. The npm script starts Bun for you; `bun install` already added the dependencies.
+
+Point `CONTENT_ROOT` at another content tree to run the generator against a scratch copy:
+
+```sh
+CONTENT_ROOT=/tmp/content-scratch npm run generator
+```
 
 ## Add content
 
@@ -63,10 +92,11 @@ Review the result locally, then commit your content and deploy through your norm
 - Existing entries without `status` remain published for compatibility. New entries default to draft.
 - `sort_index` controls listing order for projects, experience, and skills; lower numbers come first. Ties use the slug.
 - Blogs are ordered by date, newest first, then slug.
-- `featured: true` selects homepage content: up to **two projects** and **three skill categories with three featured skills each**. Lower `featured_order` appears first. Only published featured entries qualify; unfeatured entries remain on their full listing page.
+- `featured: true` selects homepage content: up to **two projects**, **every featured experience**, and **three skill categories with three featured skills each**. Lower `featured_order` appears first. Only published featured entries qualify; unfeatured entries remain on their full listing page.
+- The homepage Experience section shows featured experiences only, ordered by `featured_order`. `/experience` and `/about` keep showing every published experience regardless of `featured`. The section is hidden entirely when nothing is featured.
 - Each skill is a separate file with a required `category`. The Skills page groups entries by that field. Category names are free-form; reuse the exact same spelling to group skills together.
 - The homepage groups featured skills by category, using `featured_order` to order skills and the first appearance of each category. It shows at most three groups and three skills per group, with links to the individual pages. Full listings use `sort_index`.
-- `featured` and `featured_order` are available on every collection for consistency; only projects and skills currently use them on the homepage.
+- `featured` and `featured_order` are available on every collection for consistency; projects, experiences, and skills all use them on the homepage.
 
 ```sh
 npm run content -- list projects
@@ -117,8 +147,9 @@ Drafts are excluded from raw article routes as well as rendered pages.
 ## Extending the system
 
 - `lib/content/schema.mjs` defines the collection registry and field validation. TypeScript content types are inferred from these schemas.
-- `lib/content/store.mjs` handles reads, sorting, draft visibility, featured selection, creation, and updates.
+- `lib/content/store.mjs` handles reads, sorting, draft visibility, featured selection, creation, updates, and deletion.
 - `scripts/content.mjs` exposes the generic CLI.
+- `tools/generator/` holds the terminal UI. `fields.ts` derives the form from the schema, so a new field appears in both the CLI and the generator without extra wiring. It has its own `tsconfig.json` and runs under Bun.
 - `utils/content.ts` and `utils/blogs.ts` provide typed readers and Markdown rendering for the pages.
 - `tests/content.test.mjs` checks draft visibility, validation, ordering, overwrite prevention, update preservation, and CLI behavior in temporary directories.
 

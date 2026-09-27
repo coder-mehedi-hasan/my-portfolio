@@ -18,6 +18,10 @@ export function getAllProjects(): ProjectItem[] {
 export function getAllExperiences(): ExperienceItem[] {
   return listEntries('experiences') as ExperienceItem[];
 }
+/** Homepage picks: featured only, ordered by featured_order. */
+export function getFeaturedExperiences(limit = Number.MAX_SAFE_INTEGER): ExperienceItem[] {
+  return featuredEntries('experiences', limit) as ExperienceItem[];
+}
 export function getFeaturedProjects(limit = 2): ProjectItem[] {
   return featuredEntries('projects', limit) as ProjectItem[];
 }

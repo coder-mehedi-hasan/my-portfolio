@@ -6,6 +6,7 @@ job_type: "Full-time"
 icon: "fa-solid fa-window-restore"
 start_date: "October 2023"
 end_date: "August 2024"
+featured: false
 sort_index: 2
 ---
 
