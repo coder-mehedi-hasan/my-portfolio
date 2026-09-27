@@ -25,11 +25,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
-const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'Present';
-    return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-};
-
 export default async function ExperienceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const experience = getExperienceBySlug(slug);
@@ -53,7 +48,7 @@ export default async function ExperienceDetailPage({ params }: { params: Promise
 
                 <div className="detail-meta">
                     <span>
-                        {formatDate(experience.start_date)} - {formatDate(experience.end_date)}
+                        {experience.start_date} - {experience.end_date || 'Present'}
                     </span>
                     {experience.job_type && (
                         <span className="tag">

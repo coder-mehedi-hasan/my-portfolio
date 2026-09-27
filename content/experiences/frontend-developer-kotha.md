@@ -4,8 +4,8 @@ company_name: "Kotha Apps & Technologies Ltd"
 location: "BD"
 job_type: "Full-time"
 icon: "fa-solid fa-window-restore"
-start_date: "2023-10-03"
-end_date: "2024-08-08"
+start_date: "October 2023"
+end_date: "August 2024"
 sort_index: 2
 ---
 

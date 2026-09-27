@@ -4,7 +4,8 @@ company_name: "BitPixel Software Solutions"
 location: "BD"
 job_type: "Full-time"
 icon: "fa-solid fa-code"
-start_date: "2023-09-01"
+start_date: "September 2023"
+end_date: "January 2025"
 sort_index: 1
 ---
 

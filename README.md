@@ -97,7 +97,7 @@ All collections support `status`, `sort_index`, `featured`, and `featured_order`
 | Skills | `title`, `category`, `sub_title` | `description`, `icon` |
 | Blogs | `title`, `excerpt`, `date` | `author`, `feature_image`, `tags` |
 
-Use quoted `YYYY-MM-DD` dates. Experience end dates cannot precede start dates; omit `end_date` for current roles. Website URLs must start with `http://` or `https://`. Images accept a public path such as `/projects/example.png` or an HTTP(S) URL. Lists such as `tools` and `tags` must contain nonempty strings.
+Use quoted `YYYY-MM-DD` dates. Experience `start_date` and `end_date` are display text: any non-empty string works (for example `September 2023` or `2023-10-03`) and is rendered exactly as written. Omit `end_date` for current roles. Website URLs must start with `http://` or `https://`. Images accept a public path such as `/projects/example.png` or an HTTP(S) URL. Lists such as `tools` and `tags` must contain nonempty strings.
 
 Blogs default to author `Md Mehedi Hasan` and image `/me.png` when omitted. Existing explicit image values are preserved. Images for projects are optional. Put local image assets under `public/` and reference them without the `public` prefix.
 

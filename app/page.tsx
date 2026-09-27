@@ -4,10 +4,6 @@ import Hero from '@/components/home/Hero';
 import { setting } from '@/utils/data';
 import { getFeaturedProjects, getFeaturedSkillGroups, getAllExperiences } from '@/utils/content';
 
-function formatDate(value?: string | null) {
-  return value ? new Date(value).toLocaleString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Present';
-}
-
 export default function Home() {
   const projects = getFeaturedProjects(2);
   const experiences = getAllExperiences();
@@ -26,7 +22,7 @@ export default function Home() {
 
       <section id="experience" className="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">
         <div><h2 className="text-lg font-medium tracking-tight">Experience</h2><Link href="/experience" className="mt-3 inline-block text-sm text-[#70746f] hover:underline">Full timeline <span aria-hidden="true">↗</span></Link></div>
-        <div>{experiences.map((exp) => <Link key={exp.slug} href={`/experiences/${exp.slug}`} className="group flex flex-col gap-2 border-b border-[#e5e6df] py-6 first:pt-0 last:border-0 last:pb-0 md:flex-row md:justify-between md:gap-5"><div><h3 className="text-base font-medium group-hover:underline underline-offset-4">{exp.company_name}</h3><p className="mt-1 text-sm leading-6 text-[#626660]">{exp.designation}</p></div><p className="shrink-0 text-xs leading-6 text-[#70746f]">{formatDate(exp.start_date)} — {formatDate(exp.end_date)}</p></Link>)}</div>
+        <div>{experiences.map((exp) => <Link key={exp.slug} href={`/experiences/${exp.slug}`} className="group flex flex-col gap-2 border-b border-[#e5e6df] py-6 first:pt-0 last:border-0 last:pb-0 md:flex-row md:justify-between md:gap-5"><div><h3 className="text-base font-medium group-hover:underline underline-offset-4">{exp.company_name}</h3><p className="mt-1 text-sm leading-6 text-[#626660]">{exp.designation}</p></div><p className="shrink-0 text-xs leading-6 text-[#70746f]">{exp.start_date} — {exp.end_date || 'Present'}</p></Link>)}</div>
       </section>
 
       <section id="skills" className="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">

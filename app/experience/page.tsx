@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     },
 };
 
-const date = (value?: string) => value ? new Date(value).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'Present';
+const date = (value?: string) => value || 'Present';
 export default function ExperiencePage() {
  return <main className="page-shell"><PageIntro eyebrow="The journey" title="Experience." description="The teams I’ve worked with and the products I’ve helped build, across frontend, backend, and mobile development." /><div className="editorial-list">{getAllExperiences().map(exp => <Link className="editorial-row" key={exp.slug} href={`/experiences/${exp.slug}`}><p className="row-meta">{date(exp.start_date)} — {date(exp.end_date)}</p><div><h2>{exp.company_name}</h2><p className="mt-2">{exp.designation}</p><p className="row-meta mt-2">{[exp.location, exp.job_type].filter(Boolean).join(' · ')}</p>{exp.description && <p className="mt-4">{exp.description}</p>}</div><span aria-hidden="true">↗</span></Link>)}</div></main>;
 }

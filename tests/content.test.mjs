@@ -53,7 +53,7 @@ test('updates preserve the body and support optional field removal', t => {
   assert.equal(entry.company_name, 'Updated company');
   assert.equal(entry.end_date, undefined);
   assert.match(entry.body, /Keep this body/);
-  assert.throws(() => updateEntry('experiences', 'role', { end_date: '2023-01-01' }, { root }), /End date/);
+  assert.throws(() => updateEntry('experiences', 'role', { start_date: '' }, { root }), /start_date/);
   assert.throws(() => updateEntry('experiences', 'role', {}, { root, unset: ['company_name'] }), /company_name/);
 });
 
