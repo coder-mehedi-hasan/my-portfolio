@@ -4,12 +4,14 @@ import Browse from './browse';
 import {
   blankValues,
   createDraft,
+  failedSave,
   loadEntries,
+  resolveSlug,
   type EntryRecord,
   type FormValues,
   type SaveResult,
 } from './content';
-import { fieldsFor, slugify, type ContentType } from './fields';
+import { fieldsFor, type ContentType } from './fields';
 import Form from './form';
 import type { ToneName } from './ui';
 
@@ -68,9 +70,13 @@ export default function App() {
   };
 
   const createNew = (values: FormValues, body: string): SaveResult => {
-    const requested = (values.slug ?? '').trim() || slugify(String(values[collection.titleKey] ?? ''));
+    const requested = resolveSlug(collection.titleKey, values);
     if (!requested) {
-      return { ok: false, message: 'A slug is required before an entry can be created.', issues: { slug: 'Use kebab-case, or fill in the title first.' } };
+      return failedSave(
+        collection.all,
+        { [collection.titleKey]: 'Nothing in this title survives slugify. Use letters or numbers.' },
+        `Not saved — ${collection.titleLabel} has no slug-safe characters.`,
+      );
     }
     return createDraft(type, requested, collection.all, values, body);
   };

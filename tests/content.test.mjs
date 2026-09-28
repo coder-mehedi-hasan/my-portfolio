@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 import matter from 'gray-matter';
 import { fileURLToPath } from 'node:url';
 import { contentTypes } from '../lib/content/schema.mjs';
-import { createEntry, updateEntry, getEntry, listEntries, featuredEntries, readPublishedMarkdown, validateContent, groupSkills, entryIssues, readTemplate, deleteEntry } from '../lib/content/store.mjs';
+import { createEntry, updateEntry, getEntry, listEntries, featuredEntries, readPublishedMarkdown, validateContent, groupSkills, entryIssues, readTemplate, deleteEntry, entryExists } from '../lib/content/store.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 function fixture(t) {
@@ -97,6 +97,19 @@ test('drafts stay hidden from featured lists and URLs; ordering is deterministic
   createEntry('blogs', 'older', { status: 'published', date: '2024-01-01' }, undefined, root);
   createEntry('blogs', 'newer', { status: 'published', date: '2025-01-01' }, undefined, root);
   assert.deepEqual(listEntries('blogs', { root }).map(entry => entry.slug), ['newer', 'older']);
+});
+
+test('entryExists answers the question a form asks before saving', t => {
+  const root = fixture(t);
+  assert.equal(entryExists('projects', 'fresh', { root }), false);
+  createEntry('projects', 'fresh', {}, undefined, root);
+  assert.equal(entryExists('projects', 'fresh', { root }), true);
+  deleteEntry('projects', 'fresh', root);
+  assert.equal(entryExists('projects', 'fresh', { root }), false);
+  // An unusable slug is a validation problem, so it never reads as a collision.
+  for (const slug of ['../secret', '_template', 'Mixed Case', '']) {
+    assert.equal(entryExists('projects', slug, { root }), false, slug);
+  }
 });
 
 test('invalid paths, reserved slugs and unknown types are rejected', t => {

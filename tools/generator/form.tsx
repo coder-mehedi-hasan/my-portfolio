@@ -1,7 +1,7 @@
 import type { ScrollBoxRenderable, SelectOption, TextareaRenderable } from '@opentui/core';
 import { useKeyboard, useTerminalDimensions } from '@opentui/react';
 import { useRef, useState } from 'react';
-import { validate, type FormValues, type SaveResult } from './content';
+import { resolveSlug, slugConflict, validate, type FormValues, type SaveResult } from './content';
 import type { CollectionFields, FieldSpec } from './fields';
 import { theme } from './theme';
 import { KeyHints, Notice, Panel, Row, Tone, truncate, type ToneName } from './ui';
@@ -18,10 +18,10 @@ const SLUG_SPEC: FieldSpec = {
   key: 'slug',
   label: 'Slug',
   kind: 'text',
-  required: true,
+  required: false,
   choices: [],
   placeholder: 'kebab-case-file-name',
-  help: 'Becomes the filename and the URL. Leave it empty to derive it from the title.',
+  help: 'Becomes the filename and the URL. Filled in from the title until you edit it.',
   fallback: '',
 };
 
@@ -35,6 +35,7 @@ export default function Form({ collection, initialValues, notice, onSubmit, onCa
   const [focus, setFocus] = useState(0);
   const [slugTouched, setSlugTouched] = useState(false);
   const [result, setResult] = useState<SaveResult | null>(null);
+  const [attempted, setAttempted] = useState(false);
   const bodyRef = useRef<TextareaRenderable>(null);
   const scrollerRef = useRef<ScrollBoxRenderable>(null);
 
@@ -45,10 +46,14 @@ export default function Form({ collection, initialValues, notice, onSubmit, onCa
   const active = rows[Math.min(focus, rows.length - 1)];
   const paneWidth = Math.floor((width - 6) * 0.58) - 4;
   const controlWidth = Math.max(20, paneWidth - LABEL_WIDTH - 2);
-  const target = `content/${collection.type}/${values.slug || '<slug>'}.md`;
+  const slug = resolveSlug(collection.titleKey, values);
+  const target = `content/${collection.type}/${slug || '<slug>'}.md`;
 
-  const issues = validate(collection.type, collection.all, values, body);
-  const messages: Record<string, string> = { ...issues, ...(result && !result.ok ? result.issues : {}) };
+  // A blank form has nothing to apologise for, so problems surface on the first save.
+  const issues = validate(collection.type, collection.all, values, body, slug);
+  const conflict = slugConflict(collection.type, slug);
+  if (conflict) issues.slug = conflict;
+  const messages = attempted ? issues : {};
 
   const setValue = (key: string, value: string) => {
     if (key === 'slug') setSlugTouched(true);
@@ -59,16 +64,24 @@ export default function Form({ collection, initialValues, notice, onSubmit, onCa
     });
   };
 
+  const focusRow = (index: number) => {
+    setFocus(index);
+    const row = rows[index];
+    if (row.kind === 'body') return;
+    setTimeout(() => scrollerRef.current?.scrollChildIntoView(`field-${row.key}`), 0);
+  };
+
   const step = (delta: number) => {
-    const next = Math.min(rows.length - 1, Math.max(0, focus + delta));
-    setFocus(next);
-    const target = rows[next];
-    if (target.kind === 'body') return;
-    setTimeout(() => scrollerRef.current?.scrollChildIntoView(`field-${target.key}`), 0);
+    focusRow(Math.min(rows.length - 1, Math.max(0, focus + delta)));
   };
 
   const submit = () => {
-    setResult(onSubmit(values, bodyRef.current?.plainText ?? body));
+    setAttempted(true);
+    const outcome = onSubmit(values, bodyRef.current?.plainText ?? body);
+    setResult(outcome);
+    if (outcome.ok) return;
+    const blocked = rows.findIndex((row) => outcome.issues[row.key]);
+    if (blocked >= 0) focusRow(blocked);
   };
 
   useKeyboard((key) => {
@@ -151,13 +164,16 @@ export default function Form({ collection, initialValues, notice, onSubmit, onCa
       </Row>
 
       <Notice tone={result ? (result.ok ? 'success' : 'danger') : notice?.tone ?? 'faint'}>
-        {truncate(result?.message ?? notice?.text ?? 'Nothing saved yet — ctrl+s writes the file.', Math.max(20, width - 8))}
+        {truncate(
+          result?.message ?? notice?.text ?? `Nothing saved yet — ctrl+s writes ${target}.`,
+          Math.max(20, width - 8),
+        )}
       </Notice>
 
       <KeyHints
         width={width}
         items={[
-          ['ctrl+s', 'save'],
+          ['ctrl+s', 'save, back to list'],
           ['tab', 'next field'],
           ['shift+tab', 'previous'],
           ['esc', 'cancel'],

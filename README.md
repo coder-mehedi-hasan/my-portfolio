@@ -31,7 +31,7 @@ npm run generator
 
 Browse screen: `n` creates, `p` publishes or moves an entry back to draft, `/` filters, `↑`/`↓` move, `tab` switches collection, `q` quits.
 
-Editor screen: `tab` and `shift+tab` move between fields, `ctrl+s` saves, `esc` cancels. Fields come from the Zod schema, so required fields and the slug are enforced before anything is written. The Markdown body is a full-height editor beside the frontmatter fields.
+Editor screen: `tab` and `shift+tab` move between fields, `ctrl+s` saves and returns to the list, `esc` cancels. Fields come from the Zod schema, so required fields are enforced before anything is written. The header and the status line both name the file a save would write, the slug is derived from the title until you edit it, and a save that cannot happen says so on the status line and moves focus to the field to fix. The Markdown body is a full-height editor beside the frontmatter fields.
 
 The generator is deliberately create-and-publish only. Changing existing content is a deliberate act, so use `npm run content -- update` or edit the Markdown files directly. Removing an entry means deleting its file:
 
