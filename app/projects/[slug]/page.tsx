@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import React from 'react';
@@ -87,7 +88,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
                 {project.image && (
                     <div className="detail-image">
-                        <img src={project.image} alt={project.title} loading="lazy" className="w-full object-cover" />
+                        <Image
+                            src={project.image}
+                            alt={project.title}
+                            loading="lazy"
+                            className="w-full object-cover"
+                            width={1200}
+                            height={630}
+                        />
                     </div>
                 )}
 
