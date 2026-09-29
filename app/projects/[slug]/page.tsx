@@ -48,6 +48,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         notFound();
     }
 
+    const projectUrl = project.live_url ?? project.url;
+    const projectUrlLabel = projectUrl?.includes('github.com') ? 'Source Code' : 'Live Site';
+
     return (
         <main className="detail-page">
             <div className="detail-shell">
@@ -69,14 +72,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                             })}
                         </span>
                     )}
-                    {(project.live_url ?? project.url) && (
+                    {projectUrl && (
                         <a
-                            href={project.live_url ?? project.url}
+                            href={projectUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="button-primary"
                         >
-                            Live Site
+                            {projectUrlLabel}
                         </a>
                     )}
                     {project.tools?.map((tool) => (

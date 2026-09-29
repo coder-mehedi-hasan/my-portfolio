@@ -7,7 +7,7 @@ date: "2024-10-01"
 icon: "fa-solid fa-stethoscope"
 description: "A web-based electronic medical record system for clinical workflows, patient charts, and reporting."
 live_url: "http://emr.quantumleapcorp.com"
-sort_index: 2
+sort_index: 6
 tools:
   - React.js
   - NestJS

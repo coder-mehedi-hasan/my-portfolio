@@ -12,5 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
- return <main className="page-shell"><PageIntro eyebrow="Portfolio" title="Selected work." description="Web and mobile products I’ve helped bring to life. A closer look at the work, the decisions, and what I learned along the way." /><ProjectCards projects={getAllProjects()} /></main>;
+ const projects = [...getAllProjects()].sort((a, b) => b.date.localeCompare(a.date));
+
+ return <main className="page-shell"><PageIntro eyebrow="Portfolio" title="Selected work." description="Web and mobile products I’ve helped bring to life. A closer look at the work, the decisions, and what I learned along the way." /><ProjectCards projects={projects} /></main>;
 }
