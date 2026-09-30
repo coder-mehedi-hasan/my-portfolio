@@ -3,7 +3,7 @@ designation: Software Engineer
 company_name: Interspeed
 location: 'Dhaka, Bangladesh'
 job_type: Full-time
-start_date: March 2024
+start_date: April 2024
 status: published
 featured: true
 featured_order: 1
