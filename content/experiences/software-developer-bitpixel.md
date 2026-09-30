@@ -6,9 +6,9 @@ job_type: "Full-time"
 icon: "fa-solid fa-code"
 start_date: "August 2022"
 end_date: "April 2024"
-featured: true
-featured_order: 2
-sort_index: 1
+featured: false
+featured_order: 0
+sort_index: 3
 ---
 
 ## About the Company
