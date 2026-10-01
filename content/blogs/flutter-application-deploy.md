@@ -336,7 +336,7 @@ With the archive selected in **Organizer**, upload it directly from Xcode.
 
 1. Select the latest archive.
 2. Click **Distribute App**.
-3. Choose **App Store Connect** → **Upload**.
+3. Choose **App Store Connect** → **Distribute**.
 4. Continue through the signing and distribution options.
 5. Let Xcode validate the app and fix any reported errors.
 6. Click **Upload**.
