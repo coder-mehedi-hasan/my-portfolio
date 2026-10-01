@@ -274,13 +274,15 @@ flutter devices
 flutter run -d <simulator_id>
 ```
 
-Building a signed archive against the simulator is a fast way to catch runtime issues before Xcode ever touches your code.
+Running the app in a simulator is a fast way to catch runtime issues before you create a device archive in Xcode.
 
 ### 2. Open the iOS Project in Xcode
 
 ```bash
 open ios/Runner.xcworkspace
 ```
+
+For a Flutter project, open `Runner.xcworkspace` rather than `Runner.xcodeproj` so Xcode also loads the CocoaPods dependencies.
 
 Confirm the target is set up correctly.
 
@@ -294,34 +296,71 @@ Xcode's analyzer catches memory issues and Objective-C errors that a normal buil
 
 - Select the **Runner** scheme.
 - Use **Product → Analyze** (`⌘I`) and resolve the reported issues.
+- Confirm that the scheme points to the existing app and uses the correct bundle identifier.
 - Then build for release: `flutter build ipa`.
 
 ### 4. Archive the App
 
-From Xcode, use **Product → Archive**, or let Flutter produce the archive and Xcode export it.
-
-```bash
-flutter build ipa
-```
-
-The archive is written to the build output directory.
+If you have the Flutter source project, Xcode is the easiest way to create and upload the archive.
 
 ```text
-build/ios/archive/Runner.xcarchive
+Xcode
+  ↓
+Select the Runner scheme
+  ↓
+Select Any iOS Device (arm64)
+  ↓
+Product → Archive
+  ↓
+Organizer
 ```
 
-The resulting `.ipa` is exported to the same location's `ipa` export directory.
+Follow these steps in Xcode:
+
+1. Select the **Runner** scheme for your existing app.
+2. Set the run destination to **Any iOS Device (arm64)**. You cannot archive for a simulator.
+3. Choose **Product → Archive**.
+4. Wait for the release build to finish. Xcode opens **Organizer** automatically.
+
+You can also create an archive from the command line with `flutter build ipa`, but it is not required when you use Xcode's Archive workflow.
 
 ### 5. Upload to App Store Connect
 
-Distribute the archive through Xcode Organizer.
+With the archive selected in **Organizer**, upload it directly from Xcode.
 
-1. Open the **Organizer** window after archiving.
-2. Select the archive, then choose **Distribute App**.
-3. Pick **App Store Connect** → **Upload**.
-4. Sign in with your Apple ID and let Xcode validate the build.
+1. Select the latest archive.
+2. Click **Distribute App**.
+3. Choose **App Store Connect** → **Upload**.
+4. Continue through the signing and distribution options.
+5. Let Xcode validate the app and fix any reported errors.
+6. Click **Upload**.
 
-Alternatively, upload the `.ipa` manually with **Transporter**.
+After the upload, App Store Connect processes the build and adds it to your existing app. When processing finishes, select the build for the App Store version and submit it for review.
+
+```text
+Xcode
+  ↓
+App Store Connect
+  ↓
+Processing
+  ↓
+Build appears in the existing app
+  ↓
+Select the build
+  ↓
+Submit for Review
+```
+
+#### If You Only Have the `.ipa`
+
+An existing `.ipa` cannot normally be opened in Xcode and uploaded as a new archive. If you have only the `.ipa` and not the source project, upload it with **Transporter** or Apple's command-line upload tooling.
+
+| What you have | Recommended workflow |
+|---------------|----------------------|
+| iOS source project | **Xcode → Archive → Upload** |
+| Flutter project | Open `ios/Runner.xcworkspace`, then archive and upload with Xcode |
+| Only an `.ipa` | **Transporter** |
+| Expo/EAS project | EAS Build → App Store Connect |
 
 ### 6. Verify with TestFlight
 
