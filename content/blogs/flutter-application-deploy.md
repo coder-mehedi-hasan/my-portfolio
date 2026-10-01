@@ -303,6 +303,12 @@ Xcode's analyzer catches memory issues and Objective-C errors that a normal buil
 
 If you have the Flutter source project, Xcode is the easiest way to create and upload the archive.
 
+Open the Runner workspace from the Flutter project root.
+
+```bash
+open ios/Runner.xcworkspace
+```
+
 ```text
 Xcode
   ↓
