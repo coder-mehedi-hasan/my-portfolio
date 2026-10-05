@@ -2,40 +2,30 @@
 featured: true
 featured_order: 1
 title: "QuantumLeap EMR"
-sub_title: "Electronic Medical Record Software"
+sub_title: "Cross-platform electronic medical record system"
 date: "2024-10-01"
 icon: "fa-solid fa-stethoscope"
-description: "A web-based electronic medical record system for clinical workflows, patient charts, and reporting."
+description: "A cross-platform mobile and web EMR for lab orders, patient management, medical-test tracking, and multi-organization workflows."
 live_url: "http://emr.quantumleapcorp.com"
 sort_index: 6
 tools:
-  - React.js
-  - NestJS
-  - PostgreSQL
+  - React Native
+  - PHP
+  - JavaScript
 ---
 
 ## Project Scope
 
-QuantumLeap EMR is a web-based electronic medical record system that digitizes patient charts, clinical workflows, and reporting for healthcare providers. The application handles appointment scheduling, prescription management, and clinical documentation in a single dashboard.
+QuantumLeap EMR is a cross-platform mobile and web application for healthcare operations. It supports lab orders, patient management, medical-test tracking, and structured access across complex organizations.
 
 ## My Role
 
-I worked across the frontend and backend — building the clinical dashboard UI and the REST APIs that power it.
+I developed the application across its mobile and web experiences using React Native, PHP, and JavaScript.
 
-## Learning Curve
+- Built workflows for lab orders, patient management, and medical-test tracking.
+- Supported multi-location and multi-organization deployments.
+- Implemented role-based access for users across the healthcare workflow.
 
-Working in a regulated domain pushed me to think carefully about data modeling and auditability.
+## Contribution
 
-- Designed normalized database schemas that could handle complex clinical relationships.
-- Learned how to structure long-running background jobs for report generation.
-- Got hands-on with role-based access control across dozens of user roles.
-
-## Challenges & Struggles
-
-- **Complex UI state:** clinical dashboards have many interconnected widgets; keeping state predictable took a lot of iteration.
-- **Performance:** large patient datasets made naive queries unusable, so I learned indexing and pagination the hard way.
-- **Uptime expectations:** medical staff depend on the system daily, so deployment had to be smooth and reversible.
-
-## Key Takeaways
-
-Building an EMR gave me real respect for boring, reliable engineering. The most valuable skills I took away were careful schema design, disciplined API versioning, and the ability to debug performance problems in production.
+The project brought clinical and laboratory workflows into a single system while accounting for organizational boundaries, physical locations, and role-specific access.
