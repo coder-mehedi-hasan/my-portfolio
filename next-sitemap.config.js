@@ -6,7 +6,7 @@ const { getDistDir, DEV_DIST_DIR } = require('./next-dist-dir.js');
 module.exports = {
     // postbuild runs after next build, so target the same directory the build used.
     sourceDir: getDistDir(DEV_DIST_DIR),
-    siteUrl: 'https://mehedi-info.vercel.app',
+    siteUrl: 'https://mehedihasan.dev',
     generateRobotsTxt: true,
     generateIndexSitemap: true,
     exclude: ['/private'],

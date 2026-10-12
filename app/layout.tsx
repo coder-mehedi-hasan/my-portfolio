@@ -1,5 +1,6 @@
 import Footer from '@/components/site/Footer';
 import Header from '@/components/home/Header';
+import { profileLinks } from '@/lib/profile';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Inter, Noto_Sans } from 'next/font/google';
@@ -15,7 +16,7 @@ const noto = Noto_Sans({
   variable: '--font-noto-sans',
 });
 
-const SITE_URL = 'https://mehedi-info.vercel.app';
+const SITE_URL = 'https://mehedihasan.dev';
 const SITE_NAME = 'Md Mehedi Hasan Portfolio';
 const DEFAULT_TITLE = 'Md Mehedi Hasan | Full-Stack Developer';
 const DEFAULT_DESCRIPTION =
@@ -100,11 +101,11 @@ const jsonLd = {
   url: SITE_URL,
   image: `${SITE_URL}/md-mehedi-hasan-portfolio.jpg`,
   jobTitle: 'Full-Stack Developer',
-  sameAs: [],
-  worksFor: {
-    '@type': 'Organization',
-    name: 'Self-Employed',
-  },
+  sameAs: [profileLinks.github, profileLinks.linkedin],
+  worksFor: [
+    { '@type': 'Organization', name: 'Graphland' },
+    { '@type': 'Organization', name: 'Interspeed Digital Solutions' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

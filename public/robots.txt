@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://mehedi-info.vercel.app
+Host: https://mehedihasan.dev
 
 # Sitemaps
-Sitemap: https://mehedi-info.vercel.app/sitemap.xml
+Sitemap: https://mehedihasan.dev/sitemap.xml
