@@ -45,3 +45,5 @@ node_modules
 
 # Isolated production output
 /.next-production/
+
+coder-mehedi-hasan/*
