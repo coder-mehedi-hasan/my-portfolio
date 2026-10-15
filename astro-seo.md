@@ -487,6 +487,7 @@ The official sitemap integration includes statically generated dynamic routes: [
 - [x] Set explicit image dimensions to avoid CLS. (Astro's `<Image />` infers them; the audit requires width/height on every `<img>`.)
 - [x] Create 1200 × 630 social images for priority articles and projects. (`npm run seo:og` derives project cards under `public/og/`. Articles without a dedicated card keep their feature image; author one when it matters.)
 - [x] Fix existing missing `/me.png` references before launch.
+- [x] Serve the portrait at the size it renders. (The 1599×1599 source stays in `public/` for social cards, but both in-page slots — the 64 px hero avatar and the 300 px about column — now use grayscale WebP variants from `npm run images` via `srcset`/`sizes`. The hero avatar drops from 165 KB to 2–3 KB, which is what Lighthouse's image-delivery insight flagged.)
 
 Astro optimizes imported source images, while files in `public/` are copied without processing: [Astro images guide](https://v7-2.previews.docs.astro.build/en/guides/images/).
 

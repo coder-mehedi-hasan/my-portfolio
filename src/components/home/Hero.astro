@@ -7,16 +7,27 @@ interface Props {
 }
 
 const { setting } = Astro.props;
+
+// Rendered at 64 px. The bundled WebP variants come from `npm run images`; a
+// portrait overridden in `site.ts` is served as authored.
+const heroImg = setting.hero_img || '/md-mehedi-hasan-portfolio.jpg';
+const heroSrcset =
+  heroImg === '/md-mehedi-hasan-portfolio.jpg'
+    ? '/portrait/mehedi-128.webp 128w, /portrait/mehedi-192.webp 192w'
+    : undefined;
 ---
 
 <section class="pb-20 pt-14 sm:pb-24 sm:pt-20">
   <div class="mb-8 flex items-center gap-4">
     <img
-      src={setting.hero_img || '/md-mehedi-hasan-portfolio.jpg'}
+      src={heroImg}
+      srcset={heroSrcset}
+      sizes={heroSrcset ? '64px' : undefined}
       alt="Mehedi Hasan"
       width="64"
       height="64"
       fetchpriority="high"
+      decoding="async"
       class="size-16 rounded-full object-cover grayscale"
     />
     <div class="text-sm leading-6">

@@ -34,6 +34,7 @@ npm run build
 | `seo:audit` | Audit the built HTML: metadata, canonicals, links, images, JSON-LD, sitemap |
 | `seo:inventory` | Refresh `tests/route-inventory.json` from the build (route parity) |
 | `seo:og` | Derive 1200 × 630 social cards from entry images |
+| `images` | Derive the responsive WebP portrait variants under `public/portrait/` |
 | `generator` | Open the terminal content generator (Bun) |
 
 ## Content model

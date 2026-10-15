@@ -14,6 +14,7 @@
     "seo:audit": "node scripts/seo-audit.mjs",
     "seo:inventory": "node scripts/route-inventory.mjs",
     "seo:og": "node scripts/og-images.mjs",
+    "images": "node scripts/image-variants.mjs",
     "generator": "bun run tools/generator/index.tsx",
     "prebuild": "npm run content:validate",
     "postbuild": "node scripts/sitemap-alias.mjs"
