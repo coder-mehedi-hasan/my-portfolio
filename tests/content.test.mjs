@@ -13,8 +13,10 @@ const repository = fileURLToPath(new URL('../', import.meta.url));
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-content-'));
   for (const type of contentTypes) {
-    fs.mkdirSync(path.join(root, type));
-    fs.copyFileSync(path.join(repository, 'content', type, '_template.md'), path.join(root, type, '_template.md'));
+    const dest = path.join(root, type);
+    fs.mkdirSync(dest, { recursive: true });
+    const template = path.join(repository, 'src', 'pages', type, '_template.md');
+    if (fs.existsSync(template)) fs.copyFileSync(template, path.join(dest, '_template.md'));
   }
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   return root;
@@ -137,7 +139,8 @@ test('CLI creates, updates, lists and validates files in a temporary workspace',
   const root = fixture(t);
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-cli-'));
   t.after(() => fs.rmSync(cwd, { recursive: true, force: true }));
-  fs.renameSync(root, path.join(cwd, 'content'));
+  fs.mkdirSync(path.join(cwd, 'src'), { recursive: true });
+  fs.renameSync(root, path.join(cwd, 'src', 'pages'));
   const run = args => spawnSync(process.execPath, [path.join(repository, 'scripts/content.mjs'), ...args], { cwd, encoding: 'utf8' });
   assert.equal(run(['new', 'blogs', 'cli-post', '--data', '{"title":"CLI post"}']).status, 0);
   assert.equal(run(['new', 'blogs', 'cli-post']).status, 1);

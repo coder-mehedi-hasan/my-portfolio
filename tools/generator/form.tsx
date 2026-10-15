@@ -47,7 +47,7 @@ export default function Form({ collection, initialValues, notice, onSubmit, onCa
   const paneWidth = Math.floor((width - 6) * 0.58) - 4;
   const controlWidth = Math.max(20, paneWidth - LABEL_WIDTH - 2);
   const slug = resolveSlug(collection.titleKey, values);
-  const target = `content/${collection.type}/${slug || '<slug>'}.md`;
+  const target = `src/pages/${collection.type}/${slug || '<slug>'}.md`;
 
   // A blank form has nothing to apologise for, so problems surface on the first save.
   const issues = validate(collection.type, collection.all, values, body, slug);

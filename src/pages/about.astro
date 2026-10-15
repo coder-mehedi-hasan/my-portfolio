@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/site/PageIntro.astro';
+import { getPublishedExperiences, getSkillGroups } from '../lib/content';
+
+const experiences = await getPublishedExperiences();
+const groups = await getSkillGroups();
+---
+
+<BaseLayout
+  title="About"
+  description="Learn more about Md Mehedi Hasan, a full-stack developer building web and mobile products across frontend, backend and infrastructure."
+  canonical="/about"
+>
+  <main class="page-shell">
+    <PageIntro eyebrow="A little about me" title={'Developer. Builder.\nAlways learning.'} />
+    <div class="about-grid">
+      <div class="about-copy">
+        <p>I’m Mehedi Hasan, a full-stack developer working across frontend experiences, backend services, databases, and delivery infrastructure.</p>
+        <p>I enjoy turning complex workflows into clear, maintainable products and taking ownership from requirements through production.</p>
+        <p>My work spans web and mobile applications, from patient-facing interfaces to the APIs and systems behind them.</p>
+        <a class="text-link" href="/contact">Let’s talk ↗</a>
+      </div>
+      <img
+        src="/md-mehedi-hasan-portfolio.jpg"
+        alt="Mehedi Hasan"
+        width="600"
+        height="600"
+        fetchpriority="high"
+        class="about-portrait"
+      />
+    </div>
+    <section class="split-section">
+      <div>
+        <h2>Where I’ve worked</h2>
+        <a href="/experience" class="text-link">Full timeline ↗</a>
+      </div>
+      <div>
+        {
+          experiences.map((exp) => (
+            <a class="compact-row" href={`/experiences/${exp.id}`}>
+              <div>
+                <h3>{exp.data.company_name}</h3>
+                <p>{exp.data.designation}</p>
+              </div>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+    <section class="split-section">
+      <div>
+        <h2>What I work with</h2>
+        <a class="text-link" href="/skills">Explore skills ↗</a>
+      </div>
+      <div class="flex flex-wrap content-start gap-2">
+        {groups.map((group) => <a href="/skills" class="tag hover:underline">{group.category}</a>)}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

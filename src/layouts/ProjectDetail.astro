@@ -1,0 +1,82 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate, toDateString } from '../lib/content';
+import { PERSON_ID, absoluteUrl, breadcrumbJsonLd, normalizePath } from '../lib/seo';
+
+interface Props {
+  frontmatter: Record<string, any>;
+}
+
+const { frontmatter } = Astro.props;
+const { title, sub_title, description, date, tools = [], image, live_url, url } = frontmatter;
+const summary = description ?? sub_title;
+const projectUrl = live_url ?? url;
+const projectUrlLabel = projectUrl?.includes('github.com') ? 'Source Code' : 'Live Site';
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+const canonical = `/projects/${slug}`;
+const createdDate = toDateString(date);
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Projects', url: absoluteUrl('/projects') },
+    { name: title, url: absoluteUrl(canonical) },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: title,
+    description: summary,
+    dateCreated: createdDate,
+    author: { '@id': PERSON_ID },
+    url: absoluteUrl(canonical),
+    ...(projectUrl ? { sameAs: projectUrl } : {}),
+    ...(image ? { image: absoluteUrl(image) } : {}),
+    keywords: tools,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={summary}
+  canonical={canonical}
+  type="article"
+  publishedTime={createdDate}
+  tags={tools}
+  image={image}
+  jsonLd={jsonLd}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/projects" class="back-link">← All projects</a>
+
+      <h1 class="detail-title">{title}</h1>
+      {sub_title && <p class="detail-description">{sub_title}</p>}
+
+      <div class="detail-meta">
+        <span>{formatDate(createdDate, { year: 'numeric', month: 'long', timeZone: 'UTC' })}</span>
+        {
+          projectUrl && (
+            <a href={projectUrl} target="_blank" rel="noopener noreferrer" class="button-primary">
+              {projectUrlLabel}
+            </a>
+          )
+        }
+        {tools?.map((tool: string) => <span class="tag">{tool}</span>)}
+      </div>
+
+      {
+        image && (
+          <div class="detail-image">
+            <img src={image} alt={title} width="1200" height="630" loading="lazy" class="w-full object-cover" />
+          </div>
+        )
+      }
+
+      <div class="blog-content">
+        <slot />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,76 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate, toDateString } from '../lib/content';
+import { PERSON_ID, absoluteUrl, breadcrumbJsonLd, normalizePath } from '../lib/seo';
+
+interface Props {
+  frontmatter: Record<string, any>;
+}
+
+const { frontmatter } = Astro.props;
+const {
+  title,
+  excerpt,
+  author,
+  date,
+  modified_date,
+  tags = [],
+  feature_image,
+  canonical: canonicalOverride,
+} = frontmatter;
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+const canonical = canonicalOverride || `/blogs/${slug}`;
+const publishedDate = toDateString(date);
+const modifiedDate = modified_date ? toDateString(modified_date) : publishedDate;
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Writing', url: absoluteUrl('/blogs') },
+    { name: title, url: absoluteUrl(canonical) },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: excerpt,
+    datePublished: publishedDate,
+    dateModified: modifiedDate,
+    author: { '@id': PERSON_ID },
+    publisher: { '@id': PERSON_ID },
+    mainEntityOfPage: absoluteUrl(canonical),
+    image: absoluteUrl(feature_image),
+    keywords: tags,
+    inLanguage: 'en',
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={excerpt}
+  canonical={canonical}
+  type="article"
+  publishedTime={publishedDate}
+  modifiedTime={modifiedDate}
+  tags={tags}
+  image={feature_image}
+  jsonLd={jsonLd}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/blogs" class="back-link">← All writing</a>
+
+      <h1 class="detail-title">{title}</h1>
+      <div class="detail-meta">
+        {author && <span>{author}</span>}
+        <span>{formatDate(publishedDate, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</span>
+        {tags?.map((tag: string) => <span class="tag">{tag}</span>)}
+      </div>
+
+      <div class="blog-content">
+        <slot />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

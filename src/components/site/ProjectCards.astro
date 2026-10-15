@@ -1,0 +1,25 @@
+---
+import type { ProjectEntry } from '../../lib/content';
+
+interface Props {
+  projects: ProjectEntry[];
+}
+
+const { projects } = Astro.props;
+---
+
+<div class="project-grid">
+  {
+    projects.map((project, index) => (
+      <a href={`/projects/${project.id}`} class="project-card">
+        <div class="project-caption">
+          <span>{String(index + 1).padStart(2, '0')} / {project.data.sub_title}</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+        <h2>{project.data.title}</h2>
+        <p>{project.data.description || project.data.sub_title}</p>
+        <div class="project-tools">{project.data.tools?.join(' / ')}</div>
+      </a>
+    ))
+  }
+</div>

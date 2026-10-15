@@ -1,0 +1,49 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { absoluteUrl, breadcrumbJsonLd, firstParagraph, normalizePath } from '../lib/seo';
+
+interface Props {
+  frontmatter: Record<string, any>;
+  rawContent?: () => string;
+}
+
+const { frontmatter } = Astro.props;
+const { designation, company_name, location, job_type, start_date, end_date, description } = frontmatter;
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+
+// Entries without a `description` fall back to their first body paragraph so the
+// meta description stays unique instead of repeating the site-wide default.
+const body = Astro.props.rawContent?.() ?? '';
+const metaDescription = description || firstParagraph(body) || `${designation} at ${company_name}.`;
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Home', url: absoluteUrl('/') },
+  { name: 'Experience', url: absoluteUrl('/experience') },
+  { name: company_name, url: absoluteUrl(`/experiences/${slug}`) },
+]);
+---
+
+<BaseLayout
+  title={`${designation} at ${company_name}`}
+  description={metaDescription}
+  canonical={`/experiences/${slug}`}
+  jsonLd={breadcrumbs}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/experience" class="back-link">← All experience</a>
+
+      <h1 class="detail-title">{designation}</h1>
+      <p class="detail-description">{company_name}{location ? `, ${location}` : ''}</p>
+
+      <div class="detail-meta">
+        <span>{start_date} - {end_date || 'Present'}</span>
+        {job_type && <span class="tag">{job_type}</span>}
+      </div>
+
+      <div class="blog-content">
+        <slot />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

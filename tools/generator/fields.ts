@@ -93,7 +93,7 @@ const shared: Record<string, Overrides> = {
   live_url: { placeholder: 'https://example.com' },
   url: { placeholder: 'https://example.com' },
   image: { placeholder: '/projects/example.png', help: 'A path under /public, or an http(s) URL.' },
-  feature_image: { placeholder: '/me.png', help: 'A path under /public, or an http(s) URL.' },
+  feature_image: { placeholder: '/me.jpg', help: 'A path under /public, or an http(s) URL.' },
   tools: { kind: 'list', placeholder: 'TypeScript, PostgreSQL', help: 'Comma separated.' },
   tags: { kind: 'list', placeholder: 'performance, nextjs', help: 'Comma separated.' },
 };

@@ -1,0 +1,71 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/noto-sans';
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+import SEOHead from '../components/seo/SEOHead.astro';
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, personJsonLd } from '../lib/seo';
+import '../styles/globals.css';
+
+interface Props {
+  /** Page title without the brand suffix. Omit on the homepage. */
+  title?: string;
+  description?: string;
+  canonical?: string | URL;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  publishedTime?: string | Date;
+  modifiedTime?: string | Date;
+  tags?: string[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  canonical,
+  image,
+  type = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  tags,
+  jsonLd,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111211" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <SEOHead
+      title={fullTitle}
+      description={description}
+      canonical={canonical}
+      image={image}
+      type={type}
+      noindex={noindex}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      tags={tags}
+      jsonLd={[personJsonLd(), ...pageJsonLd]}
+    />
+  </head>
+  <body>
+    <div class="sticky top-0 z-50 bg-white">
+      <Header />
+    </div>
+    <a href="#page-content" class="skip-link">Skip to content</a>
+    <div id="page-content">
+      <slot />
+    </div>
+    <Footer />
+  </body>
+</html>

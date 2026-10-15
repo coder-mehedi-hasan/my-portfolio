@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/site/PageIntro.astro';
+---
+
+<BaseLayout
+  title="Testimonials"
+  description="Client testimonials and reviews about the work of Md Mehedi Hasan, a full-stack developer."
+  canonical="/testimonials"
+>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="People & collaboration"
+      title="Professional references."
+      description="Good work starts with good collaboration."
+    />
+    <section class="reference-panel">
+      <p class="eyebrow">Available on request</p>
+      <h2>Hear from the people I’ve worked with.</h2>
+      <p>I only publish names and feedback with permission. Get in touch and I can provide a relevant professional reference.</p>
+      <a class="button-primary" href="mailto:hi@mehedihasan.dev?subject=Professional%20reference%20request">Request a reference <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+</BaseLayout>
