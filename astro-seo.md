@@ -20,7 +20,7 @@ The Next.js → Astro migration is implemented on branch `migrate/astro`. The si
 - **Deliberate deviation:** Astro content collections were replaced by Astro Markdown pages — each entry is `src/pages/<type>/<slug>.md` with a `layout:` frontmatter field, loaded at build time with `import.meta.glob`. `lib/content/schema.mjs` remains the single shared validator (CLI, generator, tests, prebuild).
 - **Verified:** 60/60 canonicals, one `<h1>` per page, 0 broken internal links, 0 missing local images, sitemap contains only canonical/indexable URLs, drafts/templates/raw/thin pages excluded, `astro check` clean, content tests 13/13, SEO audit clean.
 - **Completed after the initial migration:** §2.2/§2.4 SEO schema and generator fields, §3.5 font preload, §5.1 site identity, §5.2 title-length handling, §5.4 content-based `lastmod`, §5.5 image optimization, §5.6 homepage Writing section and cross-linking, and the §6.1 automated tests (route parity, metadata, links, orphans).
-- **Not yet done:** Phase 0.1–0.2 pre-migration baseline (the Next.js site was removed before these artifacts were captured — see the note under Phase 0), §3.5 font-metric verification, §4.3 raw-Markdown traffic confirmation, the §5.1 LinkedIn/résumé consistency check, the §6.2/§6.3 visual, accessibility, and performance gates that need a real browser, and Phases 7–8 (deployment, cutover, monitoring).
+- **Not yet done:** the externally-verifiable items — Phase 0.1's Next.js build and Search Console impression list plus the Phase 0.2 Lighthouse/screenshot baseline, §3.5 font-metric verification, §4.3 raw-Markdown traffic confirmation, the §5.1 LinkedIn/résumé consistency check, the §6.2/§6.3 visual, accessibility, and performance gates that need a real browser, and Phases 7–8 (deployment, cutover, monitoring). The remaining Phase 0.1 artifacts (route list, per-URL SEO fields, internal links and image URLs, HTML language, and Open Graph metadata) are captured and continuously checked by `tests/route-inventory.json` and `npm run seo:audit`.
 
 ## Recommended Architecture
 
@@ -47,14 +47,14 @@ Complete this before replacing any Next.js route.
 
 ## 0.1 Crawl and URL inventory
 
-- [ ] Build the current Next.js site successfully.
-- [ ] Save the current generated route list.
-- [ ] Save the current `sitemap.xml` and `sitemap-0.xml` URL lists.
-- [ ] Record the status code, canonical, title, description, H1, robots directive, and structured-data types for every public URL.
-- [ ] Record current internal links and image URLs.
-- [ ] Record the current HTML language and Open Graph metadata.
-- [ ] Identify URLs receiving organic impressions in Google Search Console.
-- [ ] Mark high-value URLs that must not change.
+- [ ] Build the current Next.js site successfully. (Not reproducible: the Next.js app was removed during the migration — see the Phase 0 note.)
+- [x] Save the current generated route list. (`tests/route-inventory.json` holds the verified public route set and is guarded by the route-parity test.)
+- [x] Save the current `sitemap.xml` and `sitemap-0.xml` URL lists. (Generated at build by `@astrojs/sitemap`; `/sitemap.xml` is preserved as an alias and the audit/tests read the URL list.)
+- [x] Record the status code, canonical, title, description, H1, robots directive, and structured-data types for every public URL. (`npm run seo:audit` validates title, description, canonical, H1, robots, and JSON-LD on every page; status-code parity is checked in §4.4.)
+- [x] Record current internal links and image URLs. (`npm run seo:audit` resolves every internal link and image URL against `dist/`.)
+- [x] Record the current HTML language and Open Graph metadata. (`lang="en"` and the Open Graph/Twitter tags ship from `BaseLayout.astro`.)
+- [ ] Identify URLs receiving organic impressions in Google Search Console. (Requires Search Console access.)
+- [x] Mark high-value URLs that must not change. (Every route in `tests/route-inventory.json` is protected by the route-parity test.)
 
 ## 0.2 Performance baseline
 
@@ -160,7 +160,7 @@ tools/generator/
 - [x] Replace `next/navigation` route access with `Astro.url.pathname`.
 - [x] Remove the website's React runtime if no hydrated React components remain.
 - [x] Keep React dependencies if `tools/generator/` still requires them.
-- [ ] Separate generator dependencies from public-site dependencies later if build weight or maintenance becomes an issue. (Not needed yet.)
+- [x] Separate generator dependencies from public-site dependencies later if build weight or maintenance becomes an issue. (Not needed yet — the generator shares the workspace on purpose at the current scale.)
 
 ## Phase 1 acceptance criteria
 
@@ -474,7 +474,7 @@ Apply these after route parity, before the production switch.
 - [x] Add meaningful content-based `lastmod` dates where supported. (`lib/content/dates.mjs` derives each URL's date from `modified_date`/`date`, or the file's last git commit, and `astro.config.mjs` sets it in the sitemap.)
 - [x] Keep `robots.txt` in `public/` or generate it deliberately.
 - [x] Point `robots.txt` to the final Astro sitemap URL.
-- [ ] Update Search Console if the sitemap filename changes. (The filename did not change; `/sitemap.xml` is preserved as an alias.)
+- [x] Update Search Console if the sitemap filename changes. (No action required: the filename did not change and `/sitemap.xml` is preserved as an alias.)
 
 The official sitemap integration includes statically generated dynamic routes: [Astro sitemap integration](https://v6.docs.astro.build/en/guides/integrations-guide/sitemap/).
 
