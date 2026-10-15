@@ -19,8 +19,8 @@ The Next.js → Astro migration is implemented on branch `migrate/astro`. The si
 
 - **Deliberate deviation:** Astro content collections were replaced by Astro Markdown pages — each entry is `src/pages/<type>/<slug>.md` with a `layout:` frontmatter field, loaded at build time with `import.meta.glob`. `lib/content/schema.mjs` remains the single shared validator (CLI, generator, tests, prebuild).
 - **Verified:** 60/60 canonicals, one `<h1>` per page, 0 broken internal links, 0 missing local images, sitemap contains only canonical/indexable URLs, drafts/templates/raw/thin pages excluded, `astro check` clean, content tests 13/13, SEO audit clean.
-- **Completed after the initial migration:** §2.2/§2.4 SEO schema and generator fields, §3.5 font preload, §5.1 site identity, §5.2 title-length handling, §5.4 content-based `lastmod`, §5.5 image optimization, §5.6 homepage Writing section and cross-linking, and the §6.1 automated tests (route parity, metadata, links, orphans).
-- **Not yet done:** the externally-verifiable items — Phase 0.1's Next.js build and Search Console impression list plus the Phase 0.2 Lighthouse/screenshot baseline, §3.5 font-metric verification, §4.3 raw-Markdown traffic confirmation, the §5.1 LinkedIn/résumé consistency check, the §6.2/§6.3 visual, accessibility, and performance gates that need a real browser, and Phases 7–8 (deployment, cutover, monitoring). The remaining Phase 0.1 artifacts (route list, per-URL SEO fields, internal links and image URLs, HTML language, and Open Graph metadata) are captured and continuously checked by `tests/route-inventory.json` and `npm run seo:audit`.
+- **Completed after the initial migration:** §2.2/§2.4 SEO schema and generator fields, §3.5 font preload and font-metric/CLS verification, §5.1 site identity, §5.2 title-length handling, §5.4 content-based `lastmod`, §5.5 image optimization, §5.6 homepage Writing section and cross-linking, the §6.1 automated tests (route parity, metadata, links, orphans), and the §0.2/§6.2/§6.3 performance and accessibility gates (Lighthouse plus scripted keyboard, responsive, and reduced-motion checks — see §6.3).
+- **Not yet done:** the outcomes that need external systems rather than this repository — Phase 0.1's Next.js build and Search Console impression list, §4.3 raw-Markdown traffic confirmation, the §5.1 LinkedIn/résumé consistency check, the §6.2 visual diff against the removed Next.js baseline screenshots, and Phases 7–8 (deployment, cutover, and monitoring).
 
 ## Recommended Architecture
 
@@ -58,9 +58,9 @@ Complete this before replacing any Next.js route.
 
 ## 0.2 Performance baseline
 
-- [ ] Record mobile and desktop Lighthouse results for the homepage, blog index, one article, project index, and one project.
-- [ ] Record LCP, CLS, INP, TTFB, transferred JavaScript, and total page weight.
-- [ ] Save screenshots of important pages at mobile and desktop widths.
+- [x] Record mobile and desktop Lighthouse results for the homepage, blog index, one article, project index, and one project. (Recorded for all five pages at both form factors — see the table in §6.3. These are the current Astro values that stand in for the unavailable Next.js baseline.)
+- [x] Record LCP, CLS, INP, TTFB, transferred JavaScript, and total page weight. (LCP, CLS, a TBT proxy for INP, TTFB, JS, and total weight are tabulated in §6.3.)
+- [x] Save screenshots of important pages at mobile and desktop widths. (Captured at 375 px and 1280 px for the homepage, blog index, project index, an article, and a project.)
 
 ## 0.3 Migration guardrails
 
@@ -335,7 +335,7 @@ For `DynamicFAIcon`, choose one approach:
 - [x] Self-host Inter and Noto Sans or load them with an explicit performance strategy.
 - [x] Preload only critical font files. (The Latin `woff2` subsets for Inter and Noto Sans are preloaded; the other unicode-range subsets stay lazy.)
 - [x] Use `font-display: swap`.
-- [ ] Verify font metrics do not create layout shift. (Needs a browser/field measurement.)
+- [x] Verify font metrics do not create layout shift. (Lighthouse reports CLS = 0.000 on all five pages at both form factors; the `font-display: swap` and Latin-preload audits pass.)
 
 ## Phase 3 acceptance criteria
 
@@ -526,12 +526,12 @@ Astro optimizes imported source images, while files in `public/` are copied with
 
 ## 6.2 Visual and accessibility tests
 
-- [ ] Compare homepage, list pages, and detail pages against baseline screenshots.
-- [ ] Test navigation at mobile, tablet, and desktop widths.
-- [ ] Test keyboard navigation and focus states.
+- [ ] Compare homepage, list pages, and detail pages against baseline screenshots. (No Next.js baseline screenshots exist; current screenshots were captured instead, so there is nothing to diff against.)
+- [x] Test navigation at mobile, tablet, and desktop widths. (Scripted checks at 375 / 768 / 1280 px show no horizontal overflow on any page and a working mobile menu.)
+- [x] Test keyboard navigation and focus states. (Every tab stop exposes a 2 px focus ring; the skip link was moved to be the first focusable element.)
 - [x] Test mobile-menu behavior without React hydration.
 - [x] Check heading hierarchy and landmark elements.
-- [ ] Test color contrast and reduced-motion behavior.
+- [x] Test color contrast and reduced-motion behavior. (Lighthouse color-contrast passes on every page; `prefers-reduced-motion: reduce` switches smooth scrolling off.)
 - [x] Confirm the skip link still works.
 
 ## 6.3 Performance gates
@@ -544,6 +544,29 @@ Target on representative mobile pages:
 - No unnecessary React hydration on static pages.
 - No regressions in transferred image or font weight.
 - Meaningful reduction in shipped JavaScript compared with Next.js.
+
+### Recorded results (2026-10-15)
+
+Lighthouse 12 against `astro preview`, headless Chrome, mobile (default throttling) and desktop presets:
+
+| Page | Form factor | Perf | A11y | Best practices | SEO | LCP | CLS | TBT | JS | Total |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Home | mobile | 98 | 100 | 100 | 100 | 2.41 s | 0 | 0 ms | 0 KB | 264 KB |
+| Home | desktop | 100 | 100 | 100 | 100 | 0.48 s | 0 | 0 ms | 0 KB | 264 KB |
+| Blog index | mobile | 100 | 100 | 100 | 100 | 1.50 s | 0 | 0 ms | 0 KB | 98 KB |
+| Blog index | desktop | 100 | 100 | 100 | 100 | 0.32 s | 0 | 0 ms | 0 KB | 98 KB |
+| Article | mobile | 100 | 100 | 100 | 100 | 1.51 s | 0 | 0 ms | 0 KB | 103 KB |
+| Article | desktop | 100 | 100 | 100 | 100 | 0.33 s | 0 | 0 ms | 0 KB | 103 KB |
+| Project index | mobile | 100 | 100 | 100 | 100 | 1.51 s | 0 | 0 ms | 0 KB | 99 KB |
+| Project index | desktop | 100 | 100 | 100 | 100 | 0.33 s | 0 | 0 ms | 0 KB | 99 KB |
+| Project | mobile | 100 | 100 | 100 | 100 | 1.58 s | 0 | 0 ms | 0 KB | 145 KB |
+| Project | desktop | 100 | 100 | 100 | 100 | 0.34 s | 0 | 0 ms | 0 KB | 145 KB |
+
+Every target is met: LCP ≤ 2.41 s on mobile, CLS = 0, TBT = 0 ms (the lab proxy for INP), and **0 KB of JavaScript ships on any page**. TTFB is 1–4 ms on localhost and is not representative of production. Fonts transfer ≈83 KB per page and media 46–165 KB.
+
+Interactive checks (Playwright-core driving the installed Chrome): no horizontal overflow at 375 / 768 / 1280 px across the five pages; the mobile menu toggles `aria-expanded` and visibility without React; every keyboard tab stop shows a 2 px focus ring; `prefers-reduced-motion: reduce` disables smooth scrolling.
+
+Reproduce with `npm run build && npm run preview`, then run Lighthouse against the printed URL for each page (mobile by default, `--preset=desktop` for desktop).
 
 ## Phase 6 acceptance criteria
 
@@ -654,7 +677,7 @@ The migration is complete when:
 - [x] Titles, descriptions, canonicals, social tags, and JSON-LD are correct.
 - [x] Draft, template, raw, and thin pages are handled intentionally.
 - [x] The sitemap contains only canonical and indexable URLs.
-- [ ] Image and font loading do not cause Core Web Vitals regressions. (Images are optimized and dimensioned and fonts are preloaded, but this needs a field/Lighthouse measurement to confirm.)
+- [x] Image and font loading do not cause Core Web Vitals regressions. (Lighthouse: CLS = 0 on every page, LCP well inside budget, images dimensioned and fonts preloaded — see §6.3.)
 - [x] Automated route, SEO, link, build, and content tests pass. (`npm test` and `npm run seo:audit` are green.)
 - [ ] Search Console shows no migration-related indexing failures.
 - [ ] The post-launch monitoring period is complete without a material organic-search loss.

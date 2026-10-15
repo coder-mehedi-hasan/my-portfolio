@@ -65,10 +65,10 @@ const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     />
   </head>
   <body>
+    <a href="#page-content" class="skip-link">Skip to content</a>
     <div class="sticky top-0 z-50 bg-white">
       <Header />
     </div>
-    <a href="#page-content" class="skip-link">Skip to content</a>
     <div id="page-content">
       <slot />
     </div>
