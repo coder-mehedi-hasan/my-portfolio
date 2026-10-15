@@ -1,13 +1,30 @@
 import { profileLinks } from './profile';
 
 export const SITE_URL = 'https://mehedihasan.dev';
-export const SITE_NAME = 'Md Mehedi Hasan Portfolio';
-export const DEFAULT_TITLE = 'Md Mehedi Hasan | Full-Stack Developer';
+export const SITE_NAME = 'Md Mehedi Hasan';
+/** The search-facing homepage title. Never receives a suffix. */
+export const DEFAULT_TITLE = 'Software Engineer in Bangladesh | Md Mehedi Hasan';
 export const DEFAULT_DESCRIPTION =
-  'I am Md Mehedi Hasan, a full-stack developer building fast, scalable and user-friendly web applications with React, Node.js, Next.js and more. Explore my projects, experience and blogs.';
+  'Md Mehedi Hasan is a software engineer in Dhaka, Bangladesh, building full-stack web and mobile products with React, Next.js, Node.js, React Native, and PostgreSQL.';
 export const DEFAULT_OG_IMAGE = '/md-mehedi-hasan-portfolio.jpg';
 /** Stable identifier so articles can reference the same author entity. */
 export const PERSON_ID = `${SITE_URL}/#person`;
+
+/** Appended to page titles when it keeps the SERP title within length. */
+export const TITLE_SUFFIX = ` | ${SITE_NAME}`;
+/** Roughly the point where Google truncates a result title. */
+export const TITLE_MAX_LENGTH = 60;
+
+/**
+ * Build the final `<title>` for a page. A page title that would overflow the
+ * recommended length keeps its own text rather than gaining an oversized brand
+ * suffix, so long article headlines are never clipped to fit the site name.
+ */
+export function buildTitle(title?: string): string {
+  if (!title) return DEFAULT_TITLE;
+  const withSuffix = `${title}${TITLE_SUFFIX}`;
+  return withSuffix.length <= TITLE_MAX_LENGTH ? withSuffix : title;
+}
 
 /**
  * Intrinsic pixel dimensions for the local social images. Declaring accurate
@@ -24,6 +41,11 @@ export const OG_IMAGE_DIMENSIONS: Record<string, { width: number; height: number
   '/works/satujobs.com.png': { width: 1475, height: 889 },
   '/works/senior-places.png': { width: 1092, height: 627 },
   '/works/web.kotha.app-chat.png': { width: 1475, height: 891 },
+  // Derived 1200×630 cards written by `npm run seo:og`.
+  '/og/project-espd.jpg': { width: 1200, height: 630 },
+  '/og/project-satujobs.jpg': { width: 1200, height: 630 },
+  '/og/project-senior-places.jpg': { width: 1200, height: 630 },
+  '/og/project-kotha-web.jpg': { width: 1200, height: 630 },
 };
 
 /** Look up declared dimensions for a same-origin image, or `undefined`. */
@@ -69,7 +91,16 @@ export function personJsonLd() {
     name: 'Md Mehedi Hasan',
     url: SITE_URL,
     image: absoluteUrl(DEFAULT_OG_IMAGE),
-    jobTitle: 'Full-Stack Developer',
+    jobTitle: 'Software Engineer',
+    // Locality only: never publish a private street address.
+    homeLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Dhaka',
+        addressCountry: 'BD',
+      },
+    },
     sameAs: [profileLinks.github, profileLinks.linkedin],
     worksFor: [
       { '@type': 'Organization', name: 'Graphland' },

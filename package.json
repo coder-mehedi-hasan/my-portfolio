@@ -7,9 +7,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "test": "npm run content:test && node --test tests/seo.test.mjs",
     "content": "node scripts/content.mjs",
     "content:validate": "node scripts/content.mjs validate",
     "content:test": "node --test tests/content.test.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs",
+    "seo:inventory": "node scripts/route-inventory.mjs",
+    "seo:og": "node scripts/og-images.mjs",
     "generator": "bun run tools/generator/index.tsx",
     "prebuild": "npm run content:validate",
     "postbuild": "node scripts/sitemap-alias.mjs"

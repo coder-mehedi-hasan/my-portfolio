@@ -9,6 +9,7 @@ featured: false
 featured_order: 0
 sort_index: 1
 image: "/works/espd.png"
+social_image: "/og/project-espd.jpg"
 live_url: "https://espd.school/"
 tools:
   - Backend APIs

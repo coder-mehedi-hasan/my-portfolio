@@ -94,6 +94,18 @@ const shared: Record<string, Overrides> = {
   url: { placeholder: 'https://example.com' },
   image: { placeholder: '/projects/example.png', help: 'A path under /public, or an http(s) URL.' },
   feature_image: { placeholder: '/me.jpg', help: 'A path under /public, or an http(s) URL.' },
+  social_image: {
+    placeholder: '/og/example.png',
+    help: 'Optional 1200×630 social card. Replace the OG/Twitter preview image.',
+  },
+  modified_date: {
+    placeholder: '2026-01-01',
+    help: 'YYYY-MM-DD. Last meaningful edit — used for dateModified and sitemap lastmod.',
+  },
+  canonical: {
+    placeholder: '/blogs/example',
+    help: 'Only set this to consolidate a duplicate page onto another URL.',
+  },
   tools: { kind: 'list', placeholder: 'TypeScript, PostgreSQL', help: 'Comma separated.' },
   tags: { kind: 'list', placeholder: 'performance, nextjs', help: 'Comma separated.' },
 };

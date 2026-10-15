@@ -9,6 +9,7 @@ featured: false
 featured_order: 0
 sort_index: 5
 image: "/works/satujobs.com.png"
+social_image: "/og/project-satujobs.jpg"
 live_url: "https://satujobs.com/"
 tools:
   - Full-stack Development

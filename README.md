@@ -27,9 +27,13 @@ npm run build
 | `build` | Validate content, build to `dist/`, then write `dist/sitemap.xml` |
 | `preview` | Preview the built site locally |
 | `check` | Run `astro check` (types, diagnostics) |
+| `test` | Run the content tests and then the built-site SEO tests |
 | `content` | Generic content CLI (`new`, `update`, `list`) |
 | `content:validate` | Validate every entry and report issues |
 | `content:test` | Run the content store/CLI tests |
+| `seo:audit` | Audit the built HTML: metadata, canonicals, links, images, JSON-LD, sitemap |
+| `seo:inventory` | Refresh `tests/route-inventory.json` from the build (route parity) |
+| `seo:og` | Derive 1200 × 630 social cards from entry images |
 | `generator` | Open the terminal content generator (Bun) |
 
 ## Content model
@@ -154,7 +158,7 @@ src/pages/
 
 Each folder includes a ready-to-copy `_template.md`.
 
-All collections support `status`, `sort_index`, `featured`, and `featured_order`. Order fields must be non-negative integers. Unknown frontmatter fields are rejected to catch typos. The `layout` field is managed by Astro and is not part of the content schema.
+All collections support `status`, `sort_index`, `featured`, `featured_order`, and the SEO fields `modified_date`, `social_image`, and `canonical`. Order fields must be non-negative integers. Unknown frontmatter fields are rejected to catch typos. The `layout` field is managed by Astro and is not part of the content schema.
 
 | Collection | Required fields | Optional fields |
 | --- | --- | --- |
@@ -163,9 +167,11 @@ All collections support `status`, `sort_index`, `featured`, and `featured_order`
 | Skills | `title`, `category`, `sub_title` | `description`, `icon` |
 | Blogs | `title`, `excerpt`, `date` | `author`, `feature_image`, `tags` |
 
+Every collection also accepts `modified_date` (drives `dateModified` and the sitemap `lastmod`), `social_image` (overrides the Open Graph/Twitter card), and `canonical` (a deliberate canonical override for consolidated or syndicated pages).
+
 Use quoted `YYYY-MM-DD` dates. Experience `start_date` and `end_date` are display text: any non-empty string works (for example `September 2023` or `2023-10-03`) and is rendered exactly as written. Omit `end_date` for current roles. Website URLs must start with `http://` or `https://`. Images accept a public path such as `/projects/example.png` or an HTTP(S) URL. Lists such as `tools` and `tags` must contain nonempty strings.
 
-Blogs default to author `Md Mehedi Hasan` and image `/me.jpg` when omitted. Existing explicit image values are preserved. Images for projects are optional. Put local image assets under `public/` and reference them without the `public` prefix.
+Blogs default to author `Md Mehedi Hasan` and image `/me.jpg` when omitted. Existing explicit image values are preserved. Images for projects are optional. Project screenshots live in `src/assets/works/` and are optimized by Astro's `<Image />`; frontmatter still references them by their `/works/<file>` path. Stable assets — favicons, the résumé, the portrait used as the default social image — stay in `public/`, as do the generated 1200 × 630 cards under `public/og/`.
 
 Published projects, experiences, and blogs require a nonempty Markdown body. Use `##` and `###` headings: the page already supplies the main title. Templates offer a suggested structure, not mandatory heading names. Each skill's Markdown body is rendered on its own `/skills/<slug>` page. An empty body is allowed and shows a short “notes will be added” message; those thin pages are marked `noindex` and kept out of the sitemap. Adding notes later requires editing only that skill's file.
 
@@ -180,6 +186,16 @@ Markdown is trusted repository content. Only accept edits from trusted contribut
 
 Drafts are excluded from raw article routes as well as rendered pages.
 
+## SEO
+
+The built site is audited, not just reviewed by eye. `npm run build && npm run seo:audit` fails on a missing or duplicate title/description, a missing or non-absolute canonical, a missing `robots` directive, a page without exactly one `<h1>`, unparseable JSON-LD, an image without `alt` or width/height, a broken internal link, an orphan page, or a sitemap entry that is missing, `noindex`, or not self-canonical. It also warns about over-long titles and pages with fewer than three inbound internal links.
+
+- `scripts/seo-audit.mjs` reads `dist/` only, so it checks exactly what a crawler receives.
+- `scripts/route-inventory.mjs` writes `tests/route-inventory.json`. `tests/seo.test.mjs` compares the build against it so a migration never silently drops a URL; run `npm run seo:inventory` when a route change is intentional.
+- `scripts/og-images.mjs` crops entry images into 1200 × 630 cards under `public/og/`; point `social_image` at the card.
+- `scripts/sitemap-alias.mjs` copies the generated sitemap index to the legacy `/sitemap.xml` so the URL Search Console knows keeps working.
+- Sitemap `lastmod` values come from content (`modified_date`/`date`, or the file's last git commit) rather than the build time, via `lib/content/dates.mjs`.
+
 ## Extending the system
 
 - `lib/content/schema.mjs` defines the collection registry and field validation. TypeScript content types are inferred from these schemas.
@@ -188,7 +204,9 @@ Drafts are excluded from raw article routes as well as rendered pages.
 - `tools/generator/` holds the terminal UI. `fields.ts` derives the form from the schema, so a new field appears in both the CLI and the generator without extra wiring. It has its own `tsconfig.json` and runs under Bun.
 - `src/lib/content.ts` loads the Markdown pages at build time (via `import.meta.glob` + `gray-matter`) and exposes typed readers to the pages and layouts.
 - `src/layouts/*Detail.astro` render the detail pages; each Markdown file opts in through its `layout:` frontmatter.
+- `src/layouts/*Detail.astro` also cross-link related work, skills, writing, and sibling pages so no page is an orphan.
 - `tests/content.test.mjs` checks draft visibility, validation, ordering, overwrite prevention, update preservation, and CLI behavior in temporary directories.
+- `tests/seo.test.mjs` audits the built site and compares its routes against `tests/route-inventory.json`, the verified public route set.
 
 To add a collection, register its schema, add `src/pages/<collection>/_template.md`, create the detail layout, and add the public page(s) that use it. The CLI and validator discover registered collections automatically. Profile text, navigation, and site-wide settings remain in the application code; these four collections are managed through Markdown.
 

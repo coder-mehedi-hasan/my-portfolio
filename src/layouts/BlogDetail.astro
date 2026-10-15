@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import { formatDate, toDateString } from '../lib/content';
+import { formatDate, getRelatedProjects, getRelatedSkills, toDateString } from '../lib/content';
 import { PERSON_ID, absoluteUrl, breadcrumbJsonLd, normalizePath } from '../lib/seo';
 
 interface Props {
@@ -16,10 +16,12 @@ const {
   modified_date,
   tags = [],
   feature_image,
+  social_image,
   canonical: canonicalOverride,
 } = frontmatter;
 const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
 const canonical = canonicalOverride || `/blogs/${slug}`;
+const socialImage = social_image || feature_image;
 const publishedDate = toDateString(date);
 const modifiedDate = modified_date ? toDateString(modified_date) : publishedDate;
 
@@ -39,11 +41,16 @@ const jsonLd = [
     author: { '@id': PERSON_ID },
     publisher: { '@id': PERSON_ID },
     mainEntityOfPage: absoluteUrl(canonical),
-    image: absoluteUrl(feature_image),
+    image: absoluteUrl(socialImage),
     keywords: tags,
     inLanguage: 'en',
   },
 ];
+
+// Give the article useful inbound internal links by pointing at the projects and
+// skills it draws on, matched from its tags and title.
+const relatedProjects = await getRelatedProjects([title, ...tags], 3);
+const relatedSkills = await getRelatedSkills([title, ...tags], 6);
 ---
 
 <BaseLayout
@@ -54,7 +61,7 @@ const jsonLd = [
   publishedTime={publishedDate}
   modifiedTime={modifiedDate}
   tags={tags}
-  image={feature_image}
+  image={socialImage}
   jsonLd={jsonLd}
 >
   <main class="detail-page">
@@ -71,6 +78,36 @@ const jsonLd = [
       <div class="blog-content">
         <slot />
       </div>
+
+      {
+        relatedProjects.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">Related work</h2>
+            <div class="flex flex-wrap gap-3">
+              {relatedProjects.map((project) => (
+                <a href={`/projects/${project.id}`} class="tag hover:underline">
+                  {project.data.title} ↗
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        relatedSkills.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">Skills in this article</h2>
+            <div class="flex flex-wrap gap-3">
+              {relatedSkills.map((skill) => (
+                <a href={`/skills/${skill.id}`} class="tag hover:underline">
+                  {skill.data.title} ↗
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
     </div>
   </main>
 </BaseLayout>

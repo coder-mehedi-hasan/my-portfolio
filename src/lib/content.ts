@@ -190,6 +190,76 @@ export function isThinSkill(entry: SkillEntry): boolean {
   return !(entry.body ?? '').trim();
 }
 
+/** Lowercase, split a free-text term into comparable words (keeping `node.js`). */
+function terms(values: readonly (string | undefined)[]): string[] {
+  return values
+    .flatMap((value) => (value ?? '').toLowerCase().split(/[^a-z0-9.+#-]+/))
+    .map((term) => term.replace(/^\.+|\.+$/g, ''))
+    .filter((term) => term.length > 1);
+}
+
+/** How many of the query terms an entry's haystack covers, newest interest first. */
+function relevance(haystack: string[], query: string[]): number {
+  const unique = new Set(haystack);
+  return query.reduce((score, term) => score + (unique.has(term) ? 1 : 0), 0);
+}
+
+/**
+ * Entries related to a page by shared tags, tools, or title words. Used to give
+ * every page at least a few useful inbound internal links instead of leaving
+ * clusters of orphaned content.
+ */
+export async function getRelatedProjects(query: readonly (string | undefined)[], limit = 3): Promise<ProjectEntry[]> {
+  const wanted = terms(query);
+  if (!wanted.length) return [];
+  return (await getPublishedProjects())
+    .map((entry) => ({
+      entry,
+      score: relevance(
+        terms([entry.data.title, entry.data.sub_title, ...(entry.data.tools ?? [])]),
+        wanted,
+      ),
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || byId(a.entry, b.entry))
+    .slice(0, limit)
+    .map(({ entry }) => entry);
+}
+
+export async function getRelatedSkills(query: readonly (string | undefined)[], limit = 4): Promise<SkillEntry[]> {
+  const wanted = terms(query);
+  if (!wanted.length) return [];
+  return (await getPublishedSkills())
+    .map((entry) => ({
+      entry,
+      score: relevance(
+        terms([entry.data.title, entry.data.category, entry.data.sub_title, entry.id]),
+        wanted,
+      ),
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || byId(a.entry, b.entry))
+    .slice(0, limit)
+    .map(({ entry }) => entry);
+}
+
+export async function getRelatedBlogs(query: readonly (string | undefined)[], limit = 3): Promise<BlogEntry[]> {
+  const wanted = terms(query);
+  if (!wanted.length) return [];
+  return (await getPublishedBlogs())
+    .map((entry) => ({
+      entry,
+      score: relevance(
+        terms([entry.data.title, entry.data.excerpt, ...(entry.data.tags ?? [])]),
+        wanted,
+      ),
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || String(b.entry.data.date).localeCompare(String(a.entry.data.date)))
+    .slice(0, limit)
+    .map(({ entry }) => entry);
+}
+
 export function formatDate(value: string, options: Intl.DateTimeFormatOptions): string {
   return new Date(value).toLocaleDateString('en-US', options);
 }

@@ -18,8 +18,9 @@ The migrated site should:
 The Next.js → Astro migration is implemented on branch `migrate/astro`. The site builds to 60 static pages; every route, slug, canonical, sitemap URL, and JSON-LD block was verified against the preserved inventory.
 
 - **Deliberate deviation:** Astro content collections were replaced by Astro Markdown pages — each entry is `src/pages/<type>/<slug>.md` with a `layout:` frontmatter field, loaded at build time with `import.meta.glob`. `lib/content/schema.mjs` remains the single shared validator (CLI, generator, tests, prebuild).
-- **Verified:** 60/60 canonicals, one `<h1>` per page, 0 broken internal links, 0 missing local images, sitemap contains only canonical/indexable URLs, drafts/templates/raw/thin pages excluded, `astro check` clean, content tests 13/13.
-- **Not yet done:** Phase 0 crawl/performance baseline artifacts (0.1–0.2), §5.1 site identity, §5.4 `lastmod`, §5.5 image optimization, §5.6 homepage Writing section and cross-linking, several Phase 6 automated tests (route-parity, duplicate-metadata, orphan-page), and Phases 7–8 (deployment, cutover, monitoring).
+- **Verified:** 60/60 canonicals, one `<h1>` per page, 0 broken internal links, 0 missing local images, sitemap contains only canonical/indexable URLs, drafts/templates/raw/thin pages excluded, `astro check` clean, content tests 13/13, SEO audit clean.
+- **Completed after the initial migration:** §2.2/§2.4 SEO schema and generator fields, §3.5 font preload, §5.1 site identity, §5.2 title-length handling, §5.4 content-based `lastmod`, §5.5 image optimization, §5.6 homepage Writing section and cross-linking, and the §6.1 automated tests (route parity, metadata, links, orphans).
+- **Not yet done:** Phase 0.1–0.2 pre-migration baseline (the Next.js site was removed before these artifacts were captured — see the note under Phase 0), §3.5 font-metric verification, §4.3 raw-Markdown traffic confirmation, the §5.1 LinkedIn/résumé consistency check, the §6.2/§6.3 visual, accessibility, and performance gates that need a real browser, and Phases 7–8 (deployment, cutover, monitoring).
 
 ## Recommended Architecture
 
@@ -41,6 +42,8 @@ Astro is well suited to static portfolios and blogs. Its official migration guid
 # Phase 0: Record the SEO Baseline
 
 Complete this before replacing any Next.js route.
+
+> **Baseline note (2026-10-15):** the Next.js application was removed in the migration before the 0.1/0.2 artifacts were captured, so those exact crawl and Lighthouse numbers cannot be produced here. The machine-readable baseline that now stands in for them is `tests/route-inventory.json` (the verified public route set, compared by `tests/seo.test.mjs`) plus the `npm run seo:audit` report over `dist/`. Re-run the audit and Lighthouse against a preview deployment to close out the phase.
 
 ## 0.1 Crawl and URL inventory
 
@@ -152,12 +155,12 @@ tools/generator/
 
 - [x] Remove `next`, `next-sitemap`, and `eslint-config-next` only after Astro reaches parity.
 - [x] Remove `next/font` usage and self-host the current fonts or adopt a controlled font-loading strategy.
-- [ ] Replace `next/image` with Astro image components.
+- [x] Replace `next/image` with Astro image components. (Next.js is gone; project screenshots now render through Astro `<Image />`. Other UI images use plain `<img>` with explicit dimensions because they double as stable social-card URLs.)
 - [x] Replace `next/link` with standard `<a>` links.
 - [x] Replace `next/navigation` route access with `Astro.url.pathname`.
 - [x] Remove the website's React runtime if no hydrated React components remain.
 - [x] Keep React dependencies if `tools/generator/` still requires them.
-- [ ] Separate generator dependencies from public-site dependencies later if build weight or maintenance becomes an issue.
+- [ ] Separate generator dependencies from public-site dependencies later if build weight or maintenance becomes an issue. (Not needed yet.)
 
 ## Phase 1 acceptance criteria
 
@@ -210,7 +213,7 @@ const blogs = defineCollection({
 - [x] Preserve ordering fields such as `sort_index`, `featured`, and `featured_order`.
 - [x] Normalize experience dates while preserving the displayed text where necessary.
 - [x] Fail the build on duplicate slugs or invalid required fields.
-- [ ] Add schema fields needed by SEO: `modified_date`, optional social image, and optional canonical override.
+- [x] Add schema fields needed by SEO: `modified_date`, optional social image, and optional canonical override. (`modified_date`, `social_image`, and `canonical` are accepted by every collection and surfaced in the CLI and generator.)
 
 ## 2.3 Replace content utilities
 
@@ -233,7 +236,7 @@ Astro collections provide typed querying and Markdown rendering through these AP
 - [x] Keep `tools/generator/` outside the Astro public runtime.
 - [x] Confirm it still reads and writes the same `content/` directories.
 - [x] Reuse shared Zod schemas if practical, without coupling the generator to Astro runtime modules.
-- [ ] Update generator fields for `modified_date` and article social images.
+- [x] Update generator fields for `modified_date` and article social images. (The generator derives its form from the schema, so `modified_date`, `social_image`, and `canonical` appear automatically with help text.)
 - [x] Keep existing validation and generator scripts working during the transition.
 
 ## Phase 2 acceptance criteria
@@ -330,9 +333,9 @@ For `DynamicFAIcon`, choose one approach:
 - [x] Copy the current global CSS into `src/styles/globals.css`.
 - [x] Preserve CSS class output before refactoring.
 - [x] Self-host Inter and Noto Sans or load them with an explicit performance strategy.
-- [ ] Preload only critical font files.
+- [x] Preload only critical font files. (The Latin `woff2` subsets for Inter and Noto Sans are preloaded; the other unicode-range subsets stay lazy.)
 - [x] Use `font-display: swap`.
-- [ ] Verify font metrics do not create layout shift.
+- [ ] Verify font metrics do not create layout shift. (Needs a browser/field measurement.)
 
 ## Phase 3 acceptance criteria
 
@@ -393,7 +396,7 @@ The current application exposes raw blog content and redirects `.md` slugs.
 
 Recommended approach:
 
-- [ ] Confirm whether any raw Markdown URLs receive traffic or external links.
+- [ ] Confirm whether any raw Markdown URLs receive traffic or external links. (Cannot be answered from the repository; the safe defaults below are already in place. Check Search Console.)
 - [x] If retained, generate static text endpoints with the correct `Content-Type`.
 - [x] Add `X-Robots-Tag: noindex` to raw responses.
 - [x] Preserve or redirect existing `.md` aliases at the hosting layer with real 301 responses.
@@ -414,7 +417,7 @@ For each migrated route:
 - [x] Visible content is present in built HTML.
 - [x] Structured data is valid.
 - [x] Internal links are preserved.
-- [ ] Images load with correct dimensions and alt text.
+- [x] Images load with correct dimensions and alt text. (Enforced by `npm run seo:audit`: every `<img>` must carry `alt` and width/height.)
 - [x] Drafts and templates do not generate pages.
 
 ## Phase 4 acceptance criteria
@@ -431,18 +434,18 @@ Apply these after route parity, before the production switch.
 
 ## 5.1 Site identity
 
-- [ ] Use `Software Engineer in Bangladesh | Md Mehedi Hasan` for the homepage title.
-- [ ] Use `Software Engineer` as the Person schema job title.
-- [ ] Include Dhaka, Bangladesh naturally in the homepage introduction.
+- [x] Use `Software Engineer in Bangladesh | Md Mehedi Hasan` for the homepage title.
+- [x] Use `Software Engineer` as the Person schema job title.
+- [x] Include Dhaka, Bangladesh naturally in the homepage introduction.
 - [x] Keep GitHub and LinkedIn in `sameAs`.
-- [ ] Add `homeLocation` without publishing a private street address.
-- [ ] Keep name, title, location, and employment dates consistent with LinkedIn and the résumé.
+- [x] Add `homeLocation` without publishing a private street address. (Locality and country only: `Place` → `PostalAddress` → `Dhaka`/`BD`.)
+- [ ] Keep name, title, location, and employment dates consistent with LinkedIn and the résumé. (Requires checking those profiles by hand.)
 
 ## 5.2 Page-level metadata
 
 - [x] Create one metadata object per route or content entry.
-- [ ] Keep important title text within roughly the first 50–60 characters.
-- [ ] Prevent long article titles from receiving an oversized suffix.
+- [x] Keep important title text within roughly the first 50–60 characters. (`buildTitle()` in `src/lib/seo.ts` stops appending the brand suffix once a title would exceed 60 characters, and the audit warns on any title over 60.)
+- [x] Prevent long article titles from receiving an oversized suffix. (Two over-long article titles were also shortened at the source.)
 - [x] Use unique descriptions based on actual page content.
 - [x] Use self-referencing canonicals.
 - [x] Produce absolute Open Graph and Twitter image URLs.
@@ -468,31 +471,31 @@ Apply these after route parity, before the production switch.
 - [x] Generate sitemaps with `@astrojs/sitemap`.
 - [x] Confirm dynamic paths from `getStaticPaths()` appear in the sitemap.
 - [x] Filter out drafts, raw Markdown endpoints, and `noindex` skill pages.
-- [ ] Add meaningful content-based `lastmod` dates where supported.
+- [x] Add meaningful content-based `lastmod` dates where supported. (`lib/content/dates.mjs` derives each URL's date from `modified_date`/`date`, or the file's last git commit, and `astro.config.mjs` sets it in the sitemap.)
 - [x] Keep `robots.txt` in `public/` or generate it deliberately.
 - [x] Point `robots.txt` to the final Astro sitemap URL.
-- [ ] Update Search Console if the sitemap filename changes.
+- [ ] Update Search Console if the sitemap filename changes. (The filename did not change; `/sitemap.xml` is preserved as an alias.)
 
 The official sitemap integration includes statically generated dynamic routes: [Astro sitemap integration](https://v6.docs.astro.build/en/guides/integrations-guide/sitemap/).
 
 ## 5.5 Image performance
 
-- [ ] Move transformable content images from `public/` into `src/assets/` where practical.
+- [x] Move transformable content images from `public/` into `src/assets/` where practical. (Project screenshots moved to `src/assets/works/`. The portrait and social cards stay in `public/` because they must keep stable, unhashed social URLs.)
 - [x] Keep favicons, résumé files, and assets requiring stable public URLs in `public/`.
-- [ ] Use `<Image />` for fixed-format optimized images.
-- [ ] Use `<Picture />` when multiple responsive formats materially help.
-- [ ] Set explicit image dimensions to avoid CLS.
-- [ ] Create 1200 × 630 social images for priority articles and projects.
+- [x] Use `<Image />` for fixed-format optimized images. (Project screenshots render through Astro's `<Image />` and ship as optimized WebP.)
+- [x] Use `<Picture />` when multiple responsive formats materially help. (Not needed: each screenshot renders at a single size.)
+- [x] Set explicit image dimensions to avoid CLS. (Astro's `<Image />` infers them; the audit requires width/height on every `<img>`.)
+- [x] Create 1200 × 630 social images for priority articles and projects. (`npm run seo:og` derives project cards under `public/og/`. Articles without a dedicated card keep their feature image; author one when it matters.)
 - [x] Fix existing missing `/me.png` references before launch.
 
 Astro optimizes imported source images, while files in `public/` are copied without processing: [Astro images guide](https://v7-2.previews.docs.astro.build/en/guides/images/).
 
 ## 5.6 Internal linking and thin content
 
-- [ ] Add a Writing section to the homepage.
-- [ ] Link articles to related projects and skills.
-- [ ] Link project pages to relevant articles.
-- [ ] Give every new page at least three useful inbound internal links.
+- [x] Add a Writing section to the homepage.
+- [x] Link articles to related projects and skills.
+- [x] Link project pages to relevant articles.
+- [x] Give every new page at least three useful inbound internal links. (Detail pages cross-link related work, skills, writing, and siblings; the footer lists References; the audit warns on any sitemap page with fewer than three inbound links.)
 - [x] Expand, consolidate, or `noindex` the current empty skill pages.
 - [x] Do not generate indexed pages solely because a Markdown file exists.
 
@@ -512,11 +515,11 @@ Astro optimizes imported source images, while files in `public/` are copied with
 - [x] Run `astro check`.
 - [x] Run the production build.
 - [x] Run existing content validation tests.
-- [ ] Add a route-parity test comparing old and new URL inventories.
-- [ ] Add built-HTML assertions for title, description, canonical, H1, and robots.
-- [ ] Add a duplicate-title and duplicate-description check.
-- [ ] Add a broken internal-link check.
-- [ ] Add an orphan-page check.
+- [x] Add a route-parity test comparing old and new URL inventories. (`tests/seo.test.mjs` compares the build against `tests/route-inventory.json`, the verified route set; refresh with `npm run seo:inventory`.)
+- [x] Add built-HTML assertions for title, description, canonical, H1, and robots. (`npm run seo:audit`, run over `dist/`.)
+- [x] Add a duplicate-title and duplicate-description check.
+- [x] Add a broken internal-link check.
+- [x] Add an orphan-page check.
 - [x] Validate JSON-LD parsing for every generated page.
 - [x] Confirm sitemap URLs return successful responses in preview.
 - [x] Assert drafts, templates, and raw content are absent from the sitemap.
@@ -651,7 +654,7 @@ The migration is complete when:
 - [x] Titles, descriptions, canonicals, social tags, and JSON-LD are correct.
 - [x] Draft, template, raw, and thin pages are handled intentionally.
 - [x] The sitemap contains only canonical and indexable URLs.
-- [ ] Image and font loading do not cause Core Web Vitals regressions.
-- [ ] Automated route, SEO, link, build, and content tests pass.
+- [ ] Image and font loading do not cause Core Web Vitals regressions. (Images are optimized and dimensioned and fonts are preloaded, but this needs a field/Lighthouse measurement to confirm.)
+- [x] Automated route, SEO, link, build, and content tests pass. (`npm test` and `npm run seo:audit` are green.)
 - [ ] Search Console shows no migration-related indexing failures.
 - [ ] The post-launch monitoring period is complete without a material organic-search loss.

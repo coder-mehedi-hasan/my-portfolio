@@ -9,6 +9,7 @@ featured: false
 featured_order: 0
 sort_index: 3
 image: "/works/web.kotha.app-chat.png"
+social_image: "/og/project-kotha-web.jpg"
 live_url: "https://web.kotha.app/"
 tools:
   - Frontend Development

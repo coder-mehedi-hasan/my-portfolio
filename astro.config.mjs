@@ -2,8 +2,13 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { listEntries } from './lib/content/store.mjs';
+import { contentLastmod } from './lib/content/dates.mjs';
 
 const SITE_URL = 'https://mehedihasan.dev';
+
+// Content-based `lastmod` values, so crawlers see a real change date instead of
+// the time of every build.
+const lastmod = contentLastmod();
 
 // Thin skill pages (frontmatter only) must not be indexed, so keep them out of the
 // sitemap. Detail pages apply the same rule in `src/layouts/SkillDetail.astro`.
@@ -40,6 +45,11 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !isExcludedUrl(page),
+      serialize(item) {
+        const { pathname } = new URL(item.url);
+        const date = lastmod[pathname];
+        return date ? { ...item, lastmod: new Date(date) } : item;
+      },
     }),
   ],
   vite: {

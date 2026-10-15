@@ -9,6 +9,7 @@ featured: false
 featured_order: 0
 sort_index: 2
 image: "/works/senior-places.png"
+social_image: "/og/project-senior-places.jpg"
 live_url: "https://seniorplaces.org/"
 tools:
   - Backend APIs

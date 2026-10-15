@@ -1,10 +1,14 @@
 ---
 import '@fontsource-variable/inter';
 import '@fontsource-variable/noto-sans';
+// Preload only the Latin subsets that the site actually renders; the other
+// unicode-range subsets stay lazy and load on demand.
+import interLatinUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import notoSansLatinUrl from '@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2?url';
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
 import SEOHead from '../components/seo/SEOHead.astro';
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, personJsonLd } from '../lib/seo';
+import { DEFAULT_DESCRIPTION, buildTitle, personJsonLd } from '../lib/seo';
 import '../styles/globals.css';
 
 interface Props {
@@ -34,7 +38,7 @@ const {
   jsonLd,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+const fullTitle = buildTitle(title);
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
@@ -45,6 +49,8 @@ const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111211" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preload" href={interLatinUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={notoSansLatinUrl} as="font" type="font/woff2" crossorigin />
     <SEOHead
       title={fullTitle}
       description={description}

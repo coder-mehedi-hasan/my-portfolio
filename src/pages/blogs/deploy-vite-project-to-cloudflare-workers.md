@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/BlogDetail.astro
-title: "Deploy a Vite Project to Cloudflare Workers Using the Vite Plugin"
+title: "Deploy a Vite Project to Cloudflare Workers"
 excerpt: "Learn how to deploy your Vite application to Cloudflare Workers using the official Vite plugin with this beginner-friendly step-by-step guide."
 author: "Md Mehedi Hasan"
 date: "2026-08-05"

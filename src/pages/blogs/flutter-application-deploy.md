@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/BlogDetail.astro
-title: "Upload a Flutter Mobile Application to the Apple App Store and Google Play Store"
+title: "Publish a Flutter App to the App Store and Google Play"
 excerpt: "A step-by-step guide to build a Flutter app, generate an .aab file for Google Play and an .ipa archive for the Apple App Store, and ship both to review."
 author: "Md Mehedi Hasan"
 date: "2026-09-28"

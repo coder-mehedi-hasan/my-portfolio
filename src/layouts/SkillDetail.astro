@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { frontmatter } = Astro.props;
-const { title, category, sub_title, description } = frontmatter;
+const { title, category, sub_title, description, canonical: canonicalOverride } = frontmatter;
 const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
 
 const related = (await getPublishedSkills())
@@ -18,7 +18,7 @@ const related = (await getPublishedSkills())
 
 // Empty skill pages are thin content: keep them crawlable but out of the index.
 const thin = !(Astro.props.rawContent?.() ?? '').trim();
-const canonical = `/skills/${slug}`;
+const canonical = canonicalOverride || `/skills/${slug}`;
 
 const breadcrumbs = breadcrumbJsonLd([
   { name: 'Home', url: absoluteUrl('/') },
