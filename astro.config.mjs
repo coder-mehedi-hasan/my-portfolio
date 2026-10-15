@@ -6,7 +6,7 @@ import { listEntries } from './lib/content/store.mjs';
 const SITE_URL = 'https://mehedihasan.dev';
 
 // Thin skill pages (frontmatter only) must not be indexed, so keep them out of the
-// sitemap. This mirrors the rule used by `src/pages/skills/[slug].astro`.
+// sitemap. Detail pages apply the same rule in `src/layouts/SkillDetail.astro`.
 const thinSkillPaths = new Set(
   listEntries('skills')
     .filter(entry => !entry.body.trim())

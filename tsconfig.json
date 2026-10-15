@@ -7,16 +7,5 @@
     }
   },
   "include": [".astro/types.d.ts", "src/**/*", "astro.config.mjs"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "app",
-    "components",
-    "utils",
-    "tests",
-    "scripts",
-    "tools",
-    ".next",
-    ".next-production"
-  ]
+  "exclude": ["node_modules", "dist", "tests", "scripts", "tools"]
 }
