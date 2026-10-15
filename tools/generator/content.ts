@@ -91,15 +91,20 @@ export function resolveSlug(titleKey: string, values: FormValues): string {
 }
 
 /** Notices are one line wide, so paths stay relative to the content tree. */
+function displayPath(file: string): string {
+  const rel = path.relative(process.cwd(), file);
+  return rel && !rel.startsWith('..') ? rel : file;
+}
+
 function target(type: ContentType, slug: string): string {
   try {
     const file = contentPath(type, slug);
-    const inside = path.relative(contentRoot, file);
-    if (inside && !inside.startsWith('..')) return `content/${inside}`;
+    return displayPath(file);
   } catch {
     // An unusable slug still has an obvious destination to name in the message.
   }
-  return `content/${type}/${slug || '<slug>'}.md`;
+  const base = path.relative(process.cwd(), contentRoot) || 'src/pages';
+  return `${base}/${type}/${slug || '<slug>'}.md`;
 }
 
 /** A slug already on disk, phrased as the fix rather than as a collision. */
@@ -187,7 +192,7 @@ export function createDraft(type: ContentType, slug: string, specs: FieldSpec[],
   try {
     const { data, unset } = toFrontmatter(specs, values);
     const file = createEntry(type, slug, data, body, undefined, { unset });
-    return { ok: true, slug, file, message: `Saved ${target(type, slug)}`, issues: {} };
+    return { ok: true, slug, file, message: `Saved ${displayPath(file)}`, issues: {} };
   } catch (error) {
     return failedSave(specs, { slug: describeError(error, type, slug) });
   }
@@ -197,7 +202,7 @@ export function setFlags(type: ContentType, slug: string, patch: Record<string, 
   try {
     const file = updateEntry(type, slug, patch);
     const verb = patch.status === 'published' ? 'Published' : 'Moved back to draft';
-    return { ok: true, slug, file, message: `${verb} ${target(type, slug)}`, issues: {} };
+    return { ok: true, slug, file, message: `${verb} ${displayPath(file)}`, issues: {} };
   } catch (error) {
     return { ok: false, message: `Not saved — ${describeError(error, type, slug)}`, issues: {} };
   }

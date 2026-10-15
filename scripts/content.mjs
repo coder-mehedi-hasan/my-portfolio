@@ -10,7 +10,7 @@ npm run content -- list <type>
 npm run content:validate
 
 Types: projects, experiences, skills, blogs
-New entries use content/<type>/_template.md and start as drafts.
+New entries use src/pages/<type>/_template.md and start as drafts.
 Updates preserve the body unless --body-file is provided. --unset accepts comma-separated fields.
 Use --data-file path.json instead of --data for large updates. No command commits or publishes a deployment.`;
 

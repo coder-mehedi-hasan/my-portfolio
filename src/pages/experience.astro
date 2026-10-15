@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/site/PageIntro.astro';
+import { getPublishedExperiences } from '../lib/content';
+
+const experiences = await getPublishedExperiences();
+const date = (value?: string) => value || 'Present';
+---
+
+<BaseLayout
+  title="Experience"
+  description="Software engineering experience of Md Mehedi Hasan across full-stack web, mobile, and platform teams in Bangladesh."
+  canonical="/experience"
+>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="The journey"
+      title="Experience."
+      description="The teams I’ve worked with and the products I’ve helped build, across frontend, backend, and mobile development."
+    />
+    <div class="editorial-list">
+      {
+        experiences.map((exp) => (
+          <a class="editorial-row" href={`/experiences/${exp.id}`}>
+            <p class="row-meta">{date(exp.data.start_date)} — {date(exp.data.end_date)}</p>
+            <div>
+              <h2>{exp.data.company_name}</h2>
+              <p class="mt-2">{exp.data.designation}</p>
+              <p class="row-meta mt-2">{[exp.data.location, exp.data.job_type].filter(Boolean).join(' · ')}</p>
+              {exp.data.description && <p class="mt-4">{exp.data.description}</p>}
+            </div>
+            <span aria-hidden="true">↗</span>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

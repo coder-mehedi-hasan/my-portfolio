@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import { formatDate, getPublishedProjects, getRelatedBlogs, getRelatedProjects, getRelatedSkills, toDateString } from '../lib/content';
+import { PERSON_ID, absoluteUrl, breadcrumbJsonLd, normalizePath, ogImageDimensions } from '../lib/seo';
+
+/**
+ * Screenshots live in `src/assets` so Astro can optimize them at build time.
+ * Frontmatter keeps the original `/works/<file>` path; map it back to the
+ * imported asset. The separate `social_image` (a stable `/public/og` card) keeps
+ * Open Graph previews working independently of the hashed display URL.
+ */
+const screenshots = import.meta.glob<{ default: ImageMetadata }>('/src/assets/works/*', { eager: true });
+const screenshotsByPath = Object.fromEntries(
+  Object.entries(screenshots).map(([file, mod]) => [`/works/${file.split('/').pop()}`, mod.default]),
+);
+
+interface Props {
+  frontmatter: Record<string, any>;
+}
+
+const { frontmatter } = Astro.props;
+const {
+  title,
+  sub_title,
+  description,
+  date,
+  modified_date,
+  tools = [],
+  image,
+  social_image,
+  live_url,
+  url,
+  canonical: canonicalOverride,
+} = frontmatter;
+const summary = description ?? sub_title;
+const projectUrl = live_url ?? url;
+const projectUrlLabel = projectUrl?.includes('github.com') ? 'Source Code' : 'Live Site';
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+const canonical = canonicalOverride || `/projects/${slug}`;
+const createdDate = toDateString(date);
+const modifiedDate = modified_date ? toDateString(modified_date) : createdDate;
+const socialImage = social_image || image;
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Projects', url: absoluteUrl('/projects') },
+    { name: title, url: absoluteUrl(canonical) },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: title,
+    description: summary,
+    dateCreated: createdDate,
+    dateModified: modifiedDate,
+    author: { '@id': PERSON_ID },
+    url: absoluteUrl(canonical),
+    ...(projectUrl ? { sameAs: projectUrl } : {}),
+    ...(socialImage ? { image: absoluteUrl(socialImage) } : {}),
+    keywords: tools,
+  },
+];
+
+// Link the case study out to the writing and skills that support it so the
+// project is not an orphan page and readers can go deeper.
+const relatedPosts = await getRelatedBlogs([title, sub_title, ...tools], 3);
+const relatedSkills = await getRelatedSkills([title, ...tools], 6);
+// Sibling projects share capabilities, and linking them keeps every case study
+// reachable from several related pages instead of only the index. When nothing
+// matches, fill the gap with recent work so no page is left with one link.
+const matchedProjects = (await getRelatedProjects([title, sub_title, ...tools], 6)).filter(
+  (project) => project.id !== slug,
+);
+const relatedProjects = [...matchedProjects];
+if (relatedProjects.length < 3) {
+  for (const project of await getPublishedProjects()) {
+    if (relatedProjects.length >= 3) break;
+    if (project.id === slug || relatedProjects.some((item) => item.id === project.id)) continue;
+    relatedProjects.push(project);
+  }
+}
+// Prefer the optimized local asset; fall back to the raw path if it is remote.
+const screenshot = image ? screenshotsByPath[image] : undefined;
+const imageDims = image && !screenshot ? ogImageDimensions(absoluteUrl(image)) : undefined;
+---
+
+<BaseLayout
+  title={title}
+  description={summary}
+  canonical={canonical}
+  type="article"
+  publishedTime={createdDate}
+  modifiedTime={modifiedDate}
+  tags={tools}
+  image={socialImage}
+  jsonLd={jsonLd}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/projects" class="back-link">← All projects</a>
+
+      <h1 class="detail-title">{title}</h1>
+      {sub_title && <p class="detail-description">{sub_title}</p>}
+
+      <div class="detail-meta">
+        <span>{formatDate(createdDate, { year: 'numeric', month: 'long', timeZone: 'UTC' })}</span>
+        {
+          projectUrl && (
+            <a href={projectUrl} target="_blank" rel="noopener noreferrer" class="button-primary">
+              {projectUrlLabel}
+            </a>
+          )
+        }
+        {tools?.map((tool: string) => <span class="tag">{tool}</span>)}
+      </div>
+
+      {
+        image && (
+          <div class="detail-image">
+            {screenshot ? (
+              <Image src={screenshot} alt={title} loading="lazy" class="w-full object-cover" />
+            ) : (
+              <img
+                src={image}
+                alt={title}
+                width={imageDims?.width ?? 1200}
+                height={imageDims?.height ?? 630}
+                loading="lazy"
+                class="w-full object-cover"
+              />
+            )}
+          </div>
+        )
+      }
+
+      <div class="blog-content">
+        <slot />
+      </div>
+
+      {
+        relatedPosts.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">Related writing</h2>
+            <div class="flex flex-col gap-4">
+              {relatedPosts.map((post) => (
+                <a href={`/blogs/${post.id}`} class="group">
+                  <h3 class="text-base font-medium underline-offset-4 group-hover:underline">{post.data.title}</h3>
+                  <p class="mt-1 text-sm leading-6 text-[#626660]">{post.data.excerpt}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        relatedSkills.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">Skills used</h2>
+            <div class="flex flex-wrap gap-3">
+              {relatedSkills.map((skill) => (
+                <a href={`/skills/${skill.id}`} class="tag hover:underline">
+                  {skill.data.title} ↗
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        relatedProjects.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">More projects</h2>
+            <div class="flex flex-col gap-4">
+              {relatedProjects.map((project) => (
+                <a href={`/projects/${project.id}`} class="group">
+                  <h3 class="text-base font-medium underline-offset-4 group-hover:underline">{project.data.title}</h3>
+                  <p class="mt-1 text-sm leading-6 text-[#626660]">{project.data.sub_title}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/site/PageIntro.astro';
+---
+
+<BaseLayout noindex>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="404 / Page not found"
+      title="A little off the path."
+      description="This page may have moved, or the link may be incorrect. Head back to explore my work."
+    />
+    <a href="/" class="button-primary">Back to home <span aria-hidden="true">↗</span></a>
+  </main>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { profileLinks } from '../../lib/profile';
+import type { SiteSetting } from '../../lib/site';
+
+interface Props {
+  setting: SiteSetting;
+}
+
+const { setting } = Astro.props;
+---
+
+<section class="pb-20 pt-14 sm:pb-24 sm:pt-20">
+  <div class="mb-8 flex items-center gap-4">
+    <img
+      src={setting.hero_img || '/md-mehedi-hasan-portfolio.jpg'}
+      alt="Mehedi Hasan"
+      width="64"
+      height="64"
+      fetchpriority="high"
+      class="size-16 rounded-full object-cover grayscale"
+    />
+    <div class="text-sm leading-6">
+      <p class="font-medium text-[#202220]">Mehedi Hasan</p>
+      <p class="text-[#70746f]">Software Engineer</p>
+    </div>
+  </div>
+  <h1 class="max-w-[760px] text-[40px] font-semibold leading-[1.12] tracking-[-0.045em] text-[#202220] sm:text-[64px]">
+    Software engineer building web, mobile, and platform products.
+  </h1>
+  <p class="mt-6 max-w-[570px] text-base leading-8 text-[#626660] sm:text-lg">{setting.hero_desc}</p>
+  <div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 text-sm">
+    <a href="/contact" class="inline-flex items-center gap-3 rounded-full bg-[#252724] px-5 py-3 font-medium text-white transition-colors hover:bg-[#444741]">Get in touch <span aria-hidden="true">↗</span></a>
+    <a href={profileLinks.resume} target="_blank" rel="noreferrer" class="font-medium text-[#626660] underline-offset-4 hover:text-[#202220] hover:underline">Résumé <span aria-hidden="true">↗</span></a>
+  </div>
+</section>

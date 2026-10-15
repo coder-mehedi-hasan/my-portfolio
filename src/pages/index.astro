@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import ProjectCards from '../components/site/ProjectCards.astro';
+import { setting } from '../lib/site';
+import {
+  formatDate,
+  getFeaturedExperiences,
+  getFeaturedProjects,
+  getFeaturedSkillGroups,
+  getPublishedBlogs,
+} from '../lib/content';
+
+const projects = await getFeaturedProjects(2);
+const experiences = await getFeaturedExperiences();
+const skillHighlights = await getFeaturedSkillGroups();
+const latestPosts = (await getPublishedBlogs()).slice(0, 3);
+---
+
+<BaseLayout>
+  <main class="mx-auto max-w-[1080px] px-6 sm:px-10">
+    <Hero setting={setting} />
+    <section id="projects" class="scroll-mt-28 border-t border-[#dedfd9] pb-20 pt-8 sm:pb-24">
+      <div class="mb-8 flex items-center justify-between gap-4">
+        <h2 class="text-sm font-medium text-[#626660]">Selected work</h2>
+        <a href="/projects" class="text-sm text-[#626660] underline-offset-4 hover:text-[#202220] hover:underline">All projects <span aria-hidden="true">↗</span></a>
+      </div>
+      <ProjectCards projects={projects} />
+    </section>
+
+    {
+      experiences.length > 0 && (
+        <section id="experience" class="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">
+          <div>
+            <h2 class="text-lg font-medium tracking-tight">Experience</h2>
+            <a href="/experience" class="mt-3 inline-block text-sm text-[#70746f] hover:underline">Full timeline <span aria-hidden="true">↗</span></a>
+          </div>
+          <div>
+            {experiences.map((exp) => (
+              <a href={`/experiences/${exp.id}`} class="group flex flex-col gap-2 border-b border-[#e5e6df] py-6 first:pt-0 last:border-0 last:pb-0 md:flex-row md:justify-between md:gap-5">
+                <div>
+                  <h3 class="text-base font-medium underline-offset-4 group-hover:underline">{exp.data.company_name}</h3>
+                  <p class="mt-1 text-sm leading-6 text-[#626660]">{exp.data.designation}</p>
+                </div>
+                <p class="shrink-0 text-xs leading-6 text-[#70746f]">{exp.data.start_date} — {exp.data.end_date || 'Present'}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section id="skills" class="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">
+      <div>
+        <h2 class="text-lg font-medium tracking-tight">Tools of the trade</h2>
+        <a href="/skills" class="mt-3 inline-block text-sm text-[#626660] underline-offset-4 hover:underline">
+          All skills <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <dl>
+        {
+          skillHighlights.map(({ category, skills }) => (
+            <div class="grid gap-2 border-b border-[#e5e6df] py-5 first:pt-0 last:border-0 last:pb-0 lg:grid-cols-[160px_1fr] lg:gap-6">
+              <dt class="text-sm font-medium leading-7">{category}</dt>
+              <dd class="text-sm leading-7 text-[#626660]">
+                {skills.map((skill, index) => (
+                  <span>
+                    {index > 0 && ', '}
+                    <a href={`/skills/${skill.id}`} class="underline-offset-4 hover:underline">{skill.data.title}</a>
+                  </span>
+                ))}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    {
+      latestPosts.length > 0 && (
+        <section id="writing" class="grid scroll-mt-28 gap-7 border-t border-[#dedfd9] py-10 sm:grid-cols-[220px_1fr] sm:py-12">
+          <div>
+            <h2 class="text-lg font-medium tracking-tight">Writing</h2>
+            <a href="/blogs" class="mt-3 inline-block text-sm text-[#626660] underline-offset-4 hover:underline">
+              All writing <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <div>
+            {latestPosts.map((post) => (
+              <a href={`/blogs/${post.id}`} class="group flex flex-col gap-2 border-b border-[#e5e6df] py-6 first:pt-0 last:border-0 last:pb-0">
+                <p class="text-xs leading-6 text-[#70746f]">
+                  {formatDate(post.data.date, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
+                </p>
+                <h3 class="text-base font-medium underline-offset-4 group-hover:underline">{post.data.title}</h3>
+                <p class="text-sm leading-6 text-[#626660]">{post.data.excerpt}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="mt-8 border-t border-[#dedfd9] py-14 sm:py-20">
+      <p class="mb-3 text-sm text-[#70746f]">Have something in mind?</p>
+      <a href="/contact" class="inline-flex items-center gap-5 text-3xl font-medium tracking-[-0.04em] underline-offset-8 hover:underline sm:text-4xl">Let’s build something useful. <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+</BaseLayout>

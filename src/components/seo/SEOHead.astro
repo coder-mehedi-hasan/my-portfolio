@@ -1,0 +1,99 @@
+---
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+  jsonLdString,
+  normalizePath,
+  ogImageDimensions,
+} from '../../lib/seo';
+
+interface Props {
+  /** Final `<title>` text, including any brand suffix. */
+  title: string;
+  description: string;
+  /** Override the self-referencing canonical. Defaults to the current path. */
+  canonical?: string | URL;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  publishedTime?: string | Date;
+  modifiedTime?: string | Date;
+  tags?: string[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  image = DEFAULT_OG_IMAGE,
+  type = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  tags = [],
+  jsonLd = [],
+} = Astro.props;
+
+const site = Astro.site ?? SITE_URL;
+const canonicalUrl = canonical ? new URL(canonical.toString(), site).href : new URL(normalizePath(Astro.url.pathname), site).href;
+const imageUrl = absoluteUrl(image, site);
+const imageDimensions = ogImageDimensions(imageUrl, site);
+const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const toIso = (value?: string | Date) => (value ? new Date(value).toISOString() : undefined);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+
+{
+  noindex ? (
+    <meta name="robots" content="noindex, follow" />
+  ) : (
+    <>
+      <meta name="robots" content="index, follow" />
+      <meta
+        name="googlebot"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      />
+    </>
+  )
+}
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={imageUrl} />
+{
+  imageDimensions && (
+    <>
+      <meta property="og:image:width" content={String(imageDimensions.width)} />
+      <meta property="og:image:height" content={String(imageDimensions.height)} />
+    </>
+  )
+}
+<meta property="og:image:alt" content={title} />
+{
+  type === 'article' && (
+    <>
+      {publishedTime && <meta property="article:published_time" content={toIso(publishedTime)} />}
+      {modifiedTime && <meta property="article:modified_time" content={toIso(modifiedTime)} />}
+      {tags.map((tag) => (
+        <meta property="article:tag" content={tag} />
+      ))}
+    </>
+  )
+}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+
+{jsonLdItems.map((item) => <script type="application/ld+json" set:html={jsonLdString(item)} />)}

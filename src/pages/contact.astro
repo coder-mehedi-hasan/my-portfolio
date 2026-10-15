@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/site/PageIntro.astro';
+import { profileLinks, socialProfiles } from '../lib/profile';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Md Mehedi Hasan, a software engineer in Dhaka, Bangladesh, available for freelance work and new opportunities."
+  canonical="/contact"
+>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="Start a conversation"
+      title="Let’s build something useful."
+      description="Have a project in mind, an opportunity to share, or a question about my work? I’d love to hear from you."
+    />
+    <div class="contact-grid">
+      <aside>
+        <h2>A direct line.</h2>
+        <p>Tell me what you’re working on and how I can help.</p>
+        <a class="text-link" href={profileLinks.email}>hi@mehedihasan.dev <span aria-hidden="true">↗</span></a>
+        <div class="contact-links">
+          {
+            socialProfiles.map(({ label, href, description }) => (
+              <a href={href} target="_blank" rel="noreferrer">
+                <span>
+                  <strong>{label}</strong>
+                  <small>{description}</small>
+                </span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            ))
+          }
+          <a href={profileLinks.resume} target="_blank" rel="noreferrer">
+            <span>
+              <strong>Résumé</strong>
+              <small>Experience, capabilities, and work samples</small>
+            </span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
+      <form class="contact-form" id="contact-form" data-email={profileLinks.email}>
+        <div class="form-row">
+          <div>
+            <label for="name">Your name</label>
+            <input id="name" name="name" autocomplete="name" placeholder="How should I address you?" required />
+          </div>
+          <div>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div>
+          <label for="message">What do you have in mind?</label>
+          <textarea id="message" name="message" rows="6" placeholder="A little about your project, timeline, or question…" required></textarea>
+        </div>
+        <div>
+          <button class="button-primary" type="submit">Prepare email <span aria-hidden="true">↗</span></button>
+          <p class="form-hint">Opens your email app. You can review the draft before sending.</p>
+        </div>
+        <p role="status" id="form-status" class="form-status" hidden>Your email app was requested. If it didn’t open, email hi@mehedihasan.dev directly.</p>
+      </form>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const subject = encodeURIComponent(`Portfolio enquiry from ${data.get('name')}`);
+    const body = encodeURIComponent(`Name: ${data.get('name')}\nEmail: ${data.get('email')}\n\n${data.get('message')}`);
+    window.location.href = `${form.dataset.email ?? 'mailto:hi@mehedihasan.dev'}?subject=${subject}&body=${body}`;
+    if (status) status.hidden = false;
+  });
+</script>

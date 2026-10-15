@@ -1,0 +1,34 @@
+---
+import { profileLinks } from '../../lib/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-profile">
+    <a href="/" class="footer-name">Mehedi Hasan</a>
+    <p>Software engineer building thoughtful web, mobile, and platform products from Dhaka, Bangladesh.</p>
+    <a href="/contact" class="footer-cta">Let’s work together <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="footer-groups">
+    <nav aria-label="Explore">
+      <p>Explore</p>
+      <a href="/projects">Work</a>
+      <a href="/experience">Experience</a>
+      <a href="/skills">Skills</a>
+      <a href="/blogs">Writing</a>
+      <a href="/testimonials">References</a>
+    </nav>
+    <nav aria-label="Connect">
+      <p>Connect</p>
+      <a href={profileLinks.github} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <a href={profileLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+      <a href={profileLinks.email}>Email <span aria-hidden="true">↗</span></a>
+      <a href={profileLinks.resume} target="_blank" rel="noreferrer">Résumé <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© {year} Mehedi Hasan</span>
+    <span>Designed and built with care.</span>
+  </div>
+</footer>

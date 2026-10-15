@@ -1,0 +1,67 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { getPublishedSkills } from '../lib/content';
+import { absoluteUrl, breadcrumbJsonLd, normalizePath } from '../lib/seo';
+
+interface Props {
+  frontmatter: Record<string, any>;
+  rawContent?: () => string;
+}
+
+const { frontmatter } = Astro.props;
+const { title, category, sub_title, description, canonical: canonicalOverride } = frontmatter;
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+
+const related = (await getPublishedSkills())
+  .filter((item) => item.data.category === category && item.id !== slug)
+  .slice(0, 4);
+
+// Empty skill pages are thin content: keep them crawlable but out of the index.
+const thin = !(Astro.props.rawContent?.() ?? '').trim();
+const canonical = canonicalOverride || `/skills/${slug}`;
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Home', url: absoluteUrl('/') },
+  { name: 'Skills', url: absoluteUrl('/skills') },
+  { name: title, url: absoluteUrl(canonical) },
+]);
+---
+
+<BaseLayout
+  title={title}
+  description={description || sub_title}
+  canonical={canonical}
+  noindex={thin}
+  jsonLd={breadcrumbs}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/skills" class="back-link">← All skills</a>
+      <h1 class="detail-title">{title}</h1>
+      <p class="detail-description">{sub_title}</p>
+      <div class="detail-meta"><span>{category}</span></div>
+      {description && <p class="mb-8 leading-8 text-[#626660]">{description}</p>}
+      {
+        !thin ? (
+          <article class="blog-content">
+            <slot />
+          </article>
+        ) : (
+          <p class="text-sm leading-7 text-[#626660]">Notes and practical examples will be added here.</p>
+        )
+      }
+      {
+        related.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">More in {category}</h2>
+            <div class="flex flex-wrap gap-3">
+              {related.map((item) => (
+                <a href={`/skills/${item.id}`} class="tag hover:underline">{item.data.title} ↗</a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

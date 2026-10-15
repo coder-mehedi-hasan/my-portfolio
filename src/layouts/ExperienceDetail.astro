@@ -1,0 +1,86 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { getPublishedExperiences } from '../lib/content';
+import { absoluteUrl, breadcrumbJsonLd, firstParagraph, normalizePath } from '../lib/seo';
+
+interface Props {
+  frontmatter: Record<string, any>;
+  rawContent?: () => string;
+}
+
+const { frontmatter } = Astro.props;
+const {
+  designation,
+  company_name,
+  location,
+  job_type,
+  start_date,
+  end_date,
+  description,
+  canonical: canonicalOverride,
+} = frontmatter;
+const slug = normalizePath(Astro.url.pathname).split('/').pop() ?? '';
+const canonical = canonicalOverride || `/experiences/${slug}`;
+
+// Entries without a `description` fall back to their first body paragraph so the
+// meta description stays unique instead of repeating the site-wide default.
+const body = Astro.props.rawContent?.() ?? '';
+const metaDescription = description || firstParagraph(body) || `${designation} at ${company_name}.`;
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Home', url: absoluteUrl('/') },
+  { name: 'Experience', url: absoluteUrl('/experience') },
+  { name: company_name, url: absoluteUrl(canonical) },
+]);
+
+// Link to the other roles so each experience page has useful inbound links from
+// its siblings, not just the timeline.
+const otherRoles = (await getPublishedExperiences())
+  .filter((entry) => entry.id !== slug)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title={`${designation} at ${company_name}`}
+  description={metaDescription}
+  canonical={canonical}
+  jsonLd={breadcrumbs}
+>
+  <main class="detail-page">
+    <div class="detail-shell">
+      <a href="/experience" class="back-link">← All experience</a>
+
+      <h1 class="detail-title">{designation}</h1>
+      <p class="detail-description">{company_name}{location ? `, ${location}` : ''}</p>
+
+      <div class="detail-meta">
+        <span>{start_date} - {end_date || 'Present'}</span>
+        {job_type && <span class="tag">{job_type}</span>}
+      </div>
+
+      <div class="blog-content">
+        <slot />
+      </div>
+
+      {
+        otherRoles.length > 0 && (
+          <section class="mt-12 border-t border-[#dedfd9] pt-8">
+            <h2 class="mb-5 text-sm font-medium">More experience</h2>
+            <div class="flex flex-col gap-4">
+              {otherRoles.map((role) => (
+                <a href={`/experiences/${role.id}`} class="group">
+                  <h3 class="text-base font-medium underline-offset-4 group-hover:underline">
+                    {role.data.designation} · {role.data.company_name}
+                  </h3>
+                  <p class="mt-1 text-sm leading-6 text-[#626660]">
+                    {role.data.start_date} — {role.data.end_date || 'Present'}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/site/PageIntro.astro';
+import ProjectCards from '../../components/site/ProjectCards.astro';
+import { getPublishedProjects } from '../../lib/content';
+
+const projects = [...(await getPublishedProjects())].sort((a, b) =>
+  b.data.date.localeCompare(a.data.date),
+);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Software engineering projects by Md Mehedi Hasan — e-commerce platforms, healthcare systems, mobile apps, and developer tools."
+  canonical="/projects"
+>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="Portfolio"
+      title="Selected work."
+      description="Web and mobile products I’ve helped bring to life. A closer look at the work, the decisions, and what I learned along the way."
+    />
+    <ProjectCards projects={projects} />
+  </main>
+</BaseLayout>

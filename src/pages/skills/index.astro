@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/site/PageIntro.astro';
+import { getSkillGroups } from '../../lib/content';
+
+const groups = await getSkillGroups();
+---
+
+<BaseLayout
+  title="Skills"
+  description="Software engineering skills of Md Mehedi Hasan — React, React Native, Node.js, NestJS, TypeScript, PostgreSQL, Docker, and more."
+  canonical="/skills"
+>
+  <main class="page-shell">
+    <PageIntro
+      eyebrow="Capabilities"
+      title="Tools of the trade."
+      description="The technologies I work with, organized by category. Explore each skill for a closer look."
+    />
+    {
+      groups.map(({ category, skills }) => (
+        <section class="split-section">
+          <h2>{category}</h2>
+          <div class="skill-directory">
+            {skills.map((skill) => (
+              <a href={`/skills/${skill.id}`} class="skill-link">
+                <div>
+                  <h3>{skill.data.title}</h3>
+                  <p>{skill.data.sub_title}</p>
+                </div>
+                <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </main>
+</BaseLayout>
