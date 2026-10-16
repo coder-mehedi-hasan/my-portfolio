@@ -3,7 +3,7 @@ layout: ../../layouts/BlogDetail.astro
 title: "Google Gemini Features: A Practical Guide to 12 Feature Categories, Use Cases, and How to Use Them"
 excerpt: "A practical guide to 12 Google Gemini feature categories, including use cases and simple ways to get started."
 author: "Md Mehedi Hasan"
-date: "2026-01-01"
+date: "2026-10-16"
 feature_image: "/me.jpg"
 status: published
 featured: false
