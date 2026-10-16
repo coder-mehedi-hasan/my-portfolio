@@ -5,12 +5,14 @@ excerpt: "A practical guide to 12 Google Gemini feature categories, including us
 author: "Md Mehedi Hasan"
 date: "2026-01-01"
 feature_image: "/me.jpg"
-status: draft
+status: published
 featured: false
 featured_order: 0
 sort_index: 0
 tags:
-  - development
+  - Google Gemini
+  - Artificial Intelligence
+  - Productivity
 ---
 
 ## Introduction
