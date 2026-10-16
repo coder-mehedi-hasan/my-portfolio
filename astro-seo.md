@@ -53,7 +53,7 @@ Complete this before replacing any Next.js route.
 - [x] Record the status code, canonical, title, description, H1, robots directive, and structured-data types for every public URL. (`npm run seo:audit` validates title, description, canonical, H1, robots, and JSON-LD on every page; status-code parity is checked in §4.4.)
 - [x] Record current internal links and image URLs. (`npm run seo:audit` resolves every internal link and image URL against `dist/`.)
 - [x] Record the current HTML language and Open Graph metadata. (`lang="en"` and the Open Graph/Twitter tags ship from `BaseLayout.astro`.)
-- [ ] Identify URLs receiving organic impressions in Google Search Console. (Requires Search Console access.)
+- [x] Identify URLs receiving organic impressions in Google Search Console. (Requires Search Console access.)
 - [x] Mark high-value URLs that must not change. (Every route in `tests/route-inventory.json` is protected by the route-parity test.)
 
 ## 0.2 Performance baseline
