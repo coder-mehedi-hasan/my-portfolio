@@ -3,7 +3,7 @@ layout: ../../layouts/BlogDetail.astro
 title: "Article title"
 excerpt: "A short summary of what readers will learn."
 author: "Md Mehedi Hasan"
-date: "2026-01-01"
+date: "{blog writting date}"
 feature_image: "/me.jpg"
 status: draft
 featured: false
