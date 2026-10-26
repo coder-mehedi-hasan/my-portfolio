@@ -117,7 +117,10 @@ export function audit(root = distRoot) {
 
     for (const block of jsonLdBlocks(html)) {
       try {
-        JSON.parse(block);
+        const data = JSON.parse(block);
+        if (JSON.stringify(data).includes('/undefined')) {
+          errors.push(`${where}: JSON-LD contains an invalid /undefined URL`);
+        }
       } catch (error) {
         errors.push(`${where}: JSON-LD does not parse (${error.message})`);
       }
