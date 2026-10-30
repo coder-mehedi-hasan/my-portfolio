@@ -83,6 +83,17 @@ export function jsonLdString(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c');
 }
 
+export function websiteJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    alternateName: ['Mehedi Hasan', 'mehedihasan.dev'],
+  };
+}
+
 export function personJsonLd() {
   return {
     '@context': 'https://schema.org',

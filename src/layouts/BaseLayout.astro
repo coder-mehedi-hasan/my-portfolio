@@ -8,7 +8,7 @@ import notoSansLatinUrl from '@fontsource-variable/noto-sans/files/noto-sans-lat
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
 import SEOHead from '../components/seo/SEOHead.astro';
-import { DEFAULT_DESCRIPTION, buildTitle, personJsonLd } from '../lib/seo';
+import { DEFAULT_DESCRIPTION, buildTitle, personJsonLd, websiteJsonLd } from '../lib/seo';
 import '../styles/globals.css';
 
 interface Props {
@@ -48,7 +48,10 @@ const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111211" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="preload" href={interLatinUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={notoSansLatinUrl} as="font" type="font/woff2" crossorigin />
     <SEOHead
@@ -61,7 +64,7 @@ const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}
       tags={tags}
-      jsonLd={[personJsonLd(), ...pageJsonLd]}
+      jsonLd={[websiteJsonLd(), personJsonLd(), ...pageJsonLd]}
     />
   </head>
   <body>
